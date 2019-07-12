@@ -15,14 +15,16 @@ public class User {
 
     //UUID
     private String id ;
-    //账号
+    //账号 账号是惟一的
     private String account ;
-    //密码
+    //密码 数据库保存的密码都是md5加密过得
     private String password ;
     //名称
     private String name ;
     //权限
     private Integer role ;
+    //登录时生成的凭证
+    private String token ;
 
     public String getId() {
         return id;
@@ -64,9 +66,28 @@ public class User {
         this.role = role;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    /**
+     * 生成一个新的用户对象 会自动生成id
+     * @return
+     */
     public static User newUser(){
-        User user = new User() ;
-        user.setId(UUID.randomUUID().toString());
-        return user ;
+        return new User().newId() ;
+    }
+
+    /**
+     * 新生成一个用户id
+     * @return
+     */
+    public User newId(){
+        setId(UUID.randomUUID().toString());
+        return this ;
     }
 }

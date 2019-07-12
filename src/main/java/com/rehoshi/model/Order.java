@@ -1,23 +1,39 @@
 package com.rehoshi.model;
 
+import java.util.Date;
+
 /**
  * 订单
  */
 public class Order {
+
+    /**
+     * 订单状态
+     */
     public interface Status{
+        //待发货
         int WAIT_SEND = 0 ;
+        //已发货
         int HAS_SENT = 0 ;
     }
     //订单ID
     private String id ;
     //订单名称
     private String name ;
-    //订单规格
-    private String specs ;
+    //商品id
+    private String gId ;
+    //规格
+    private Double specs ;
+    //商品
+    private Goods goods ;
+
     //订单数量
     private Integer amount ;
     //状态
     private Integer status ;
+
+    //创建时间
+    private Date createTime ;
 
     public String getId() {
         return id;
@@ -35,12 +51,20 @@ public class Order {
         this.name = name;
     }
 
-    public String getSpecs() {
-        return specs;
+    public String getgId() {
+        return gId;
     }
 
-    public void setSpecs(String specs) {
-        this.specs = specs;
+    public void setgId(String gId) {
+        this.gId = gId;
+    }
+
+    public Goods getGoods() {
+        return goods;
+    }
+
+    public void setGoods(Goods goods) {
+        this.goods = goods;
     }
 
     public Integer getAmount() {
@@ -57,5 +81,21 @@ public class Order {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Double getSpecs() {
+        return specs;
+    }
+
+    public void setSpecs(Double specs) {
+        this.specs = specs;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

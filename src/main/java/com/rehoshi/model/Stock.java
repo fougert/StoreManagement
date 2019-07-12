@@ -1,18 +1,11 @@
 package com.rehoshi.model;
 
+import java.util.Date;
+
 /**
- * 货品 包含了 商品 原料 包材
+ * 货物 主要存原品的数量信息
  */
 public class Stock {
-
-    public interface Type{
-        //商品
-        int GOODS = 0 ;
-        //原料
-        int MATERIAL = 1 ;
-        //包材
-        int PACKAGE_MATERIAL = 2 ;
-    }
 
     //货品ID
     private String id ;
@@ -21,17 +14,19 @@ public class Stock {
     //货品图片
     private String img ;
     //货品规格
-    private String specs ;
+    private String gId ;
     //货品数量
     private Integer amount ;
     //货品价格
     private Double price ;
-    //货品批次
-    private Integer batch ;
+    //货品批次 使用当前时间字符串 精确到分钟  yyyy-MM-dd HH:mm
+    private String batch ;
     //供应商
     private String provider ;
-    //类型
-    private Integer type ;
+    //描述
+    private String description ;
+    //入库时间
+    private Date createTime ;
 
     public String getId() {
         return id;
@@ -57,16 +52,19 @@ public class Stock {
         this.img = img;
     }
 
-    public String getSpecs() {
-        return specs;
+    public String getgId() {
+        return gId;
     }
 
-    public void setSpecs(String specs) {
-        this.specs = specs;
+    public void setgId(String gId) {
+        this.gId = gId;
     }
 
     public Integer getAmount() {
-        return amount == null ? 0 : amount;
+        if(amount == null){
+            amount = 0 ;
+        }
+        return amount;
     }
 
     public void setAmount(Integer amount) {
@@ -74,18 +72,18 @@ public class Stock {
     }
 
     public Double getPrice() {
-        return price == null ? 0 : price;
+        return price;
     }
 
     public void setPrice(Double price) {
         this.price = price;
     }
 
-    public Integer getBatch() {
+    public String getBatch() {
         return batch;
     }
 
-    public void setBatch(Integer batch) {
+    public void setBatch(String batch) {
         this.batch = batch;
     }
 
@@ -97,11 +95,19 @@ public class Stock {
         this.provider = provider;
     }
 
-    public Integer getType() {
-        return type;
+    public String getDescription() {
+        return description;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }
