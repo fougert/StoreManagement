@@ -20,12 +20,10 @@ public class Order {
     private String id ;
     //订单名称
     private String name ;
-    //商品id
-    private String gId ;
-    //规格
-    private Double specs ;
+    //库存商品id
+    private String sId ;
     //商品
-    private Goods goods ;
+    private Stock stock ;
 
     //订单数量
     private Integer amount ;
@@ -51,21 +49,6 @@ public class Order {
         this.name = name;
     }
 
-    public String getgId() {
-        return gId;
-    }
-
-    public void setgId(String gId) {
-        this.gId = gId;
-    }
-
-    public Goods getGoods() {
-        return goods;
-    }
-
-    public void setGoods(Goods goods) {
-        this.goods = goods;
-    }
 
     public Integer getAmount() {
         return amount == null ? 0 : amount;
@@ -83,19 +66,27 @@ public class Order {
         this.status = status;
     }
 
-    public Double getSpecs() {
-        return specs;
-    }
-
-    public void setSpecs(Double specs) {
-        this.specs = specs;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getsId() {
+        return sId;
+    }
+
+    public void setsId(String sId) {
+        this.sId = sId;
+    }
+
+    public Stock getStock() {
+        return stock;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
     }
 }

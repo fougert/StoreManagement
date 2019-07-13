@@ -7,12 +7,10 @@ public class ProductComposition {
     //成分id
     private String id ;
     //原品id
-    private String gId ;
+    private String sId ;
     private Stock stock ;
-    //原品规格
-    private Double specs ;
     //原品数量
-    private Integer amounnt ;
+    private Integer amount ;
     //原品批次
     private String batch ;
 
@@ -28,36 +26,12 @@ public class ProductComposition {
         this.id = id;
     }
 
-    public String getgId() {
-        return gId;
-    }
-
-    public void setgId(String gId) {
-        this.gId = gId;
-    }
-
     public Stock getStock() {
         return stock;
     }
 
     public void setStock(Stock stock) {
         this.stock = stock;
-    }
-
-    public Double getSpecs() {
-        return specs;
-    }
-
-    public void setSpecs(Double specs) {
-        this.specs = specs;
-    }
-
-    public Integer getAmounnt() {
-        return amounnt;
-    }
-
-    public void setAmounnt(Integer amounnt) {
-        this.amounnt = amounnt;
     }
 
     public String getBatch() {
@@ -82,5 +56,21 @@ public class ProductComposition {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public String getsId() {
+        return sId;
+    }
+
+    public void setsId(String sId) {
+        this.sId = sId;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
     }
 }
