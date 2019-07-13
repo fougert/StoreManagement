@@ -3,9 +3,6 @@ package com.rehoshi.service;
 import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
 import com.rehoshi.model.Product;
-import com.rehoshi.model.ProductComposition;
-
-import java.util.List;
 
 /**
  * 产品业务
@@ -15,10 +12,10 @@ public interface ProductService {
 
     /**
      * 打包产品
-     * @param compositionList 所需原料的列表
-     * @return
+     * @param product 打包的产品信息
+     * @return 产品id
      */
-    RespData<String> packing(List<ProductComposition> compositionList) ;
+    RespData<String> packing(Product product) ;
 
     /**
      * 产品分页列表
