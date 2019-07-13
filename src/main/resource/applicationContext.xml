@@ -27,12 +27,34 @@
         <property name="maxIdleTime" value="${jdbc.maxIdleTime}" />
     </bean>
 
+    <bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+        <property name="defaultCharset" value="UTF-8"/>
+    </bean>
+
     <!-- mybatis:scan会将dao包里的所有接口当做mapper配置，之后可以自动引入mapper类 -->
     <mybatis:scan base-package="com.rehoshi.dao"/>
 
     <!-- 配置sqlSessionFactoryBean -->
     <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"></property>
+        <property name="dataSource" ref="dataSource" />
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <!--使用下面的方式配置参数，一行配置一个 -->
+                        <value>
+                            offsetAsPageNum=true
+                            rowBoundsWithCount=true
+                            pageSizeZero=true
+                            reasonable=true
+                            params=pageNum=start;pageSize=limit
+                            supportMethodsArguments=true
+                            returnPageInfo=check
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
     </bean>
 
     <!-- spring包扫描 -->

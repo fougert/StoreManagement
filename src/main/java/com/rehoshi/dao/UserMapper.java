@@ -1,6 +1,8 @@
 package com.rehoshi.dao;
 
 import com.rehoshi.model.User;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -39,7 +41,8 @@ public interface UserMapper {
      * @param search 查找内容
      * @return 查询到的用户列表
      */
-    List<User> getBySearch(String search) ;
+    @Select("SELECT * FROM USER WHERE name like #{search}")
+    List<User> getBySearch(@Param("search") String search) ;
 
     /**
      * 查找用户

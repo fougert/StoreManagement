@@ -20,7 +20,7 @@ public interface UserService {
      * @param pageSize 每页数据量
      * @return
      */
-    RespData<PageData<User>> usersInPage(String search, int pageIndex, int pageSize) ;
+    PageData<User> usersInPage(String search, int pageIndex, int pageSize) ;
 
     /**
      * 根据id 查找用户
