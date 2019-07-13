@@ -54,6 +54,13 @@
       <artifactId>spring-aspects</artifactId>
       <version>4.3.7.RELEASE</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-aop -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aop</artifactId>
+      <version>4.3.7.RELEASE</version>
+    </dependency>
+
     <!-- mybatis -->
     <dependency>
       <groupId>org.mybatis</groupId>
