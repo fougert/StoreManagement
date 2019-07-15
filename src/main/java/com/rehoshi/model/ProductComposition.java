@@ -3,7 +3,7 @@ package com.rehoshi.model;
 /**
  * 产品组成原料
  */
-public class ProductComposition {
+public class ProductComposition extends BaseModel{
     //成分id
     private String id ;
     //原品id

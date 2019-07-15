@@ -6,18 +6,28 @@
     <title>欢迎页面-X-admin2.1</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
     <link rel="stylesheet" href="../../css/font.css">
     <link rel="stylesheet" href="../../css/xadmin.css">
+    <link rel="stylesheet" href="../../css/layui-table-select.css">
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="../../lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="../../js/xadmin.js"></script>
     <script type="text/javascript" src="../../js/cookie.js"></script>
+    <script type="text/javascript" src="../../js/layui-table-select.js"></script>
+    <script type="text/javascript" src="../../js/ajaxQuery.js"></script>
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
     <![endif]-->
+    <style>
+        .laytable-cell-1-0-5 {
+            overflow: visible;
+        }
+    </style>
 </head>
 
 <body class="">
@@ -28,46 +38,68 @@
         <a>
           <cite>导航元素</cite></a>
       </span>
-    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       href="javascript:location.replace(location.href);" title="刷新">
         <i class="layui-icon" style="line-height:30px">ဂ</i></a>
 </div>
 <div class="x-body">
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so">
-            <input class="layui-input"  autocomplete="off" placeholder="开始日" name="start" id="start">
-            <input class="layui-input"  autocomplete="off" placeholder="截止日" name="end" id="end">
-            <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
-            <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+            <input class="layui-input" autocomplete="off" placeholder="开始日" name="start" id="start">
+            <input class="layui-input" autocomplete="off" placeholder="截止日" name="end" id="end">
+            <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
-    <table class="layui-table" lay-data="{url:'/user/list',page:true,toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
+    <table class="layui-table" lay-data="{url:'/user/list',page:true,toolbar: '#toolbarDemo',id:'userList'}"
+           lay-filter="userList">
         <thead>
         <tr>
             <th lay-data="{type:'checkbox'}">ID</th>
-            <th lay-data="{field:'id', width:80, sort: true}">ID</th>
-            <th lay-data="{field:'username', width:120, sort: true, edit: 'text'}">用户名</th>
-            <th lay-data="{field:'email', edit: 'text', minWidth: 150}">邮箱</th>
-            <th lay-data="{field:'sex', width:80,templet: '#switchTpl'}">性别</th>
-            <th lay-data="{field:'city', edit: 'text', minWidth: 100}">城市</th>
-            <th lay-data="{field:'experience', sort: true, edit: 'text'}">积分</th>
+            <th lay-data="{field:'id', width:80, sort: false}">ID</th>
+            <th lay-data="{field:'account', width:120, sort: false, edit: 'text'}">账号</th>
+            <th lay-data="{field:'name', edit: 'text', minWidth: 150}">用户名</th>
+            <th lay-data="{field:'password', edit: 'text', minWidth: 150}">密码</th>
+            <th lay-data="{field:'role', minWidth: 100, templet:'#roleTpl',event:'selectRole'}">权限</th>
+            <th lay-data="{field:'id', width:70 ,templet:'#operateTpl'}">操作</th>
         </tr>
         </thead>
     </table>
-
 </div>
+
+
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
-        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+        <button class="layui-btn layui-btn-sm" lay-event="deleteAll">批量删除</button>
+        <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
     </div>
 </script>
 <script type="text/html" id="switchTpl">
     <!-- 这里的 checked 的状态只是演示 -->
-    <input type="checkbox" name="sex" value="{{d.id}}" lay-skin="switch" lay-text="女|男" lay-filter="sexDemo" {{ d.id == 10003 ? 'checked' : '' }}>
+    <input type="checkbox" name="sex" value="{{d.id}}" lay-skin="switch" lay-text="女|男" lay-filter="sexDemo" {{ d.id==
+           10003 ? 'checked' : '' }}>
 </script>
+
+<script type="text/html" id="roleTpl">
+    <div class="layui-form">
+        <div class="layui-inline">
+            <select name="selectDemo" lay-filter="selectDemo" lay-search>
+                <option value="0" {{ d.role== 0 ?
+                'selected' : '' }}>用户</option>
+                <option value="1" {{ d.role== 1 ?
+                'selected' : '' }}>管理员</option>
+            </select>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="operateTpl">
+    <!-- 这里的 checked 的状态只是演示 -->
+    <button  class="layui-btn layui-btn-danger" onclick="deleteUser('{{d.id}}')">删除</button>
+</script>
+
 <script>
-    layui.use('laydate', function(){
+    layui.use('laydate', function () {
         var laydate = layui.laydate;
 
         //执行一个laydate实例
@@ -84,42 +116,113 @@
     });
 </script>
 <script>
-    layui.use('table', function(){
+    layui.use('table', function () {
         var table = layui.table;
+        var form = layui.form;
 
         //监听单元格编辑
-        table.on('edit(test)', function(obj){
+        table.on('edit(userList)', function (obj) {
             var value = obj.value //得到修改后的值
-                ,data = obj.data //得到所在行所有键值
-                ,field = obj.field; //得到字段
-            layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+                , data = obj.data //得到所在行所有键值
+                , field = obj.field; //得到字段
+            data[field] = value;
+            updateUser(data);
         });
 
         //头工具栏事件
-        table.on('toolbar(test)', function(obj){
+        table.on('toolbar(userList)', function (obj) {
             var checkStatus = table.checkStatus(obj.config.id);
-            switch(obj.event){
-                case 'getCheckData':
+            switch (obj.event) {
+                case 'deleteAll':
                     var data = checkStatus.data;
-                    layer.alert(JSON.stringify(data));
+                    if(data.length > 0){
+                        var ids = "" ;
+                        for (var index = 0; index < data.length; index ++){
+                            var user = data[index] ;
+                            if (ids !== ""){
+                                ids += "," ;
+                            }
+                            ids += user.id ;
+                        }
+                        deleteAllUser(ids) ;
+                    }else {
+                        layer.alert("请选择一条数据") ;
+                    }
                     break;
                 case 'getCheckLength':
                     var data = checkStatus.data;
-                    layer.msg('选中了：'+ data.length + ' 个');
+                    layer.msg('选中了：' + data.length + ' 个');
                     break;
-                case 'isAll':
-                    layer.msg(checkStatus.isAll ? '全选': '未全选');
+                case 'add':
+                    x_admin_show('添加用户', 'add.html', 600, 400);
                     break;
-            };
+            }
+            ;
         });
+
+        //权限被修改
+        form.on("select(selectDemo)", function (data) {
+            var returnObj = getSelectObject(table, "userList", "role", data);
+            var user = returnObj.object ;
+            if (returnObj.oldValue != user.role) {
+                updateUser(user);
+            }
+        })
+
+        // table.on('tool(test)',function(obj){
+        //     if(obj.event == 'selectRole'){
+        //         var html = $("#roleContainer").html();
+        //         $("#roleContainer").remove() ;
+        //         $(obj).append(html) ;
+        //     }
+        // })
     });
+
+    function updateUser(user) {
+        //矫正日期格式
+        user.createTime = user.createTimeStr;
+        ajaxPut("/user/update", user, function (data) {
+            if (data) {
+                showToast("更新成功")
+                reloadTable();
+            } else {
+                showToast("更新失败");
+            }
+        },function (data) {
+            reloadTable() ;
+        }) ;
+    }
+
+    function deleteUser(id) {
+        layer.confirm('确认要删除该用户吗？',function(index){
+            //请求服务器删除用户
+            ajaxDelete("/user/delete/" + id,{},function (data) {
+                if(data){
+                    showToast("删除成功") ;
+                    reloadTable() ;
+                }else {
+                    showError("删除失败") ;
+                }
+            }) ;
+        });
+    }
+
+    function deleteAllUser(ids) {
+        layer.confirm('确认要删除勾选用户吗？',function(index){
+            //请求服务器删除用户
+            ajaxDelete("/user/deleteAll/" + ids,{},function (data) {
+                if(data){
+                    showToast("删除成功") ;
+                    reloadTable() ;
+                }else {
+                    showError("删除失败") ;
+                }
+            }) ;
+        });
+    }
+
+
 </script>
-<script>var _hmt = _hmt || []; (function() {
-    var hm = document.createElement("script");
-    hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-})();</script>
 </body>
 
 </html>

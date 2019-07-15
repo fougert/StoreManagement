@@ -4,7 +4,7 @@ package com.rehoshi.model;
  * 物品类 包含
  * 商品 原料 包材
  */
-public class Goods {
+public class Goods extends BaseModel{
 
     interface Type{
         int GOODS = 0 ;

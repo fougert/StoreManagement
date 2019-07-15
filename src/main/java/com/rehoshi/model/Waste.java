@@ -3,7 +3,7 @@ package com.rehoshi.model;
 /**
  * 损耗 生产产品过程中的消耗
  */
-public class Waste {
+public class Waste extends BaseModel{
     //id
     private String id ;
 

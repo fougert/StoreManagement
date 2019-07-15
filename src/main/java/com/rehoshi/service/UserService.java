@@ -4,6 +4,8 @@ import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
 import com.rehoshi.model.User;
 
+import java.util.List;
+
 public interface UserService {
     /**
      * 登录业务
@@ -52,4 +54,17 @@ public interface UserService {
     RespData<Boolean> deleteById(String id) ;
 
 
+    /**
+     * 根据账号查询用户
+     * @param account 需要查询的用户账号
+     * @return
+     */
+    User getByAccount(String account);
+
+    /**
+     * 批量删除用户
+     * @param ids 删除所有id在里面的用户
+     * @return 成功返回true 失败返回false
+     */
+    RespData<Boolean> deleteInIds(List<String> ids) ;
 }

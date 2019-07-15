@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * 货物 主要存原品的数量信息
  */
-public class Stock {
+public class Stock extends BaseModel{
 
     //货品ID
     private String id ;

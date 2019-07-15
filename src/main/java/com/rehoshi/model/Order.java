@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * 订单
  */
-public class Order {
+public class Order extends BaseModel{
 
     /**
      * 订单状态

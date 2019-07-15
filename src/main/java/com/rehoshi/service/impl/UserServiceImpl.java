@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -18,19 +19,29 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     @Resource
-    private UserMapper userMapper ;
+    private UserMapper userMapper;
 
     @Override
     public RespData<Boolean> login(User user) {
-        return null;
+        RespData<Boolean> data = RespData.fail(false).setMsg("账号或密码错误") ;
+        if(user != null){
+            User byAccount = userMapper.getByAccount(user.getAccount());
+            if(byAccount != null){
+                String password = byAccount.getPassword();
+                if(password.equals(user.getPassword())){
+                    data.success().setData(true).setMsg("登录成功") ;
+                }
+            }
+        }
+        return data;
     }
 
     @Override
     public PageData<User> usersInPage(String search, int pageIndex, int pageSize) {
-        PageHelper.startPage(pageIndex - 1, pageSize) ;
-        List<User> bySearch = userMapper.getBySearch("%"+search+"%");
+        PageHelper.startPage(pageIndex, pageSize);
+        List<User> bySearch = userMapper.getBySearch("%" + search + "%");
         PageInfo<User> userPageInfo = new PageInfo<>(bySearch);
-        return new PageData<>(userPageInfo) ;
+        return new PageData<>(userPageInfo);
     }
 
     @Override
@@ -40,16 +51,71 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public RespData<String> save(User user) {
-        return null;
+        RespData<String> data = RespData.fail(null);
+        if (user != null) {
+            //先根据账号查找用户
+            User byAccount = userMapper.getByAccount(user.getAccount());
+            if (byAccount == null) {
+                user.newId();
+                user.setCreateTime(new Date());
+                int save = userMapper.save(user);
+                if (save > 0) {
+                    data.success().setMsg("添加用户成功");
+                } else {
+                    data.fail().setMsg("添加用户失败");
+                }
+            } else {
+                data.fail().setMsg("账号已存在");
+            }
+        }
+        return data;
     }
 
     @Override
     public RespData<Boolean> update(User user) {
-        return null;
+        RespData<Boolean> data = RespData.fail(false);
+        if (user != null) {
+            User byAccount = userMapper.getByAccount(user.getAccount());
+            if (byAccount == null || byAccount.getId().equalsIgnoreCase(user.getId())) {
+                int update = userMapper.update(user);
+                if (update > 0) {
+                    data.success().setData(true).setMsg("更新成功");
+                } else {
+                    data.setMsg("更新失败");
+                }
+            } else {
+                data.setData(false).setMsg("账号已存在") ;
+            }
+        }
+        return data;
     }
 
     @Override
     public RespData<Boolean> deleteById(String id) {
-        return null;
+        RespData<Boolean> data = RespData.fail(false) ;
+        int count = userMapper.deleteById(id);
+        if(count > 0){
+            data.success().setData(true).setMsg("删除成功") ;
+        }else {
+            data.setMsg("删除失败") ;
+        }
+        return data;
+    }
+
+    @Override
+    public User getByAccount(String account) {
+        return userMapper.getByAccount(account);
+    }
+
+    @Override
+    public RespData<Boolean> deleteInIds(List<String> ids) {
+        RespData<Boolean> data = RespData.fail(false) ;
+        int index = userMapper.deleteInIds(ids);
+        if(index > 0){
+            data.success().setData(true).setMsg("删除成功") ;
+        }else {
+            data.setMsg("删除失败") ;
+        }
+        return data;
     }
 }

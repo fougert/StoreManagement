@@ -7,7 +7,7 @@ import java.util.List;
  * 产品 将原品打包之后的
  * 使用原料包材 将原品打包好
  */
-public class Product {
+public class Product extends BaseModel{
 
     //产品id
     private String id ;
