@@ -43,12 +43,12 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public RespData<List<Goods>> getAllMatrial() {
+    public RespData<List<Goods>> getAllMaterial() {
         return null;
     }
 
     @Override
-    public RespData<List<Goods>> getAllPaakageMatrial() {
+    public RespData<List<Goods>> getAllPackageMaterial() {
         return null;
     }
 

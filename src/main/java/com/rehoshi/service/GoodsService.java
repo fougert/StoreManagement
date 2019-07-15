@@ -44,14 +44,14 @@ public interface GoodsService {
      * 按照type = Material 查找
      * @return
      */
-    RespData<List<Goods>> getAllMatrial() ;
+    RespData<List<Goods>> getAllMaterial() ;
 
     /**
      * 获取所有包材
      * 按照type = PackageMaterial 查找
      * @return
      */
-    RespData<List<Goods>> getAllPaakageMatrial() ;
+    RespData<List<Goods>> getAllPackageMaterial() ;
 
     /**
      * 原品分页列表
