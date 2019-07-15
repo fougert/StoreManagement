@@ -20,6 +20,7 @@ public class Goods {
     //类型 默认商品类型
     private Integer type ;
 
+
     public String getId() {
         return id;
     }

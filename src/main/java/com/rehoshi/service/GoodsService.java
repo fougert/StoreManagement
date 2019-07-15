@@ -60,13 +60,13 @@ public interface GoodsService {
      * @param pageSize 每页数据量
      * @return
      */
-    RespData<PageData<Goods>> goodsInPage(String search, int pageIndex, int pageSize) ;
+    PageData<Goods> goodsInPage(String search, int pageIndex, int pageSize) ;
 
     /**
      * 根据id 获取原品
      * @param id 原品id
      * @return
      */
-    RespData<Goods> getById(String id) ;
+    RespData<Goods> getById(String id);
 
 }

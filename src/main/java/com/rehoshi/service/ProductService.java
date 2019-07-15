@@ -9,7 +9,6 @@ import com.rehoshi.model.Product;
  */
 public interface ProductService {
 
-
     /**
      * 打包产品
      * @param product 打包的产品信息
