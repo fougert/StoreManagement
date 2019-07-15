@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping(value = "/user",produces = "application/json; charset=utf-8" )
 public class UserController extends BaseController{
 
-    @Autowired
+   @Autowired
     UserService userService ;
 
     @RequestMapping(value = "login", method = RequestMethod.POST)

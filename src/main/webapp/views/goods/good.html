@@ -126,17 +126,16 @@
             //第一个实例
             table.render({
                 elem: '#goods'
-                //,height: 312
-                ,url: '/goods/goodInPage' //数据接口
-                ,method:'GET'
-
-                ,page: true //开启分页
-                ,cols: [[ //表头
-                    {field: 'id', title: 'ID', type:'checkbox',  sort: true, fixed: 'left'}
-                    ,{field: 'id', title: '编号'}
-                    ,{field: 'name', title: '商品名称'}
-                    ,{fixed: 'right',title: '操作', width:250, align:'center', toolbar: '#barDemo'}
-                ]]
+              //,height: 312
+              ,url: '/goods/goodInPage' //数据接口
+              ,method:'GET'
+              ,page: true //开启分页
+              ,cols: [[ //表头
+                {field: 'id', title: 'ID', type:'checkbox',  sort: true, fixed: 'left'}
+                ,{field: 'id', title: '编号'}
+                ,{field: 'name', title: '商品名称'}
+                ,{fixed: 'right',title: '操作', width:250, align:'center', toolbar: '#barDemo'}
+              ]]
             });
 
         });

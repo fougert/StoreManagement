@@ -13,7 +13,7 @@ public class User extends BaseModel {
     //角色
     public interface Role {
         int USER = 0; //用户
-        int ADMINE = 1;//管理员
+        int ADMIN = 1;//管理员
     }
 
     //UUID
@@ -26,6 +26,7 @@ public class User extends BaseModel {
     private String name;
     //权限
     private Integer role;
+
     private String roleName;
     //登录时生成的凭证
     private String token;
@@ -79,7 +80,7 @@ public class User extends BaseModel {
             case Role.USER:
                 setRoleName("用户");
                 break;
-            case Role.ADMINE:
+            case Role.ADMIN:
                 setRoleName("管理员");
                 break;
         }
