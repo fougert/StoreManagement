@@ -15,7 +15,6 @@ public class User extends BaseModel {
         int USER = 0; //用户
         int ADMIN = 1;//管理员
     }
-
     //UUID
     private String id;
     //账号 账号是惟一的

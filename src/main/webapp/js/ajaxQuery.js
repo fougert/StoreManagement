@@ -24,7 +24,7 @@ function ajaxDelete(url, param, callback, errorCallback) {
  * @param callback 成功的回调
  * @param errorCallback 错误的回调
  */
-function ajaxQuery(url,method,param, callback, errorCallback){
+function ajaxQuery(url,method,param,callback, errorCallback){
 
     if('string' !== typeof(param)){//不是字符串类型需要转化为地址参数
         var p = "" ;

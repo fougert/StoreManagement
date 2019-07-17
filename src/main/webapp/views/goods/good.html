@@ -13,10 +13,12 @@
     <script type="text/javascript" src="../../lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="../../js/xadmin.js"></script>
     <script type="text/javascript" src="../../js/cookie.js"></script>
+    <script type="text/javascript" src="../../js/ajaxQuery.js"></script>
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
       <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
       <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+
     <![endif]-->
   </head>
   
@@ -32,98 +34,37 @@
         <i class="layui-icon" style="line-height:30px">ဂ</i></a>
     </div>
     <div class="x-body">
-      <div class="layui-row">
+     <!-- <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so layui-form-pane">
-          <!-- <input class="layui-input" placeholder="分类名" name="cate_name"> -->
-          <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon"></i>增加</button>
+          &lt;!&ndash; <input class="layui-input" placeholder="分类名" name="cate_name"> &ndash;&gt;
+          <button class="layui-btn"  onclick="x_admin_show('增加商品种类','goodsType-add.html',600,400)"><i class="layui-icon"></i>增加</button>
         </form>
-      </div>
+      </div>-->
       <!-- <blockquote class="layui-elem-quote">每个tr 上有两个属性 cate-id='1' 当前分类id fid='0' 父级id ,顶级分类为 0，有子分类的前面加收缩图标<i class="layui-icon x-show" status='true'>&#xe623;</i></blockquote> -->
       <xblock>
-        <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-        <span class="x-right" style="line-height:40px">共有数据：88 条</span>
+        <button class="layui-btn layui-btn-danger" onclick="delGoods()"><i class="layui-icon"></i>批量删除</button>
+        <!--<span class="x-right" style="line-height:40px" id="total" >共有数据：88条</span>-->
+        <button class="layui-btn"  onclick="x_admin_show('增加商品种类','goodsType-add.html',600,400)"><i class="layui-icon"></i>增加</button>
       </xblock>
 
-      <table class="layui-table layui-form" id="goods"  lay-filter="goods">
-        <!-- <thead>
-          lay-data="{url:'http://localhost:8080/goods/goodInPage', method:'GET',page:true, id:'goods'}
-          <tr>
-            <th width="20">
-              <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
-            </th>
-            <th width="70">ID</th>
-            <th>商品名称</th>
-            <th width="250">操作</th>
-          </tr> 
-        </thead> -->
-        <!-- <thead>
-          <tr>
-            <th lay-data="{width:20}">
-              <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
-            </th>
-            <th lay-data="{field:'data.id', width:70}">ID</th>
-            <th lay-data="{field:'data.name'}">商品名称</th>
-            <th width="250">操作</th>
-          </tr>
-        </thead> 
-        <tbody class="x-cate">
-          <tr cate-id='1' fid='0' >
-            <td>
-              <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
-            </td>
-            <td>1</td>
-            <td>
-              产品管理
-            </td>
-          
-            <td class="td-manage">
-              <button class="layui-btn layui-btn layui-btn-xs"  onclick="x_admin_show('编辑','admin-edit.html')" >
-                <i class="layui-icon">&#xe642;</i>
-                编辑
-              </button>
-              <button class="layui-btn-danger layui-btn layui-btn-xs"  onclick="member_del(this,'要删除的id')" href="javascript:;" >
-                <i class="layui-icon">&#xe640;</i>
-                删除
-              </button>
-            </td>
-          </tr>
-         
-          <tr cate-id='5' fid='0' >
-            <td>
-              <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
-            </td>
-            <td>5</td>
-            <td>
-              新闻 
-            </td>
-
-            <td class="td-manage">
-              <button class="layui-btn layui-btn layui-btn-xs"  onclick="x_admin_show('编辑','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>编辑</button>
-              <button class="layui-btn-danger layui-btn layui-btn-xs"  onclick="member_del(this,'要删除的id')" href="javascript:;" ><i class="layui-icon">&#xe640;</i>删除</button>
-            </td>
-          </tr>
-        </tbody> -->
+      <table class="layui-table layui-form" id="goods" lay-filter="goods">
 
       </table>
-        <div id="test1"></div>
-
 
     </div>
-    <style type="text/css">
-      
-    </style>
+
     <script type="text/html" id="barDemo">
-        <button class="layui-btn layui-btn layui-btn-xs"  lay-event="edit" ><i class="layui-icon">&#xe642;</i>编辑</button>
+        <a class="layui-btn layui-btn layui-btn-xs"  lay-event="edit" ><i class="layui-icon">&#xe642;</i>编辑</a>
         <!-- onclick="x_admin_show('编辑','admin-edit.html')"
         onclick="member_del(this,'要删除的id')" href="javascript:;"  -->
-        <button class="layui-btn-danger layui-btn layui-btn-xs"  lay-event="edit"><i class="layui-icon">&#xe640;</i>删除</button>
-    </script>
+        <a class="layui-btn-danger layui-btn layui-btn-xs"  lay-event="del"><i class="layui-icon">&#xe640;</i>删除</a>
+   </script>
      
     <script>
         layui.use('table', function(){
             var table = layui.table;
 
-            //第一个实例
+            //table表格初始化
             table.render({
                 elem: '#goods'
               //,height: 312
@@ -131,14 +72,141 @@
               ,method:'GET'
               ,page: true //开启分页
               ,cols: [[ //表头
-                {field: 'id', title: 'ID', type:'checkbox',  sort: true, fixed: 'left'}
-                ,{field: 'id', title: '编号'}
-                ,{field: 'name', title: '商品名称'}
-                ,{fixed: 'right',title: '操作', width:250, align:'center', toolbar: '#barDemo'}
-              ]]
+                    {field: 'id', title: 'ID', type:'checkbox',  sort: true, fixed: 'left'}
+                    ,{field: 'id', title: '编号'}
+                    ,{field: 'name', title: '商品名称'}
+                    ,{fixed: 'right',title: '操作', width:250, align:'center', toolbar: '#barDemo'}
+                ]]
+            });
+
+
+            //监听工具条删除编辑事件
+            table.on('tool(goods)', function(obj){ //注：tool是工具条事件名，goods是table原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+                if (layEvent === 'del'){
+                    layer.confirm('真的删除当前行吗',function (index) {
+                        var id=data.id;
+                       /* ajaxDelete('/goods/delGoodsType/' + id,null,function () {
+
+                        });*/
+                        $.ajax({
+                            url:'/goods/delGoodsType/'+id,
+                            type:'DELETE',
+                           /* data:{
+                                id:id
+                            },*/
+                            success:function (result) {
+                                if (result.code===200) {
+                                    //删除成功
+                                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                                    layer.close(index);
+                                    layer.msg('删除成功',{icon: 6, time: 2000});
+                                    //setTimeout('window.location.reload()',2000);
+
+                                }else if (result.code==0){layer.message('删除成功',{icon: 6, time: 2000});
+                                    //更新失败
+                                    layer.msg('删除失败！请重新尝试',{icon: 5, time: 2000});
+                                }
+                            },
+                            fail:function (result) {
+                                layer.msg('网络异常！请联系管理员',{icon: 5, time: 2000});
+                            }
+                        });
+                    })
+                }else if (layEvent === 'edit') {
+                    //弹出iframe层
+                    layer.open({
+                        type: 2,
+                        title: '商品编辑',
+                        maxmin: true,
+                        shadeClose: true, //点击遮罩关闭层
+                        area : ['600px' , '400px'],
+                        content: 'goodsType-edit.html',
+                        //父页面给子页面(iframe)传值
+                        success:function (layero,index) {
+                            var body=layer.getChildFrame('body',index);
+                            //渲染子页面数据
+                            body.contents().find("#name").val(data.name);
+                            body.contents().find('#id').val(data.id);
+                            //body.contents().find("#type value").val(data.type);
+
+                        }
+                    });
+                }
+                /*if(layEvent === 'detail'){ //查看
+                    //do somehing
+                } else if(layEvent === 'del'){ //删除
+                    layer.confirm('真的删除行么', function(index){
+                        obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                        layer.close(index);
+                        //向服务端发送删除指令
+                    });
+                } else if(layEvent === 'edit'){ //编辑
+                    //do something
+
+                    //同步更新缓存对应的值
+                    obj.update({
+                        username: '123'
+                        ,title: 'xxx'
+                    });
+                }*/
+            });
+
+            //监听复选框事件
+            table.on('checkbox(goods)', function(obj){
+
+                //alert("触发复选框");
+                //console.log(obj.checked); //当前是否选中状态
+                //console.log(obj.data); //选中行的相关数据
+                //console.log(obj.type); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
+                //选中所有行
+              /*  if(obj.type === 'all'){
+                    console.log("all");
+                    console.log(table.checkStatus('goods').data)
+                }*/
             });
 
         });
+
+        /**
+         * 删除多个商品
+         */
+        function delGoods() {
+            //layui.table.checkStatus('goods').data    获取到所有被选中的复选框
+            //换成json格式字符串
+            var data=JSON.stringify(layui.table.checkStatus('goods').data);
+            console.log(data)
+            //将json格式字符串转换成对象
+            var dataObject=JSON.parse(data);
+            //
+            if (dataObject.length===0){
+                layer.msg("请选中要删除的商品！",{icon:7,time:3000})
+                //layer.msg("黄色感叹号", {icon:7});
+            }else{
+                $.ajax({
+                    url:'/goods/delBatchGoodsTypes',
+                    method:'DELETE',
+                    contentType:"application/json",
+                    data:data,
+                    success:function (result){
+                        if (result.code===200){
+                            layui.layer.msg("删除成功",{icon:1,time:2000})
+                        }
+                       setTimeout(function () {
+                           window.location.reload();
+                       },2000)
+
+                    },
+                    error:function (result) {
+                        layui.layer.msg("网络异常！",{icon:2,time:2000})
+                    }
+                })
+
+            }
+        }
     </script>
 
   </body>

@@ -45,6 +45,7 @@ public class RespData<T> {
         this.code = Code.TOKEN_TIMEOUT ;
         return this ;
     }
+
     public static <T>RespData<T> success(T data){
         return new RespData<T>().success().setData(data).setMsg("成功") ;
     }

@@ -5,6 +5,7 @@ import com.rehoshi.dto.RespData;
 import com.rehoshi.model.Stock;
 
 public interface StockService {
+
     /**
      * 货物入库
      * 时间自动赋值使用当前时间
@@ -27,7 +28,7 @@ public interface StockService {
      * @param pageSize 每页数据量
      * @return
      */
-    RespData<PageData<Stock>> stockInPage(String search, int pageIndex, int pageSize) ;
+    PageData<Stock> stockInPage(String search, int pageIndex, int pageSize) ;
 
     /**
      * 根据id 获取库存信息

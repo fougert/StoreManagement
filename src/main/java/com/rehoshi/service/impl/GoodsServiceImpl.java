@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class GoodsServiceImpl implements GoodsService {
@@ -68,8 +69,76 @@ public class GoodsServiceImpl implements GoodsService {
         PageInfo<Goods> goodsPageInfo = new PageInfo<>(goods);
         return new PageData<>(goodsPageInfo);
     }
+
     @Override
     public RespData<Goods> getById(String id) {
         return null;
+    }
+
+    /**
+     *
+     * @param name 商品名称
+     * @param type 商品种类
+     * @return
+     */
+    public RespData addGoodsType(String name, Integer type) {
+
+        List<Goods> goods=goodsMapper.queryByNameAndType(name,type);
+        if(goods.size()==0){
+             //生成主键
+             String uuid=UUID.randomUUID().toString().replaceAll("-","");
+            int result=goodsMapper.addGoodsType(uuid,name,type);
+            if (result==1){
+                return RespData.success(uuid).setCode(200).setMsg("数据库更新成功");
+            }else{
+                return RespData.fail(false).setCode(0).setMsg("数据库更新异常");
+            }
+        }else{
+            return RespData.fail(false).setCode(0).setMsg("该商品数据库中已存在");
+        }
+
+    }
+
+    /**
+     * 删除商品
+     * @param id
+     * @return
+     */
+    public RespData<Boolean> delGoodsType(String id) {
+        int result=goodsMapper.delGoodsType(id);
+        if (result==1){
+           return RespData.success(true).setCode(200).setMsg("删除成功");
+        }else{
+          return RespData.fail(false).setCode(0).setMsg("删除失败");
+        }
+    }
+
+    /**
+     * 修改商品
+     * @param good
+     * @return
+     */
+    public RespData<Boolean> editGoods(Goods good) {
+        int result=goodsMapper.editGoods(good);
+        if (result == 0){
+            return RespData.fail(false).setCode(0).setMsg("更新异常");
+        }else{
+            return RespData.success(true).setCode(200).setMsg("成功更新");
+        }
+    }
+
+    /**
+     * 批量删除商品
+     * @param goodslist
+     * @return
+     */
+    public RespData<Boolean> delBatchGoodTypes(List<Goods> goodslist) {
+
+        int result=goodsMapper.delBatchGoodTypes(goodslist);
+        if(result!=0){
+            return RespData.success(true);
+        }else{
+            return RespData.fail(false);
+        }
     }
 }
