@@ -7,6 +7,7 @@ import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
 import com.rehoshi.model.User;
 import com.rehoshi.service.UserService;
+import com.rehoshi.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,14 +23,14 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public RespData<Boolean> login(User user) {
-        RespData<Boolean> data = RespData.fail(false).setMsg("账号或密码错误") ;
+    public RespData<User> login(User user) {
+        RespData<User> data = new RespData<User>().fail().setData(null).setMsg("账号或者密码错误") ;
         if(user != null){
             User byAccount = userMapper.getByAccount(user.getAccount());
             if(byAccount != null){
                 String password = byAccount.getPassword();
                 if(password.equals(user.getPassword())){
-                    data.success().setData(true).setMsg("登录成功") ;
+                    data.success().setData(byAccount).setMsg("登录成功") ;
                 }
             }
         }
@@ -116,6 +117,35 @@ public class UserServiceImpl implements UserService {
         }else {
             data.setMsg("删除失败") ;
         }
+        return data;
+    }
+
+    @Override
+    public RespData<Boolean> changePassword(User user) {
+        RespData<Boolean> data = RespData.fail(false) ;
+        if(StringUtil.isNullOrEmpty(user.getOldPassword())){
+            data.setMsg("请输入旧密码") ;
+        }else if(StringUtil.isNullOrEmpty(user.getPassword())){
+            data.setMsg("请输入新密码") ;
+        }else if(!user.getPassword().equals(user.getRePassword())){
+            data.setMsg("两次密码不一致") ;
+        }else if(user.getOldPassword().equals(user.getPassword())){
+            data.setMsg("新旧密码不能相同") ;
+        }else{
+            User byId = userMapper.getById(user.getId());
+            if(user.getOldPassword().equals(byId.getPassword())){
+                byId.setPassword(user.getPassword());
+                int update = userMapper.update(byId);
+                if(update > 0){
+                    data.success().setData(true).setMsg("修改成功") ;
+                }else {
+                    data.setMsg("修改失败") ;
+                }
+            }else {
+                data.setMsg("旧密码验证失败") ;
+            }
+        }
+
         return data;
     }
 }

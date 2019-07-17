@@ -11,9 +11,9 @@ public interface UserService {
      * 登录业务
      * 先将密码进行md5加密再查询数据库
      * @param user
-     * @return 成功登录返回true 失败返回false
+     * @return 成功登录返回用户信息 失败返回null
      */
-    RespData<Boolean> login(User user) ;
+    RespData<User> login(User user) ;
 
     /**
      * 用户分页数据
@@ -67,4 +67,11 @@ public interface UserService {
      * @return 成功返回true 失败返回false
      */
     RespData<Boolean> deleteInIds(List<String> ids) ;
+
+    /**
+     * 修改用户密码
+     * @param user 包含了密码信息的用户数据
+     * @return 成功返回true 失败返回false
+     */
+    RespData<Boolean> changePassword(User user);
 }

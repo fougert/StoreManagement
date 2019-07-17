@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>欢迎页面-X-admin2.1</title>
+    <title>仓库管理系统</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -45,13 +45,11 @@
 <div class="x-body">
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so">
-            <input class="layui-input" autocomplete="off" placeholder="开始日" name="start" id="start">
-            <input class="layui-input" autocomplete="off" placeholder="截止日" name="end" id="end">
-            <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+            <input id="search" type="text" name="search" placeholder="请输入用户名" autocomplete="off" class="layui-input">
             <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
-    <table class="layui-table" lay-data="{url:'/user/list',page:true,toolbar: '#toolbarDemo',id:'userList'}"
+    <table class="layui-table" lay-data="{url:'/user/list',page:true,toolbar: '#toolbarDemo',id:'userList',where:{search:$('#search').val()}}"
            lay-filter="userList">
         <thead>
         <tr>
@@ -70,7 +68,7 @@
 
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="deleteAll">批量删除</button>
+        <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="deleteAll">批量删除</button>
         <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
     </div>
 </script>
@@ -99,6 +97,8 @@
 </script>
 
 <script>
+    var search = getQueryString("search") ;
+    $("#search").val(search) ;
     layui.use('laydate', function () {
         var laydate = layui.laydate;
 
@@ -181,47 +181,57 @@
     function updateUser(user) {
         //矫正日期格式
         user.createTime = user.createTimeStr;
-        ajaxPut("/user/update", user, function (data) {
-            if (data) {
-                showToast("更新成功")
+
+        //为null 后台无法接受正常序列化对象
+        delete user.lastLoginTime ;
+
+        $.hoshi()
+            .put("/user/update")
+            .formParam(user)
+            .onResponse(function () {
                 reloadTable();
-            } else {
-                showToast("更新失败");
-            }
-        },function (data) {
-            reloadTable() ;
-        }) ;
+            })
+            .onSuccess(function (data) {
+                if (data) {
+                    showToast("更新成功")
+                } else {
+                    showToast("更新失败");
+                }
+            }).linkStart() ;
     }
 
     function deleteUser(id) {
         layer.confirm('确认要删除该用户吗？',function(index){
+
             //请求服务器删除用户
-            ajaxDelete("/user/delete/" + id,{},function (data) {
-                if(data){
-                    showToast("删除成功") ;
-                    reloadTable() ;
-                }else {
-                    showError("删除失败") ;
-                }
-            }) ;
+            $.hoshi()
+                .delete("/user/delete/" + id)
+                .onSuccess(function (data) {
+                    if(data){
+                        showToast("删除成功") ;
+                        reloadTable() ;
+                    }else {
+                        showError("删除失败") ;
+                    }
+                }).linkStart() ;
         });
     }
 
     function deleteAllUser(ids) {
         layer.confirm('确认要删除勾选用户吗？',function(index){
             //请求服务器删除用户
-            ajaxDelete("/user/deleteAll/" + ids,{},function (data) {
-                if(data){
-                    showToast("删除成功") ;
-                    reloadTable() ;
-                }else {
-                    showError("删除失败") ;
-                }
-            }) ;
+            $.hoshi()
+                .delete("/user/deleteAll/" + ids)
+                .onSuccess(function (data) {
+                    if(data){
+                        showToast("删除成功") ;
+                        reloadTable() ;
+                    }else {
+                        showError("删除失败") ;
+                    }
+                }).linkStart() ;
         });
     }
-
-
 </script>
 </body>
 

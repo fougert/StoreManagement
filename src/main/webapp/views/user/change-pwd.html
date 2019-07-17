@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>仓库管理系统</title>
+    <title>欢迎页面-X-admin2.1</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -25,44 +25,20 @@
 <body>
 <div class="x-body">
     <form class="layui-form">
+
         <div class="layui-form-item">
-            <label for="L_email" class="layui-form-label">
-                <span class="x-red">*</span>账号
+            <label for="L_old_pass" class="layui-form-label">
+                <span class="x-red">*</span>旧密码
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="L_email" name="account" required="" lay-verify="required"
+                <input type="password" id="L_old_pass" name="oldPassword" required="" lay-verify="oldPass"
                        autocomplete="off" class="layui-input">
             </div>
-            <div class="layui-form-mid layui-word-aux">
-                <span class="x-red">*</span>将会成为您唯一的登入名
-            </div>
         </div>
-        <div class="layui-form-item">
-            <label for="L_role" class="layui-form-label">
-                <span class="x-red">*</span>用户权限
-            </label>
-            <div class="layui-input-inline">
-                <select class="layui-input" name="role" id="L_role">
-                    <option value="0">用户</option>
-                    <option value="1">管理员</option>
-                </select>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="L_username" class="layui-form-label">
-                <span class="x-red">*</span>名称
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="L_username" name="name" required="" lay-verify="name|required"
-                       autocomplete="off" class="layui-input">
-            </div>
-            <div class="layui-form-mid layui-word-aux">
-                1到6个字符
-            </div>
-        </div>
+
         <div class="layui-form-item">
             <label for="L_pass" class="layui-form-label">
-                <span class="x-red">*</span>密码
+                <span class="x-red">*</span>新密码
             </label>
             <div class="layui-input-inline">
                 <input type="password" id="L_pass" name="password" required="" lay-verify="pass"
@@ -84,7 +60,7 @@
         <div class="layui-form-item">
             <label for="L_repass" class="layui-form-label">
             </label>
-            <button class="layui-btn" lay-filter="add" lay-submit="">
+            <button class="layui-btn" lay-filter="change" lay-submit="">
                 保存
             </button>
         </div>
@@ -98,12 +74,7 @@
 
         //自定义验证规则
         form.verify({
-            name: function (value) {
-                if (value.length > 6) {
-                    return '昵称最多只能有6个字符';
-                }
-            }
-            , pass: [/(.+){6,12}$/, '密码必须6到12位']
+            pass: [/(.+){6,12}$/, '密码必须6到12位']
             , repass: function (value) {
                 if ($('#L_pass').val() != $('#L_repass').val()) {
                     return '两次密码不一致';
@@ -112,21 +83,18 @@
         });
 
         //监听提交
-        form.on('submit(add)', function (data) {
+        form.on('submit(change)', function (data) {
             $.hoshi()
-                .post("/user/add")
+                .put("/user/change/password")
                 .formParam(data.field)
                 .onSuccess(function (data) {
-                    layer.alert("增加成功", {icon: 6}, function () {
-
-                        //关闭当前frame
-                        x_admin_close();
-
-                        // 可以对父窗口进行刷新
-                        x_admin_father_reload();
-                    });
-                })
-                .linkStart("addUser") ;
+                    if (data) {
+                        layer.alert("修改成功", {icon: 6}, function () {
+                            //重新登录
+                            backToLogin() ;
+                        });
+                    }
+                }).linkStart() ;
             return false;
         })
 

@@ -32,10 +32,15 @@ public class User extends BaseModel {
 
     private String rePassword;
 
+    private String oldPassword ;
+
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime ;
 
     private String createTimeStr ;
+
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Date lastLoginTime ;
 
     public String getId() {
         return id;
@@ -122,8 +127,24 @@ public class User extends BaseModel {
         return createTimeStr;
     }
 
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
+
     public void setCreateTimeStr(String createTimeStr) {
         this.createTimeStr = createTimeStr;
+    }
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
     }
 
     /**
