@@ -22,4 +22,7 @@ public class DateUtil {
         getDateFormat().applyPattern(pattern) ;
         return date == null ? "" : getDateFormat().format(date) ;
     }
+
+
+
 }

@@ -23,8 +23,8 @@ public class GoodsController {
      */
     @ResponseBody
     @RequestMapping(value ="/allgoods",method = RequestMethod.GET)
-    public PageData<Goods> getAllGoods(){
-        return null;
+    public RespData<List<Goods>> getAllGoods(){
+        return goodsService.getAllGoods();
     }
 
     /**
