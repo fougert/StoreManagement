@@ -5,6 +5,8 @@ import com.rehoshi.dto.RespData;
 import com.rehoshi.dto.search.ProductPageSearch;
 import com.rehoshi.model.Product;
 
+import java.util.List;
+
 /**
  * 产品业务
  */
@@ -50,4 +52,10 @@ public interface ProductService {
     RespData<Boolean> deleteById(String id) ;
 
 
+    /**
+     * 批量删除产品
+     * @param ids 需要删除的产品id
+     * @return
+     */
+    RespData<Boolean> deleteInIds(List<String> ids);
 }

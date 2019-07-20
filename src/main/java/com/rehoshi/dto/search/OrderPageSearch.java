@@ -1,5 +1,7 @@
 package com.rehoshi.dto.search;
 
+import com.rehoshi.util.DateUtil;
+
 import java.util.Date;
 
 public class OrderPageSearch {
@@ -32,7 +34,7 @@ public class OrderPageSearch {
 
     public Date getEndTime() {
         if (endTime == null){
-            endTime = new Date() ;
+            endTime = DateUtil.tomorrow();
         }
         return endTime;
     }

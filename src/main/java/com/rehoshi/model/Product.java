@@ -1,7 +1,10 @@
 package com.rehoshi.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rehoshi.util.DateUtil;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,20 +12,22 @@ import java.util.List;
  * 产品 将原品打包之后的
  * 使用原料包材 将原品打包好
  */
-public class Product extends BaseModel{
+public class Product extends BaseModel {
 
     //产品id
-    private String id ;
+    private String id;
 
     //产品的名称
-    private String name ;
+    private String name;
 
     //产品的成分
-    private List<ProductComposition> compositions ;
+    private List<ProductComposition> compositions;
 
     //创建时间
-    private Date createTime ;
-    private String createTimeStr ;
+    @DateTimeFormat(pattern = DateUtil.DATETIME_FORMAT)
+    @JsonFormat(pattern = DateUtil.DATETIME_FORMAT, timezone = "GMT+8")
+    private Date createTime;
+    private String createTimeStr;
 
 
     public String getId() {
@@ -42,6 +47,9 @@ public class Product extends BaseModel{
     }
 
     public List<ProductComposition> getCompositions() {
+        if (compositions == null) {
+            compositions = new ArrayList<>();
+        }
         return compositions;
     }
 

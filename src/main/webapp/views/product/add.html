@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>订单添加</title>
+    <title>成品添加</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -26,43 +26,15 @@
 <div class="x-body">
     <form class="layui-form">
         <div class="layui-form-item">
-            <label for="username" class="layui-form-label">
-                <span class="x-red">*</span>订单名称
+            <label for="name" class="layui-form-label">
+                <span class="x-red">*</span>成品名称
             </label>
             <div class="layui-input-inline">
                 <input type="text" id="name" name="name" required="" lay-verify="required"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
-        <div class="layui-form-item">
-            <label for="username" class="layui-form-label">
-                <span class="x-red">*</span>订单编号
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="username" name="username" required="" lay-verify="required"
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="phone" class="layui-form-label">
-                <span class="x-red">*</span>订单数量
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="phone" name="phone" required="" lay-verify="number"
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="username" class="layui-form-label">
-                <span class="x-red">*</span>订单状态
-            </label>
-            <div class="layui-input-inline">
-                <select id="shipping" name="shipping" class="valid">
-                    <option value="0">未发货</option>
-                    <option value="1">已发货</option>
-                </select>
-            </div>
-        </div>
+
         <div class="layui-form-item">
             <label class="layui-form-label">
             </label>
@@ -79,8 +51,8 @@
         //监听提交
         form.on('submit(add)', function (data) {
             $.hoshi()
-                .post("/order/add")
-                .formParam(data.field)
+                .post("/product/add")
+                .jsonParam(data.field)
                 .onSuccess(function (data, msg) {
                     // showToast(msg);
                     parent.layui.layer.msg(msg) ;

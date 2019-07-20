@@ -4,105 +4,6 @@ var RespCode = {
     TOKEN_TIMEOUT: 1,
 }
 
-/*
-function ajaxPut(url, param, callback, errorCallback) {
-    ajaxFormQuery(url, "PUT", param, callback, errorCallback);
-}
-
-function ajaxPost(url, param, callback, errorCallback) {
-    ajaxFormQuery(url, "POST", param, callback, errorCallback);
-}
-
-function ajaxDelete(url, param, callback, errorCallback) {
-    ajaxFormQuery(url, "DELETE", param, callback, errorCallback);
-}
-
-function ajaxFormQuery(url, method, param, callback, errorCallback) {
-    if ('string' !== typeof(param)) {//不是字符串类型需要转化为地址参数
-        var p = "";
-        for (var key in param) {
-            if (p !== "") {
-                p += "&";
-            }
-            p += key;
-            p += "=" + param[key];
-        }
-        param = p;
-    }
-
-    //发送表单请求
-    ajaxQuery(url, method, param, "application/x-www-form-urlencoded", callback, errorCallback);
-}
-
-function ajaxJsonPut(url, param, callback, errorCallback) {
-    ajaxJsonQuery(url, "PUT", param, callback, errorCallback);
-}
-
-function ajaxJsonPost(url, param, callback, errorCallback) {
-    ajaxJsonQuery(url, "POST", param, callback, errorCallback);
-}
-
-function ajaxJsonDelete(url, param, callback, errorCallback) {
-    ajaxJsonQuery(url, "DELETE", param, callback, errorCallback);
-}
-
-//发送json请求
-function ajaxJsonQuery(url, method, param, callback, errorCallback) {
-    if ('string' !== typeof(param)) {//不是字符串类型需要进行json序列化
-        param = JSON.stringify(param);
-    }
-    ajaxQuery(url, method, param, "application/json", callback, errorCallback);
-}
-
-
-
- * 请求后台的ajax方法
- * @param url 请求的url
- * @param method 请求的方法
- * @param param 请求的数据 序列化好的对象
- * @param contentType 上传的数据格式
- * @param callback 成功的回调
- * @param errorCallback 错误的回调
-
-function ajaxQuery(url, method, param, contentType, callback, errorCallback) {
-    //加载弹出层
-
-    $.ajax({
-        url: url,
-        data: param,
-        dataType: "JSON",
-        contentType: contentType,
-        type: method,
-        success: function (data) {
-            switch (data.code) {
-                case RespCode.SUCCESS:
-                    callback(data.data, data.msg, data.code);
-                    break;
-                case RespCode.TOKEN_TIMEOUT:
-                    //token过期重新登录
-                    layui.use(['layer'], function () {
-                        layui.layer.alert("登录过期，请重新登录", {icon: 0}, function () {
-                            //重新登录
-                            backToLogin();
-                        });
-                    })
-                    break;
-                case RespCode.FAIL:
-                    if (errorCallback != null) {
-                        errorCallback(data.data, data.msg, data.code);
-                    }
-                    showError(data.msg);
-                    break;
-            }
-        },
-        error: function (data) {
-            if (errorCallback != null) {
-                errorCallback(data.data, data.msg, data.code);
-            }
-            showError("网络错误")
-        }
-    });
-}*/
 function showError(msg) {
     layui.use(['']);
     layer.alert(msg, {icon: 2});
@@ -129,8 +30,8 @@ function getQueryString(name) {
  * @param inputId 输入框的id
  */
 function bindInputParam(inputId) {
-    var input = $("#" + inputId) ;
-    input.val(getQueryString(input.attr("name"))) ;
+    var input = $("#" + inputId);
+    input.val(getQueryString(input.attr("name")));
 }
 
 function backToLogin() {
@@ -175,17 +76,76 @@ var queryManager = {
         //删除缓存
         delete this.cache[this.getKey(sender)];
     },
-
-
 };
 
 function isString(obj) {
     return 'string' === typeof(obj);
 }
 
+function isNum(val) {
+    if (val === "" || val == null) {
+        return false;
+    }
+    if (!isNaN(val)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// function toJson(obj) {
+//     if(obj == null){
+//         return null ;
+//     }
+//     if(isString(obj)){
+//         return "\"" + obj + "\"" ;
+//     }else if(isNum(obj)){
+//         return obj.toString() ;
+//     }else {
+//     }
+// }
+
+function toJson(obj) {
+    if (obj == null) {
+        return null;
+    }
+    if (isString(obj)) {
+        return "\"" + obj + "\"";
+    } else if (obj instanceof Number) {
+        return obj.toString();
+    } else {
+        var open = "{";
+        var close = "}";
+        var isArray = false;
+        if (obj instanceof Array) {
+            isArray = true;
+            open = "[";
+            close = "]";
+        }
+        var json = open;
+        for (var i in  obj) {
+            var o = obj[i];
+            if (o != null) {
+                var j = toJson(o);
+                if (j != null) {
+                    if (json != open) {
+                        json += ",";
+                    }
+                    if (!isArray) {
+                        json += "\"" + i + "\":";
+                    }
+                    json += j;
+                }
+            }
+        }
+        json += close;
+        return json;
+    }
+}
 
 var FORM_TYPE = "application/x-www-form-urlencoded";
 var JSON_TYPE = "application/json";
+
 
 /**
  * 请求json的请求器
@@ -312,8 +272,8 @@ function HoshiQueryJson() {
                 if (!isString(data)) {
                     var p = "";
                     if (data instanceof Array) {//特殊处理数组对象
-                        p = {} ;
-                        p[arrayName] = data ;
+                        p = {};
+                        p[arrayName] = data;
                     } else {
                         for (var key in data) {
                             var val = data[key];

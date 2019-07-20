@@ -6,7 +6,6 @@ import java.util.Date;
 
 public class DateUtil {
 
-
     public enum Unit {
         SECOND,
         MINUTE,
@@ -55,6 +54,10 @@ public class DateUtil {
         return System.currentTimeMillis() - date.getTime();
     }
 
+    public static boolean isAfterNow(Date date){
+        return getDiff(date) < 0 ;
+    }
+
     public static Date addTime(Date date, double time, Unit unit) {
         if (date != null) {
             long addTime = date.getTime();
@@ -100,4 +103,12 @@ public class DateUtil {
         return toDate(DATETIME_FORMAT, dateStr);
     }
 
+    public static Date today() {
+        return toDate(formatDate(new Date()));
+    }
+
+    public static Date tomorrow() {
+        return addTime(today(), 1, Unit.DAY);
+    }
 }
+

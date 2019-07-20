@@ -1,5 +1,7 @@
 package com.rehoshi.dto.search;
 
+import com.rehoshi.util.DateUtil;
+
 import java.util.Date;
 
 public class ProductPageSearch {
@@ -31,7 +33,7 @@ public class ProductPageSearch {
 
     public Date getEndTime() {
         if (endTime == null){
-            endTime = new Date() ;
+            endTime = DateUtil.tomorrow();
         }
         return endTime;
     }

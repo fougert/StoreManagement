@@ -24,7 +24,7 @@
     <![endif]-->
 
     <style>
-        .laytable-cell-1-0-6 {
+        .laytable-cell-1-0-3 {
             overflow: visible;
         }
     </style>
@@ -44,7 +44,7 @@
 </div>
 <div class="x-body">
     <div class="layui-row">
-        <form class="layui-form layui-col-md12 x-so">
+        <form class="layui-form layui-col-md12 x-so" id="testForm">
             <input class="layui-input" placeholder="开始日" name="startTime" id="startTime">
             <input class="layui-input" placeholder="截止日" name="endTime" id="endTime">
             <input type="text" id="name" name="name" placeholder="请输入订单名称" autocomplete="off" class="layui-input">
@@ -105,10 +105,10 @@
             toolbar: "#toolBar",
             cols: [[
                 {type: 'checkbox', title: "ID"},
-                {field: 'id', width: 80, title: "产品ID"},
-                {field: 'name', width: 120, edit: 'text', title: "产品名称"},
+                {field: 'id', width: 80, title: "成品ID"},
+                {field: 'name', edit: 'text', title: "成品名称"},
                 {field: 'createTime', width: 200, templet: '#createTimeTpl', title: "创建时间"},
-                {field: 'id', width: 75, templet: '#operateTpl', title: "操作"}
+                {field: 'id', width: 76, templet: '#operateTpl', title: "操作"}
             ]],
             where:getTableWhere(["startTime","endTime","name"]),
             done: function (res, curr, count) {
@@ -173,11 +173,11 @@
                     done: function (value) {
                         var input = this.elem[0];
                         //根据单元格元素 获取当前行的 数据缓存
-                        var order = getCurRowData(table, "orderList", input);
+                        var product = getCurRowData(table, "productList", input);
                         //值不相等 才更新
-                        if (order.createTimeStr !== value) {
-                            order.createTimeStr = value;
-                            updateOrder(order);
+                        if (product.createTimeStr !== value) {
+                            product.createTimeStr = value;
+                            updateProduct(product);
                         }
                     }
                 });
@@ -191,9 +191,11 @@
      */
     function updateProduct(product) {
         product.createTime = product.createTimeStr;
+        // product.createTime = null ;
+        // product.createTimeStr = null ;
         $.hoshi()
             .put("/product/update")
-            .formParam(product)
+            .jsonParam(product)
             .onResponse(function () {
                 reloadTable();
             })

@@ -1,16 +1,16 @@
 package com.rehoshi.controller;
 
 import com.rehoshi.dto.PageData;
+import com.rehoshi.dto.RespData;
 import com.rehoshi.dto.search.ProductPageSearch;
 import com.rehoshi.model.Product;
 import com.rehoshi.service.ProductService;
 import com.rehoshi.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("product")
 @Controller
@@ -34,6 +34,30 @@ public class ProductController extends BaseController {
         search.setEndTime(DateUtil.addTime(DateUtil.toDate(endTimeStr), 1, DateUtil.Unit.DAY));
 
         return productService.productInPage(search, pageIndex, pageSize) ;
+    }
+
+    @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public RespData<Boolean> delete(@PathVariable String id) {
+        return productService.deleteById(id);
+    }
+
+    @RequestMapping(value = "delete/all", method = RequestMethod.DELETE)
+    @ResponseBody
+    public RespData<Boolean> deleteAll(@RequestBody(required = false) List<String> ids) {
+        return productService.deleteInIds(ids);
+    }
+
+    @RequestMapping(value = "update", method = RequestMethod.PUT)
+    @ResponseBody
+    public RespData<Boolean> update(@RequestBody Product product) {
+        return productService.update(product);
+    }
+
+    @RequestMapping(value = "add", method = RequestMethod.POST)
+    @ResponseBody
+    public RespData<String> add(@RequestBody Product product) {
+        return productService.packing(product) ;
     }
 
 }
