@@ -14,6 +14,7 @@ public class User extends BaseModel {
     public interface Role {
         int USER = 0; //用户
         int ADMIN = 1;//管理员
+        int SUPER_ADMIN = 2;//超级管理员
     }
     //UUID
     private String id;
@@ -34,12 +35,12 @@ public class User extends BaseModel {
 
     private String oldPassword ;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = DateUtil.DATETIME_FORMAT)
     private Date createTime ;
 
     private String createTimeStr ;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = DateUtil.DATETIME_FORMAT)
     private Date lastLoginTime ;
 
     public String getId() {

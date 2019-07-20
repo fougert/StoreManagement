@@ -9,13 +9,44 @@
 function getSelectObject(table, tableId, propName, data) {
     var elem = data.othis.parents('tr');
     var dataindex = elem.attr("data-index");
-    var obj = table.cache[tableId][dataindex] ;
-    var oldVal = obj[propName] ;
-    obj[propName] = data.value ;
-    var returnVal = {object:obj,oldValue:oldVal} ;
-    return returnVal ;
+    var obj = table.cache[tableId][dataindex];
+    var oldVal = obj[propName];
+    obj[propName] = data.value;
+    var returnVal = {object: obj, oldValue: oldVal};
+    return returnVal;
+}
+
+/**
+ * 获取单元格元素当前行的数据
+ * @param table layui table对象
+ * @param tableId 表格id
+ * @param elem 单元格元素
+ * @returns {*}
+ */
+function getCurRowData(table, tableId, elem) {
+    var tr = $(elem).parents("tr");
+    var index = tr.attr("data-index");
+    var obj = table.cache[tableId][index];
+    return obj;
 }
 
 function reloadTable() {
-    $(".layui-laypage-btn")[0].click();
+    var btnArray = $(".layui-laypage-btn");
+    if (btnArray != null && btnArray.length > 0) {
+        btnArray[0].click();
+    } else {
+        x_admin_father_reload();
+    }
+}
+
+function getTableWhere(paramArray) {
+    var param = {} ;
+    for (var i in paramArray){
+        var p = $("#" + paramArray[i]) ;
+        var val = p.val() ;
+        if(val != null && val != ""){
+            param[p.attr("name")] = val ;
+        }
+    }
+    return param ;
 }

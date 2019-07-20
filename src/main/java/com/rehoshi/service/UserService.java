@@ -2,6 +2,7 @@ package com.rehoshi.service;
 
 import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
+import com.rehoshi.dto.search.UserPageSearch;
 import com.rehoshi.model.User;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public interface UserService {
      * @param pageSize 每页数据量
      * @return
      */
-    PageData<User> usersInPage(String search, int pageIndex, int pageSize) ;
+    PageData<User> usersInPage(UserPageSearch search, int pageIndex, int pageSize) ;
 
     /**
      * 根据id 查找用户

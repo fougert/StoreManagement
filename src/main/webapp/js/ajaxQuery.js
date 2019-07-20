@@ -3,6 +3,7 @@ var RespCode = {
     FAIL: 0,
     TOKEN_TIMEOUT: 1,
 }
+
 /*
 function ajaxPut(url, param, callback, errorCallback) {
     ajaxFormQuery(url, "PUT", param, callback, errorCallback);
@@ -119,8 +120,17 @@ function showToast(msg) {
 function getQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
     var r = window.location.search.substr(1).match(reg);
-    if (r != null) return unescape(r[2]);
+    if (r != null) return decodeURIComponent(r[2]);
     return null;
+}
+
+/**
+ * 回显列表查询的参数
+ * @param inputId 输入框的id
+ */
+function bindInputParam(inputId) {
+    var input = $("#" + inputId) ;
+    input.val(getQueryString(input.attr("name"))) ;
 }
 
 function backToLogin() {
@@ -205,7 +215,7 @@ function HoshiQueryJson() {
     //默认的参数
     var ajaxQueryParam = {
         //默认get请求
-        type:"GET",
+        type: "GET",
         //默认是表单类型
         contentType: FORM_TYPE,
         //数据返回类型 定死是 Json
@@ -269,26 +279,26 @@ function HoshiQueryJson() {
     }
     //发送get请求
     this.get = function (url) {
-        this.method("GET").url(url) ;
-        return this ;
+        this.method("GET").url(url);
+        return this;
     }
     //发送post请求
     this.post = function (url) {
-        this.method("POST").url(url) ;
-        return this ;
+        this.method("POST").url(url);
+        return this;
     }
     //发送put请求
     this.put = function (url) {
-        this.method("PUT").url(url) ;
-        return this ;
+        this.method("PUT").url(url);
+        return this;
     }
     //发送delete请求
     this.delete = function (url) {
-        this.method("DELETE").url(url) ;
-        return this ;
+        this.method("DELETE").url(url);
+        return this;
     }
     //设置请求参数
-    this.param = function (data) {
+    this.param = function (data, arrayName) {
         switch (ajaxQueryParam.contentType) {
             case JSON_TYPE:
                 //字符类型 不做json转换
@@ -301,12 +311,20 @@ function HoshiQueryJson() {
                 //字符类型 不做form转换
                 if (!isString(data)) {
                     var p = "";
-                    for (var key in data) {
-                        if (p !== "") {
-                            p += "&";
+                    if (data instanceof Array) {//特殊处理数组对象
+                        p = {} ;
+                        p[arrayName] = data ;
+                    } else {
+                        for (var key in data) {
+                            var val = data[key];
+                            if (val != null) {
+                                if (p !== "") {
+                                    p += "&";
+                                }
+                                p += key;
+                                p += "=" + val;
+                            }
                         }
-                        p += key;
-                        p += "=" + data[key];
                     }
                     data = p;
                 }
@@ -316,8 +334,8 @@ function HoshiQueryJson() {
         return this;
     }
     //设置表单参数
-    this.formParam = function (data) {
-        this.contentType("application/x-www-form-urlencoded").param(data);
+    this.formParam = function (data, arrayName) {
+        this.contentType("application/x-www-form-urlencoded").param(data, arrayName);
         return this;
     }
     //设置json参数
@@ -362,8 +380,8 @@ function HoshiQueryJson() {
      * @param sender
      */
     this.linkStart = function (sender) {
-        if(sender == null ){
-            sender = ajaxQueryParam.url ;
+        if (sender == null) {
+            sender = ajaxQueryParam.url;
         }
         //如果没有正在查询的缓存
         if (!queryManager.duringQuery(sender)) {

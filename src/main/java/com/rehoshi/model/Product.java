@@ -1,5 +1,7 @@
 package com.rehoshi.model;
 
+import com.rehoshi.util.DateUtil;
+
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +22,7 @@ public class Product extends BaseModel{
 
     //创建时间
     private Date createTime ;
+    private String createTimeStr ;
 
 
     public String getId() {
@@ -52,5 +55,14 @@ public class Product extends BaseModel{
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+        setCreateTimeStr(DateUtil.formatDateTime(createTime));
+    }
+
+    public String getCreateTimeStr() {
+        return createTimeStr;
+    }
+
+    public void setCreateTimeStr(String createTimeStr) {
+        this.createTimeStr = createTimeStr;
     }
 }

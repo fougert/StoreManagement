@@ -92,7 +92,6 @@
 </script>
 
 <script type="text/html" id="operateTpl">
-    <!-- 这里的 checked 的状态只是演示 -->
     <button  class="layui-btn layui-btn-danger" onclick="deleteUser('{{d.id}}')">删除</button>
 </script>
 
@@ -116,6 +115,11 @@
     });
 </script>
 <script>
+
+    $(function () {
+        bindInputParam("search") ;
+    });
+
     layui.use('table', function () {
         var table = layui.table;
         var form = layui.form;
@@ -168,14 +172,6 @@
                 updateUser(user);
             }
         })
-
-        // table.on('tool(test)',function(obj){
-        //     if(obj.event == 'selectRole'){
-        //         var html = $("#roleContainer").html();
-        //         $("#roleContainer").remove() ;
-        //         $(obj).append(html) ;
-        //     }
-        // })
     });
 
     function updateUser(user) {

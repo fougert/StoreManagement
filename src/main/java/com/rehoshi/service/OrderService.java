@@ -1,8 +1,11 @@
 package com.rehoshi.service;
 
+import com.rehoshi.dto.search.OrderPageSearch;
 import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
 import com.rehoshi.model.Order;
+
+import java.util.List;
 
 /**
  * 订单业务
@@ -39,15 +42,21 @@ public interface OrderService {
      */
     RespData<Boolean> deleteById(String id) ;
 
+    /**
+     * 批量删除订单
+     * @param ids 需要删除的订单id
+     * @return
+     */
+    RespData<Boolean> deleteInIds(List<String> ids) ;
 
     /**
      * 订单分页
-     * @param search 查询关键字
+     * @param search 查询信息
      * @param pageIndex 页码
      * @param pageSize 每页数据量
      * @return
      */
-    RespData<PageData<Order>> orderInPage(String search, int pageIndex, int pageSize) ;
+    PageData<Order> orderInPage(OrderPageSearch search, int pageIndex, int pageSize) ;
 
     /**
      * 根据id 获取订单

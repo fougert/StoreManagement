@@ -36,7 +36,6 @@ public class RespData<T> {
         this.code = Code.SUCCESS ;
         return this ;
     }
-
     public RespData<T> fail(){
         this.code = Code.FAIL ;
         return this ;

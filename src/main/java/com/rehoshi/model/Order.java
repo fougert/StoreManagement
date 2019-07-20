@@ -1,5 +1,8 @@
 package com.rehoshi.model;
 
+import com.rehoshi.util.DateUtil;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 /**
@@ -14,24 +17,33 @@ public class Order extends BaseModel{
         //待发货
         int WAIT_SEND = 0 ;
         //已发货
-        int HAS_SENT = 0 ;
+        int HAS_SENT = 1 ;
     }
     //订单ID
     private String id ;
+
+    //订单编号
+    private String serial ;
+
     //订单名称
     private String name ;
+
     //库存商品id
     private String sId ;
+
     //商品
     private Stock stock ;
 
     //订单数量
     private Integer amount ;
+
     //状态
     private Integer status ;
 
     //创建时间
+    @DateTimeFormat(pattern = DateUtil.DATETIME_FORMAT)
     private Date createTime ;
+    private String createTimeStr;
 
     public String getId() {
         return id;
@@ -72,6 +84,7 @@ public class Order extends BaseModel{
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+        setCreateTimeStr(DateUtil.formatDateTime(createTime));
     }
 
     public String getsId() {
@@ -88,5 +101,21 @@ public class Order extends BaseModel{
 
     public void setStock(Stock stock) {
         this.stock = stock;
+    }
+
+    public String getSerial() {
+        return serial;
+    }
+
+    public void setSerial(String serial) {
+        this.serial = serial;
+    }
+
+    public String getCreateTimeStr() {
+        return createTimeStr;
+    }
+
+    public void setCreateTimeStr(String createTimeStr) {
+        this.createTimeStr = createTimeStr;
     }
 }

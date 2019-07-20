@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.rehoshi.dao.UserMapper;
 import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
+import com.rehoshi.dto.search.UserPageSearch;
 import com.rehoshi.model.User;
 import com.rehoshi.service.UserService;
 import com.rehoshi.util.StringUtil;
@@ -38,9 +39,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageData<User> usersInPage(String search, int pageIndex, int pageSize) {
+    public PageData<User> usersInPage(UserPageSearch search, int pageIndex, int pageSize) {
         PageHelper.startPage(pageIndex, pageSize);
-        List<User> bySearch = userMapper.getBySearch("%" + search + "%");
+        List<User> bySearch = userMapper.getBySearch(search);
         PageInfo<User> userPageInfo = new PageInfo<>(bySearch);
         return new PageData<>(userPageInfo);
     }

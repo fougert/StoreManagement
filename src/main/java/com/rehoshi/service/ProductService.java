@@ -2,6 +2,7 @@ package com.rehoshi.service;
 
 import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
+import com.rehoshi.dto.search.ProductPageSearch;
 import com.rehoshi.model.Product;
 
 /**
@@ -18,12 +19,12 @@ public interface ProductService {
 
     /**
      * 产品分页列表
-     * @param search 查找内容
+     * @param search 查找信息
      * @param pageIndex 页码
      * @param pageSize 每页数据量
      * @return
      */
-    RespData<PageData<Product>> productInPage(String search, int pageIndex, int pageSize) ;
+    PageData<Product> productInPage(ProductPageSearch search, int pageIndex, int pageSize) ;
 
     /**
      * 根据id 查找产品

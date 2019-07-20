@@ -1,6 +1,7 @@
 package com.rehoshi.controller;
 
 import com.rehoshi.dto.RespData;
+import com.rehoshi.dto.search.UserPageSearch;
 import com.rehoshi.model.User;
 import com.rehoshi.service.UserService;
 import com.rehoshi.util.ContextUtil;
@@ -35,7 +36,13 @@ public class UserController extends BaseController{
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @ResponseBody
     public String listInPage(@RequestParam String search, @RequestParam("page") int pageIndex, @RequestParam("limit") int pageSize){
-        return $(userService.usersInPage(search, pageIndex, pageSize));
+
+        UserPageSearch userPageSearch = new UserPageSearch();
+        userPageSearch.setName(search);
+        userPageSearch.setRole(User.Role.SUPER_ADMIN);
+        userPageSearch.setUserId(ContextUtil.getCurUser().getId());
+
+        return $(userService.usersInPage(userPageSearch, pageIndex, pageSize));
     }
 
     @RequestMapping(value = "add", method = RequestMethod.POST)

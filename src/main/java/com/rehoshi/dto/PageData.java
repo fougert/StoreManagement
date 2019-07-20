@@ -14,6 +14,10 @@ public class PageData<T> {
     public String msg ;
     public long count ;
 
+    public PageData(List<T> data){
+        this(new PageInfo<>(data)) ;
+    }
+
     public PageData(PageInfo<T> pageInfo){
         this.code = 0 ;
         this.data = pageInfo.getList() ;
