@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.rehoshi.dao.GoodsMapper;
 import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
+import com.rehoshi.model.BaseModel;
 import com.rehoshi.model.Goods;
 import com.rehoshi.service.GoodsService;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,8 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public RespData<List<Goods>> getAllGoods() {
-      return null;
+        List<Goods> allGoods = goodsMapper.getAllGoods();
+        return RespData.success(allGoods).setCode(200).setMsg("成功");
     }
 
     @Override
@@ -86,7 +88,7 @@ public class GoodsServiceImpl implements GoodsService {
         List<Goods> goods=goodsMapper.queryByNameAndType(name,type);
         if(goods.size()==0){
              //生成主键
-             String uuid=UUID.randomUUID().toString().replaceAll("-","");
+             String uuid= BaseModel.generateUUID();
             int result=goodsMapper.addGoodsType(uuid,name,type);
             if (result==1){
                 return RespData.success(uuid).setCode(200).setMsg("数据库更新成功");
@@ -94,7 +96,7 @@ public class GoodsServiceImpl implements GoodsService {
                 return RespData.fail(false).setCode(0).setMsg("数据库更新异常");
             }
         }else{
-            return RespData.fail(false).setCode(0).setMsg("该商品数据库中已存在");
+            return RespData.fail(false).setCode(0).setMsg("该商品中已存在");
         }
 
     }
@@ -136,9 +138,9 @@ public class GoodsServiceImpl implements GoodsService {
 
         int result=goodsMapper.delBatchGoodTypes(goodslist);
         if(result!=0){
-            return RespData.success(true);
+            return RespData.success(true).setCode(200).setMsg("删除成功");
         }else{
-            return RespData.fail(false);
+            return RespData.fail(false).setCode(0).setMsg("删除失败");
         }
     }
 }

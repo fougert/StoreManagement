@@ -1,21 +1,22 @@
 package com.rehoshi.dao;
 
 
-import com.rehoshi.dto.RespData;
 import com.rehoshi.model.Goods;
 import org.apache.ibatis.annotations.*;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 public interface GoodsMapper {
 
 
 
-    @Select("SELECT * FROM GOODS")
+    @Select("SELECT * FROM goods")
     List<Goods> getAllGoods();
 
+    @Select("SELECT * FROM goods WHERE id=#{id}")
+    Goods queryGoodSByID(String id);
 
-    @Select("SELECT * FROM GOODS WHERE name=#{name}")
+
+    @Select("SELECT * FROM goods WHERE name=#{name}")
     List<Goods> queryByName(@Param("name") String name);
 
 
@@ -24,7 +25,7 @@ public interface GoodsMapper {
     int addGoodsType(@Param("uuid") String uuid, @Param("name") String name, @Param("type") Integer type);
 
 
-    @Select("SELECT * FROM GOODS WHERE name=#{name} AND type=#{type}")
+    @Select("SELECT * FROM goods WHERE name=#{name} AND type=#{type}")
     List<Goods> queryByNameAndType(@Param("name") String name, @Param("type") Integer type);
 
     @Delete("DELETE FROM goods WHERE id=#{id}")

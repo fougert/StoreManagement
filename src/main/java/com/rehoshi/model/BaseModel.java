@@ -6,6 +6,10 @@ public abstract class BaseModel {
     public abstract void setId(String id) ;
     public abstract String getId() ;
     public void newId(){
-        setId(UUID.randomUUID().toString());
+        setId(generateUUID());
+    }
+
+    public static String generateUUID(){
+        return UUID.randomUUID().toString().replaceAll("-","");
     }
 }

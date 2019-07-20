@@ -1,5 +1,8 @@
 package com.rehoshi.model;
 
+import com.rehoshi.util.DateUtil;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 /**
@@ -28,7 +31,10 @@ public class Stock extends BaseModel{
     //描述
     private String description ;
     //入库时间
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime ;
+
+    private String createTimeStr ;
 
     public String getId() {
         return id;
@@ -118,5 +124,15 @@ public class Stock extends BaseModel{
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+        setCreateTimeStr(DateUtil.formatDate("yyyy-MM-dd HH:mm:ss", createTime));
+    }
+
+
+    public String getCreateTimeStr() {
+        return createTimeStr;
+    }
+
+    public void setCreateTimeStr(String createTimeStr) {
+        this.createTimeStr = createTimeStr;
     }
 }
