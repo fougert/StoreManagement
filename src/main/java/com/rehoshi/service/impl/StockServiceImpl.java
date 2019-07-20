@@ -6,7 +6,9 @@ import com.rehoshi.dao.GoodsMapper;
 import com.rehoshi.dao.StockMapper;
 import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
+import com.rehoshi.dto.search.StockPageSearch;
 import com.rehoshi.model.BaseModel;
+import com.rehoshi.model.Goods;
 import com.rehoshi.model.Stock;
 import com.rehoshi.service.StockService;
 import org.springframework.stereotype.Service;
@@ -37,17 +39,18 @@ public class StockServiceImpl implements StockService {
 
 
     /**
-     * 分页查询
+     * 分页 条件 查询
      * @param search 查找关键字
      * @param pageIndex 页码
      * @param pageSize 每页数据量
      * @return
      */
     @Override
-    public PageData<Stock> stockInPage(String search, int pageIndex, int pageSize) {
+    public PageData<Stock> stockInPage(StockPageSearch search, int pageIndex, int pageSize) {
 
         PageHelper.startPage(pageIndex,pageSize);
-        List<Stock> stocks=stockMapper.getAllStock();
+        //List<Stock> stocks=stockMapper.getAllStock(StockPageSearch search);
+        List<Stock> stocks=stockMapper.queryStockBySearch(search);
 
         PageInfo<Stock> stockPageInfo = new PageInfo<>(stocks);
         return new PageData<>(stockPageInfo);
@@ -82,7 +85,18 @@ public class StockServiceImpl implements StockService {
         //库存编号
         stock.setId(BaseModel.generateUUID());
         //入库名称
-        stock.setName(goodsMapper.queryGoodSByID(stock.getgId()).getName());
+        //入库类型+商品名称
+        Goods goods = goodsMapper.queryGoodSByID(stock.getgId());
+        String stockName;
+        if (goods.getType()==0){
+            stockName="商品";
+        }else if (goods.getType()==1){
+            stockName="原料";
+        }else{
+            stockName="包材";
+        }
+        stock.setName(stockName+goods.getName());
+        //stock.setName(goodsMapper.queryGoodSByID(stock.getgId()).getName());
         //批次
         String batch=new SimpleDateFormat("yyyyMMddhhmm").format(new Date().getTime());
         stock.setBatch(batch);

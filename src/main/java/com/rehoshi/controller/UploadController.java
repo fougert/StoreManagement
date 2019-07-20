@@ -39,7 +39,7 @@ public class UploadController {
         //将图片写进磁盘
         try {
             file.transferTo(new File(imgRoot +"/" +newFileName));
-            respData.setCode(200).setData("upload/images/" + newFileName).setMsg("上传成功");
+            respData.setCode(200).setData("../../upload/images/" + newFileName).setMsg("上传成功");
             // RespData.success("upload/images/"+newFileName).setCode(200).setMsg("上传成功");
         } catch (IOException e) {
 

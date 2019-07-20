@@ -1,6 +1,7 @@
 package com.rehoshi.dao;
 
 
+import com.rehoshi.dto.search.StockPageSearch;
 import com.rehoshi.model.Stock;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -22,6 +23,11 @@ public interface StockMapper {
     int addStock(Stock stock);
 
 
+    /**
+     * 批量删除
+     * @param stockList
+     * @return
+     */
     @Delete({
             "<script>"
                     + "DELETE FROM stock  WHERE id in "
@@ -30,5 +36,15 @@ public interface StockMapper {
                     + "</foreach>"
                     +"</script>"
     })
+
+
     int delBatchStock(@Param("stockList") List<Stock> stockList);
+
+
+    @Select({"<script>",
+            "SELECT * FROM `stock`",
+            "WHERE name LIKE #{name}",
+            "AND createTime BETWEEN #{startTime} AND #{endTime}",
+            "</script>"})
+    List<Stock> queryStockBySearch(StockPageSearch search);
 }

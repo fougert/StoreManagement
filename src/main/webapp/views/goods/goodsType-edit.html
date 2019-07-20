@@ -20,7 +20,7 @@
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-</body>-->
+</body>
 <body>
 <div class="x-body">
     <form class="layui-form">
@@ -75,10 +75,27 @@
 
 </script>
 <script>
+
+    $(function () {
+        //获取全局变量
+        var data=JSON.parse(parent.parToChilData);
+        $("#name").val(data.name);
+        $("#id").val(data.id);
+        //渲染下拉框
+        $("#type").find("option[value = '"+data.type+"']").attr("selected","selected");
+        //重新渲染表单
+       // form.render();
+
+        //layui.form.render();
+
+
+    })
+    
     layui.use(['form','layer'], function(){
         $ = layui.jquery;
         var form = layui.form,
             layer = layui.layer;
+
 
         //自定义验证规则
         form.verify({
@@ -113,7 +130,7 @@
                     layer.msg("修改成功", {icon: 6,time:1000},function () {
                         //关闭当前frame
                         x_admin_close();
-                        // 可以对父窗口进行刷新
+                        // 对父窗口当前页刷新
                         //x_admin_father_reload();
                         $('.layui-laypage-btn',parent.document)[0].click();
                     });
@@ -146,10 +163,9 @@
             return false;
         });
 
-
-
-
     });
+
+
 </script>
 
 </body>

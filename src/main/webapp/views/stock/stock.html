@@ -14,6 +14,7 @@
     <script type="text/javascript" src="../../js/xadmin.js"></script>
     <script type="text/javascript" src="../../js/cookie.js"></script>
     <script type="text/javascript" src="../../js/ajaxQuery.js"></script>
+    <script type="text/javascript" src="../../js/layui-table-select.js"></script>
 
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
@@ -36,24 +37,24 @@
 <div class="x-body">
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so">
-            <input class="layui-input" placeholder="开始日" name="start" id="start">
-            <input class="layui-input" placeholder="截止日" name="end" id="end">
-            <div class="layui-input-inline">
+            <input class="layui-input" placeholder="开始日" name="startTime" id="startTime">
+            <input class="layui-input" placeholder="截止日" name="endTime" id="endTime">
+          <!--  <div class="layui-input-inline">
                 <select name="contrller">
                     <option>支付状态</option>
                     <option>已支付</option>
                     <option>未支付</option>
                 </select>
-            </div>
-            <div class="layui-input-inline">
+            </div>-->
+          <!--  <div class="layui-input-inline">
                 <select name="contrller">
                     <option>支付方式</option>
                     <option>支付宝</option>
                     <option>微信</option>
                     <option>货到付款</option>
                 </select>
-            </div>
-            <div class="layui-input-inline">
+            </div>-->
+          <!--  <div class="layui-input-inline">
                 <select name="contrller">
                     <option value="">订单状态</option>
                     <option value="0">待确认</option>
@@ -63,8 +64,8 @@
                     <option value="4">已完成</option>
                     <option value="5">已作废</option>
                 </select>
-            </div>
-            <input type="text" name="username"  placeholder="请输入订单号" autocomplete="off" class="layui-input">
+            </div>-->
+            <input type="text" name="name" id="name" placeholder="请输入库存名称" autocomplete="off" class="layui-input">
             <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
@@ -77,27 +78,38 @@
 
     </table>
 
-
-
 </div>
+<!-- 工具行按钮 -->
 <script type="text/html" id="barDemo">
    <a class="layui-btn layui-btn layui-btn-xs"  lay-event="stock_edit" ><i class="layui-icon">&#xe642;</i>编辑</a>
    <a class="layui-btn-danger layui-btn layui-btn-xs"  lay-event="stock_del"><i class="layui-icon">&#xe640;</i>删除</a>
 </script>
+<!-- 图片 -->
+<script type="text/html" id="imgTpl">
+    <a href="{{ d.img }}">点击查看</a>
+</script>
 <script>
-   /*   layui.use('laydate', function(){
+
+    var parToChilData;
+
+    $(function () {
+        bindInputParam("startTime") ;
+        bindInputParam("endTime") ;
+        bindInputParam("name") ;
+    });
+  layui.use('laydate', function(){
         var laydate = layui.laydate;
 
         //执行一个laydate实例
         laydate.render({
-          elem: '#start' //指定元素
+          elem: '#startTime' //指定元素
         });
 
         //执行一个laydate实例
         laydate.render({
-          elem: '#end' //指定元素
+          elem: '#endTime' //指定元素
         });
-      });*/
+      });
 
 
     layui.use('table',function(){
@@ -114,7 +126,7 @@
                 {field: 'gid', title: '商品id', type:'checkbox', sort: true, fixed: 'left'}
                 ,{field: 'id', title: '库存编号'}
                 ,{field: 'name', title: '名称'}
-                ,{field: 'img', title: '图片'}
+                ,{field: 'img', title: '图片',templet:'#imgTpl'}
                 ,{field: 'specs', title: '规格'}
                 ,{field: 'amount', title: '数量'}
                 ,{field: 'price', title: '价格'}
@@ -123,7 +135,9 @@
                 ,{field:'description',title:'描述'}
                 ,{field:'createTimeStr',title:'入库时间'}
                 ,{fixed: 'right',title:'操作', width:150, align:'center', toolbar: '#barDemo'}
-            ]]
+            ]],
+            where:getTableWhere(["startTime","endTime","name"])
+
         });
 
         //监听行工具事件
@@ -146,8 +160,21 @@
 
                 })
             }else if (layEvent === 'stock_edit') { //编辑当前行
-
-                x_admin_show("编辑库存","stock-add.html");
+                //将当前行的数据赋给全局变量
+                parToChilData=JSON.stringify(obj.data);
+                x_admin_show("编辑库存","stock-edit.html");
+              /*  layer.open({
+                    type:2,
+                    title:'库存编辑',
+                    maxmin: true,
+                    shadeClose: true, //点击遮罩关闭层
+                    content: 'stock-edit.html'
+                  /!*  //父页面给子页面传值
+                    success:function (layero,index) {
+                        var body=layer.getChildFrame('body',index);
+                        //渲染子页面数据
+                    }*!/
+                })*/
 
             }
         });

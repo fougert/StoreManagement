@@ -2,6 +2,7 @@ package com.rehoshi.service;
 
 import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
+import com.rehoshi.dto.search.StockPageSearch;
 import com.rehoshi.model.Stock;
 
 public interface StockService {
@@ -28,7 +29,7 @@ public interface StockService {
      * @param pageSize 每页数据量
      * @return
      */
-    PageData<Stock> stockInPage(String search, int pageIndex, int pageSize) ;
+    PageData<Stock> stockInPage(StockPageSearch search, int pageIndex, int pageSize) ;
 
     /**
      * 根据id 获取库存信息

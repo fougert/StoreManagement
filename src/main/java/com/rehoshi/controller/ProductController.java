@@ -19,6 +19,7 @@ public class ProductController extends BaseController {
     @Autowired
     private ProductService productService;
 
+
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @ResponseBody
     public PageData<Product> listInPage(@RequestParam(required = false) String name,

@@ -29,26 +29,11 @@
             <div class="layui-input-inline">
                 <select name="gId" lay-verify="gId" id="good_select" required>
                     <option value=""></option>
-                    <!--<option value="0">北京</option>
-                    <option value="1">上海</option>
-                    <option value="2">广州</option>
-                    <option value="3">深圳</option>
-                    <option value="4">杭州</option>-->
                 </select>
             </div>
         </div>
-
-        <!--<div class="layui-form-item">
-            <label for="username" class="layui-form-label">
-                <span class="x-red">*</span>库存名称
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="username" name="username" required="" lay-verify="required"
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>-->
-        <div class="layui-form-item">
-            <label class="layui-form-label">添加图片</label>
+       <div class="layui-form-item">
+            <label class="layui-form-label">修改图片</label>
             <div class="layui-input-inline uploadHeadImage">
                 <div class="layui-upload-drag" id="headImg">
                     <i class="layui-icon"></i>
@@ -61,7 +46,6 @@
                 </div>
                 <p id="demoText"></p>
             </div>
-
         </div>
 
         <!-- 隐藏域  保存服务器返回的图片url 随请求一起提交上去-->
@@ -127,7 +111,7 @@
             <label  class="layui-form-label">
             </label>
             <button type="button"  class="layui-btn" lay-filter="add" lay-submit="" id="add">
-                增加
+                修改
             </button>
         </div>
     </form>
@@ -136,25 +120,29 @@
 
 <script type="text/javascript">
 
-   /* //页面加载的时候执行
-    $(document).ready(function () {
-        $.hoshi()
-            .get("/goods/allgoods")
-            .onSuccess(function (data,msg,code) {
 
-            }).linkStart();
-    });*/
+   /* $(function () {
 
-
-
+        //获取父页面传递过来的值
+        var dataField=JSON.parse(parent.parToChilData);
+        //图片url
+        $("#img").val(dataField.img);
+        $("#specs").val(dataField.specs);
+        $("#amount").val(dataField.amount);
+        $("#price").val(dataField.price);
+        $("#provider").val(dataField.provider);
+        $("#description").val(dataField.description);
+        $("#good_select").find("dd[value = '"+dataField.gId+"']").attr("selected","selected");
+        alert(dataField.gId);
+    })*/
 
 
     layui.use(["jquery", "upload", "form", "layer", "element"], function () {
         var $ = layui.$,
-        element = layui.element,
-        layer = layui.layer,
-        upload = layui.upload,
-        form = layui.form;
+            element = layui.element,
+            layer = layui.layer,
+            upload = layui.upload,
+            form = layui.form;
 
 
 
@@ -162,27 +150,48 @@
         $.hoshi()
             .get("/goods/allgoods")
             .onSuccess(function (data,msg,code) {
-                $.each(data,function (index,item) {
-                    var type;
-                    if (item.type===0){
-                        type ="商品";
-                    }else if (type===1){
-                        type="原料";
-                    } else{
-                        type="包材";
-                    }
-                   $("<option></option>")
-                       .attr("value",item.id)
-                       .html(type+':'+item.name)
-                       .appendTo("#good_select")
-                })
-                //重新渲染select下拉框
-                form.render('select','stock-form');
+                if (code===200){
+
+                    //获取父页面传递过来的值
+                    var dataField=JSON.parse(parent.parToChilData);
+                    //图片url
+                    $("#img").val(dataField.img);
+                    $("#specs").val(dataField.specs);
+                    $("#amount").val(dataField.amount);
+                    $("#price").val(dataField.price);
+                    $("#provider").val(dataField.provider);
+                    $("#description").val(dataField.description);
+                    // $("#good_select").find("option[value = '"+dataField.gId+"']").attr("selected","selected");
+
+                    console.log(dataField.gId);
+                    $.each(data,function (index,item) {
+                        var type;
+                        if (item.type===0){
+                            type ="商品";
+                        }else if (type===1){
+                            type="原料";
+                        } else{
+                            type="包材";
+                        }
+                        $("<option "+(dataField.gId == item.id ? "selected = selected":"")+"></option>")
+                            .attr("value",item.id)
+                            .html(type+':'+item.name)
+                            .appendTo("#good_select")
+                    })
+
+                    //重新渲染select下拉框
+                    form.render('select','stock-form');
+
+
+                } else if (code===0){
+
+                }
             })
             .onError(function () {
                 layer.msg("未知错误！请联系管理员",{icon:2,time:1000})
             })
             .linkStart();
+
 
 
         //拖拽上传
@@ -214,13 +223,13 @@
                     //将图片url 保存到form 表单隐藏域中 表单提交的时候一起提交
                     $("#img").val(res.data)
                 }
-             /*   //上传成功
-                //打印后台传回的地址: 把地址放入一个隐藏的input中, 和表单一起提交到后台, 此处略..
-                /!*   console.log(res.data.src);*!/
-                window.parent.uploadHeadImage(res.data.src);
-                //上传成功提示信息
-                var demoText = $('#demoText');
-                demoText.html('<span style="color: #8f8f8f;">上传成功!!!</span>');*/
+                /*   //上传成功
+                   //打印后台传回的地址: 把地址放入一个隐藏的input中, 和表单一起提交到后台, 此处略..
+                   /!*   console.log(res.data.src);*!/
+                   window.parent.uploadHeadImage(res.data.src);
+                   //上传成功提示信息
+                   var demoText = $('#demoText');
+                   demoText.html('<span style="color: #8f8f8f;">上传成功!!!</span>');*/
             }
             , error: function () {
                 //演示失败状态，并实现重传
@@ -233,57 +242,6 @@
         });
         element.init();
 
-        //非负double正则  小数点后2位
-        var reg = /^(([1-9]+)|([0-9]+\.[0-9]{1,2}))$/;
-        var int=/^[0-9]*[1-9][0-9]*$/;
-        //表单验证
-        form.verify({
-
-            gId:function (value,item) {
-                if (value === "" || value==null){
-                    return '请选择库存名称';
-                }
-            },
-            img:function (value,item) {
-                if (value==""){
-                    return "请上传图片";
-                }
-            },
-            specs:function (value,item) {
-                if (!reg.test(value)){
-                    return "请输入正确的规格！(有效值小数点后2位)";
-                }
-                if (value.length>8) {
-                    return "规格长度不超过8";
-                }
-            },
-            amount:function (value,item) {
-                if (!int.test(value)){
-                    return "数量请输入正整数";
-                }
-                if (value.length>8) {
-                    return "数量长度不能超过8";
-                }
-            },
-            price:function (value,item) {
-                if(!reg.test(value)){
-                    return "请输入正确的价格！(有效值小数点后2位)";
-                }
-                if (value.length>8) {
-                    return "价格长度不超过8";
-                }
-            },
-            provider:function (value,item) {
-                if (value.length>20){
-                    return "供应商长度不超过20";
-                }
-            },
-            description:function (value,item) {
-                if (value.length>50){
-                    return "描述信息不超过50";
-                }
-            }
-        });
 
         //表单提交事件
         form.on('submit(add)', function(result){
