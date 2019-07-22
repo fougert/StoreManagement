@@ -2,6 +2,7 @@ package com.rehoshi.controller;
 
 import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
+import com.rehoshi.dto.search.GoodPageSearch;
 import com.rehoshi.model.Goods;
 import com.rehoshi.service.impl.GoodsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,17 @@ public class GoodsController {
      */
     @ResponseBody
     @RequestMapping(value = "/goodInPage",method = RequestMethod.GET)
-    public PageData<Goods> goodInPage(@RequestParam(value = "page")int page, @RequestParam(value = "limit")int limit){
-        return goodsService.goodsInPage("",page,limit);
+    public PageData<Goods> goodInPage(
+            @RequestParam(value = "name",required = false)String name
+            ,@RequestParam(value = "type",required = false)Integer type
+            ,@RequestParam(value = "page")int page
+            , @RequestParam(value = "limit")int limit){
+
+
+        GoodPageSearch goodPageSearch = new GoodPageSearch();
+        goodPageSearch.setName(name);
+        goodPageSearch.setType(type);
+        return goodsService.goodsInPage(goodPageSearch,page,limit);
     }
 
     /**

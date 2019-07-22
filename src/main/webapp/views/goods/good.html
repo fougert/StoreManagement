@@ -14,6 +14,7 @@
     <script type="text/javascript" src="../../js/xadmin.js"></script>
     <script type="text/javascript" src="../../js/cookie.js"></script>
     <script type="text/javascript" src="../../js/ajaxQuery.js"></script>
+    <script type="text/javascript" src="../../js/layui-table-select.js"></script>
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
       <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
@@ -34,19 +35,28 @@
         <i class="layui-icon" style="line-height:30px">ဂ</i></a>
     </div>
     <div class="x-body">
-     <!-- <div class="layui-row">
-        <form class="layui-form layui-col-md12 x-so layui-form-pane">
-          &lt;!&ndash; <input class="layui-input" placeholder="分类名" name="cate_name"> &ndash;&gt;
-          <button class="layui-btn"  onclick="x_admin_show('增加商品种类','goodsType-add.html',600,400)"><i class="layui-icon"></i>增加</button>
+      <div class="layui-row">
+        <form class="layui-form layui-col-md12 x-so">
+
+            <!--//<label class="layui-form-label">搜索类型</label>-->
+            <div class="layui-input-inline">
+              <select name="type" id="type" >
+                <option value=""></option>
+                <option value="0">商品</option>
+                <option value="1">原料</option>
+                <option value="2">包材</option>
+              </select>
+            </div>
+
+          <input type="text" name="name" id="name" placeholder="名称" autocomplete="off" class="layui-input">
+          <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
-      </div>-->
-      <!-- <blockquote class="layui-elem-quote">每个tr 上有两个属性 cate-id='1' 当前分类id fid='0' 父级id ,顶级分类为 0，有子分类的前面加收缩图标<i class="layui-icon x-show" status='true'>&#xe623;</i></blockquote> -->
+      </div>
       <xblock>
         <button class="layui-btn layui-btn-danger" onclick="delGoods()" id="batchDel"><i class="layui-icon"></i>批量删除</button>
         <!--<span class="x-right" style="line-height:40px" id="total" >共有数据：88条</span>-->
         <button class="layui-btn"  onclick="x_admin_show('增加商品种类','goodsType-add.html',600,400)"><i class="layui-icon"></i>增加</button>
       </xblock>
-
       <table class="layui-table layui-form" id="goods" lay-filter="goods">
 
       </table>
@@ -64,6 +74,11 @@
 
         var parToChilData;
 
+        $(function () {
+          bindInputParam("type") ;
+          bindInputParam("name") ;
+        });
+
         layui.use('table', function(){
             var table = layui.table;
 
@@ -77,8 +92,8 @@
               ,cols: [[ //表头
                     {field: 'id', title: 'ID', type:'checkbox',  sort: true, fixed: 'left'}
                     ,{field: 'id', title: '编号'}
-                    ,{field: 'name', title: '商品名称'}
-                    ,{field:'type',title:'商品类型'}
+                    ,{field: 'name', title: '名称'}
+                    ,{field:'type',title:'类型'}
                     ,{fixed: 'right',title: '操作', width:250, align:'center', toolbar: '#barDemo'}
                 ]]
                 ,done: function (res, curr, count) {
@@ -91,7 +106,8 @@
                             $(this).text("包材")
                         }
                     });
-                }
+                },
+              where:getTableWhere(["type","name"])
             });
 
 

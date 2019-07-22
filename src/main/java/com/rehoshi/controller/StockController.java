@@ -23,7 +23,7 @@ public class StockController {
 
 
     /**
-     * 查询所有库存
+     * 查询所有库存  返回分页数据
      * @return
      */
     @ResponseBody

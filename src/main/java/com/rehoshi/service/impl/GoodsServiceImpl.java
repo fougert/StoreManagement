@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.rehoshi.dao.GoodsMapper;
 import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
+import com.rehoshi.dto.search.GoodPageSearch;
 import com.rehoshi.model.BaseModel;
 import com.rehoshi.model.Goods;
 import com.rehoshi.service.GoodsService;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class GoodsServiceImpl implements GoodsService {
@@ -63,11 +63,11 @@ public class GoodsServiceImpl implements GoodsService {
      * @return
      */
     @Override
-    public PageData<Goods> goodsInPage(String search, int pageIndex, int pageSize){
+    public PageData<Goods> goodsInPage(GoodPageSearch search, int pageIndex, int pageSize){
         //查询之前只需传入页码及每页的大小
         PageHelper.startPage(pageIndex,pageSize);
         //startPage后面紧跟的查询就是分页查询
-        List<Goods> goods = goodsMapper.getAllGoods();
+        List<Goods> goods = goodsMapper.queryGoodsBySearch(search);
         PageInfo<Goods> goodsPageInfo = new PageInfo<>(goods);
         return new PageData<>(goodsPageInfo);
     }

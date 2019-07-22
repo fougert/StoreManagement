@@ -2,6 +2,7 @@ package com.rehoshi.service;
 
 import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
+import com.rehoshi.dto.search.GoodPageSearch;
 import com.rehoshi.model.Goods;
 
 import java.util.List;
@@ -60,7 +61,7 @@ public interface GoodsService {
      * @param pageSize 每页数据量
      * @return
      */
-    PageData<Goods> goodsInPage(String search, int pageIndex, int pageSize) ;
+    PageData<Goods> goodsInPage(GoodPageSearch search, int pageIndex, int pageSize) ;
 
     /**
      * 根据id 获取原品

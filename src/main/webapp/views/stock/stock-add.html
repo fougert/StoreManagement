@@ -25,31 +25,26 @@
 <body>
 <div class="x-body">
     <form class="layui-form" lay-filter="stock-form">
-        <div class="layui-form-item">
+        <!-- 库存名称下拉框 -->
+       <!-- <div class="layui-form-item">
             <label class="layui-form-label">库存名称</label>
             <div class="layui-input-inline">
                 <select name="gId" lay-verify="gId" id="good_select" required>
                     <option value=""></option>
-                    <!--<option value="0">北京</option>
-                    <option value="1">上海</option>
-                    <option value="2">广州</option>
-                    <option value="3">深圳</option>
-                    <option value="4">杭州</option>-->
                 </select>
-            </div>
-        </div>
-
-        <!--<div class="layui-form-item">
-            <label for="username" class="layui-form-label">
-                <span class="x-red">*</span>库存名称
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="username" name="username" required="" lay-verify="required"
-                       autocomplete="off" class="layui-input">
             </div>
         </div>-->
         <div class="layui-form-item">
-            <label class="layui-form-label">添加图片</label>
+            <label class="layui-form-label"> <span class="x-red">*</span>库存名称</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="gId" name="gId" readonly="readonly" >
+
+            </div>
+            <a class="layui-btn" onclick="x_admin_show('选择库存名称','../goods/chooseGoodsType.html')" style="margin-left: 15px"><i class="layui-icon"></i>选择库存名称</a>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"> <span class="x-red">*</span>添加图片</label>
             <div class="layui-input-inline uploadHeadImage">
                 <div class="layui-upload-drag" id="headImg">
                     <i class="layui-icon"></i>
@@ -137,19 +132,6 @@
 
 <script type="text/javascript">
 
-   /* //页面加载的时候执行
-    $(document).ready(function () {
-        $.hoshi()
-            .get("/goods/allgoods")
-            .onSuccess(function (data,msg,code) {
-
-            }).linkStart();
-    });*/
-
-
-
-
-
     layui.use(["jquery", "upload", "form", "layer", "element"], function () {
         var $ = layui.$,
         element = layui.element,
@@ -159,7 +141,7 @@
 
 
 
-        //渲染页面下拉框
+       /* //渲染页面下拉框
         $.hoshi()
             .get("/goods/allgoods")
             .onSuccess(function (data,msg,code) {
@@ -183,7 +165,7 @@
             .onError(function () {
                 layer.msg("未知错误！请联系管理员",{icon:2,time:1000})
             })
-            .linkStart();
+            .linkStart();*/
 
 
         //拖拽上传

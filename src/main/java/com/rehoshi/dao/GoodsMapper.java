@@ -1,6 +1,7 @@
 package com.rehoshi.dao;
 
 
+import com.rehoshi.dto.search.GoodPageSearch;
 import com.rehoshi.model.Goods;
 import org.apache.ibatis.annotations.*;
 
@@ -47,4 +48,14 @@ public interface GoodsMapper {
             +"</script>"
     })
     int delBatchGoodTypes(@Param("goodslist") List<Goods> goodslist);
+
+
+    @Select({"<script>",
+            "SELECT * FROM `goods`",
+            "WHERE name LIKE #{name}",
+            "<when test = 'type != null'>",
+            "AND type = #{type}",
+            "</when>",
+            "</script>"})
+    List<Goods> queryGoodsBySearch(GoodPageSearch search);
 }
