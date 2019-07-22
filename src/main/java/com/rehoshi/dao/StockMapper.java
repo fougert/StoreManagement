@@ -3,10 +3,7 @@ package com.rehoshi.dao;
 
 import com.rehoshi.dto.search.StockPageSearch;
 import com.rehoshi.model.Stock;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -47,4 +44,7 @@ public interface StockMapper {
             "AND createTime BETWEEN #{startTime} AND #{endTime}",
             "</script>"})
     List<Stock> queryStockBySearch(StockPageSearch search);
+
+    @Update("UPDATE stock SET name=#{name},img=#{img},gId=#{gId},specs=#{specs},amount=#{amount},price=#{price},provider=#{provider},description=#{description} WHERE id=#{id}")
+    int editStock(Stock stock);
 }

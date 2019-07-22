@@ -14,6 +14,7 @@
     <script type="text/javascript" src="../../js/xadmin.js"></script>
     <script type="text/javascript" src="../../js/cookie.js"></script>
     <script type="text/javascript" src="../../js/ajaxQuery.js"></script>
+    <script type="text/javascript" src="../../js/layui-table-select.js"></script>
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
@@ -192,7 +193,7 @@
             , size:5120   //图片最大5M
             ,accept:'images'  //指定上传的文件类型为图片
             , before: function (obj) {
-                // //预读本地文件示例，不支持ie8
+                //预读本地文件示例，不支持ie8
                 obj.preview(function (index, file, result) {
 
                     $('#demo1').attr('src', result); //图片链接（base64）
@@ -301,7 +302,8 @@
                             //关闭当前frame页
                             x_admin_close();
                             //父页当前页刷新
-                            $(".layui-laypage-btn",parent.document)[0].click();
+                            reloadTable();
+                            //$(".layui-laypage-btn",parent.document)[0].click();
                         })
                     }else if (code===0){
                         layer.msg("入库失败！未知错误!",{icon:2,time:1000},function () {

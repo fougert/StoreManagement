@@ -133,4 +133,30 @@ public class StockServiceImpl implements StockService {
 
     }
 
+    /**
+     * 更新库存
+     * @param stock
+     * @return
+     */
+    public RespData<Boolean> editStock(Stock stock) {
+
+        Goods goods = goodsMapper.queryGoodSByID(stock.getgId());
+        //库存名称
+        String stockName;
+        if (goods.getType()==0){
+            stockName="商品"+goods.getName();
+        }else if (goods.getType()==1){
+            stockName="原料"+goods.getName();
+        }else{
+            stockName="包材"+goods.getName();
+        }
+        stock.setName(stockName);
+
+       int result=stockMapper.editStock(stock);
+       if (result==1){
+           return RespData.success(true).setCode(200).setMsg("更新成功");
+       }else{
+           return RespData.fail(false).setCode(0).setMsg("更新异常");
+       }
+    }
 }

@@ -4,14 +4,12 @@ import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
 import com.rehoshi.dto.search.StockPageSearch;
 import com.rehoshi.model.Stock;
-import com.rehoshi.service.StockService;
 import com.rehoshi.service.impl.StockServiceImpl;
 import com.rehoshi.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -79,11 +77,27 @@ public class StockController {
     }
 
 
+    /**
+     * 批量删除库存
+     * @param stockList
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/delBatchStock",method = RequestMethod.DELETE)
     public RespData<Boolean> delBatchStock(@RequestBody List<Stock> stockList){
 
         return stockService.delBatchStock(stockList);
+    }
+
+    /**
+     * 更新库存
+     * @param stock
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/editStock",method = RequestMethod.PUT)
+    public RespData<Boolean> editStock(@RequestBody Stock stock){
+        return  stockService.editStock(stock);
     }
 
 }
