@@ -22,6 +22,24 @@
     <![endif]-->
 </head>
 
+<script>
+
+        //选择库存名称
+        function addStocks() {
+            x_admin_show("选择库存名称", "../goods/chooseGoodsName.html", 900, 600, parent, null, null, function () {
+
+                document.getElementById("name").value=parent.goodsName;
+
+                document.getElementById("gId").value=parent.Gid;
+
+            });
+            return false;
+        }
+
+
+
+</script>
+
 <body>
 <div class="x-body">
     <form class="layui-form" lay-filter="stock-form">
@@ -37,12 +55,17 @@
         <div class="layui-form-item">
             <label class="layui-form-label"> <span class="x-red">*</span>库存名称</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input" id="gId" name="gId" readonly="readonly" >
+                <input type="text" class="layui-input" id="name" name="name" readonly="readonly" value="">
+            </div>
+            <a class="layui-btn" onclick="addStocks()" style="margin-left: 15px"><i class="layui-icon"></i>选择库存名称</a>
+        </div>
+        <!-- 隐藏域  随表单一起提交 -->
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input type="hidden" class="layui-input" id="gId" name="gId"  value=""  lay-verify="gId">
 
             </div>
-            <a class="layui-btn" onclick="x_admin_show('选择库存名称','../goods/chooseGoodsType.html')" style="margin-left: 15px"><i class="layui-icon"></i>选择库存名称</a>
         </div>
-
         <div class="layui-form-item">
             <label class="layui-form-label"> <span class="x-red">*</span>添加图片</label>
             <div class="layui-input-inline uploadHeadImage">

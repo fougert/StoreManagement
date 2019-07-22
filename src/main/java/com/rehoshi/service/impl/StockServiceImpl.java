@@ -85,7 +85,8 @@ public class StockServiceImpl implements StockService {
         //库存编号
         stock.setId(BaseModel.generateUUID());
         //入库名称
-        //入库类型+商品名称
+
+       /* //入库类型+商品名称
         Goods goods = goodsMapper.queryGoodSByID(stock.getgId());
         String stockName;
         if (goods.getType()==0){
@@ -95,8 +96,8 @@ public class StockServiceImpl implements StockService {
         }else{
             stockName="包材";
         }
-        stock.setName(stockName+goods.getName());
-        //stock.setName(goodsMapper.queryGoodSByID(stock.getgId()).getName());
+        stock.setName(stockName+goods.getName());*/
+
         //批次
         String batch=new SimpleDateFormat("yyyyMMddhhmm").format(new Date().getTime());
         stock.setBatch(batch);
