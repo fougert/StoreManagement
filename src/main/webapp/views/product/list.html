@@ -65,7 +65,8 @@
 
 <!--产品操作按钮-->
 <script type="text/html" id="operateTpl">
-    <button class="layui-btn layui-btn-danger" onclick="deleteProduct('{{d.id}}')">删除</button>
+    <button class="layui-btn layui-btn-sm" onclick="x_admin_show('编辑成品', 'add.html?id={{d.id}}',600,400)"><i class="layui-icon">&#xe642;</i>编辑</button>
+    <button class="layui-btn layui-btn-danger" onclick="deleteProduct('{{d.id}}')"><i class="layui-icon">&#xe640;</i>删除</button>
 </script>
 
 
@@ -106,9 +107,9 @@
             cols: [[
                 {type: 'checkbox', title: "ID"},
                 {field: 'id', width: 80, title: "成品ID"},
-                {field: 'name', edit: 'text', title: "成品名称"},
+                {field: 'name', title: "成品名称"},
                 {field: 'createTime', width: 200, templet: '#createTimeTpl', title: "创建时间"},
-                {field: 'id', width: 76, templet: '#operateTpl', title: "操作"}
+                {field: 'id', width: 170, templet: '#operateTpl', title: "操作"}
             ]],
             where:getTableWhere(["startTime","endTime","name"]),
             done: function (res, curr, count) {
@@ -206,7 +207,6 @@
                     showError(msg);
                 }
             }).linkStart();
-
     }
 
     /**

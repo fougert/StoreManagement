@@ -29,10 +29,10 @@ public class Order extends BaseModel{
     private String name ;
 
     //库存商品id
-    private String sId ;
+    private String pId ;
 
-    //商品
-    private Stock stock ;
+    //成品
+    private Product stock ;
 
     //订单数量
     private Integer amount ;
@@ -87,19 +87,19 @@ public class Order extends BaseModel{
         setCreateTimeStr(DateUtil.formatDateTime(createTime));
     }
 
-    public String getsId() {
-        return sId;
+    public String getpId() {
+        return pId;
     }
 
-    public void setsId(String sId) {
-        this.sId = sId;
+    public void setpId(String pId) {
+        this.pId = pId;
     }
 
-    public Stock getStock() {
+    public Product getStock() {
         return stock;
     }
 
-    public void setStock(Stock stock) {
+    public void setStock(Product stock) {
         this.stock = stock;
     }
 

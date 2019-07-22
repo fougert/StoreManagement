@@ -101,6 +101,7 @@
         bindInputParam("endTime") ;
         bindInputParam("name") ;
     });
+
   layui.use('laydate', function(){
         var laydate = layui.laydate;
 
@@ -141,7 +142,6 @@
                 ,{fixed: 'right',title:'操作', width:150, align:'center', toolbar: '#barDemo'}
             ]],
             where:getTableWhere(["startTime","endTime","name"])
-
         });
 
         //监听行工具事件

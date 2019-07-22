@@ -34,6 +34,7 @@
                        autocomplete="off" class="layui-input">
             </div>
         </div>
+
         <div class="layui-form-item">
             <label for="username" class="layui-form-label">
                 <span class="x-red">*</span>订单编号
@@ -43,6 +44,16 @@
                        autocomplete="off" class="layui-input">
             </div>
         </div>
+
+        <div class="layui-form-item">
+            <label for="stockName" class="layui-form-label">
+                <span class="x-red">*</span>成品名称
+            </label>
+            <div class="layui-input-inline">
+                <a id="stockName" class="layui-btn layui-btn-sm"  onclick="addProduct()">选择</a>
+            </div>
+        </div>
+
         <div class="layui-form-item">
             <label for="phone" class="layui-form-label">
                 <span class="x-red">*</span>订单数量
@@ -89,9 +100,13 @@
                 }).linkStart();
             return false;
         });
-
-
     });
+
+    function addProduct() {
+        x_admin_show('选择成品','../product/choose.html',900,600,parent,null,null,function (data) {
+            alert(parent.chooseProduct) ;
+        }) ;
+    }
 </script>
 
 </body>

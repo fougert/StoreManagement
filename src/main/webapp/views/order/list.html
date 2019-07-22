@@ -72,7 +72,7 @@
 
 <!--订单操作按钮-->
 <script type="text/html" id="operateTpl">
-    <button class="layui-btn layui-btn-danger" onclick="deleteOrder('{{d.id}}')">删除</button>
+    <button class="layui-btn layui-btn-danger" onclick="deleteOrder('{{d.id}}')"><i class="layui-icon">&#xe640;</i>删除</button>
 </script>
 
 <!--订单状态模板-->
@@ -127,8 +127,8 @@
             cols: [[
                 {type: 'checkbox', title: "ID"},
                 {field: 'id', width: 80, title: "订单ID"},
-                {field: 'name', width: 120, edit: 'text', title: "订单名称"},
-                {field: 'stock', width: 120, title: "货品名称"},
+                {field: 'name',  edit: 'text', title: "订单名称"},
+                {field: 'stock',  title: "货品名称"},
                 {field: 'stockSpecs', width: 120, title: "货品规格"},
                 {field: 'amount', width: 120, edit: 'text', title: "货品数量"},
                 {field: 'status', width: 120, templet: '#statusTpl', title: "订单状态"},

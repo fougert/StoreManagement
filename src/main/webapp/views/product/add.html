@@ -15,11 +15,23 @@
     <script type="text/javascript" src="../../js/xadmin.js"></script>
     <script type="text/javascript" src="../../js/cookie.js"></script>
     <script type="text/javascript" src="../../js/ajaxQuery.js"></script>
+    <script type="text/javascript" src="../../js/layui-table-select.js"></script>
+    <script type="text/javascript" src="../../js/util.js"></script>
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script>
+
+        function addStocks() {
+            x_admin_show("选择库存", "../stock/choose.html", 900, 600, parent, null, null, function () {
+                addStock(parent.chooseStock);
+            });
+            return false;
+        }
+
+    </script>
 </head>
 
 <body>
@@ -36,6 +48,18 @@
         </div>
 
         <div class="layui-form-item">
+            <label for="addStock" class="layui-form-label">
+                <span class="x-red">*</span>成品原料
+            </label>
+            <div class="layui-input-block">
+                <span id="addStock" class="layui-btn layui-btn-sm" onclick="addStocks()">添加</span>
+                <table class="layui-table" id="stockList" lay-filter="stockList">
+                </table>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
             <label class="layui-form-label">
             </label>
             <button class="layui-btn" lay-filter="add" lay-submit="">
@@ -44,26 +68,124 @@
         </div>
     </form>
 </div>
+<script type="text/html" id="operateTpl">
+    <a class='x-red' href='#' onclick="delStock('{{ d.id }}')">删除</a>
+</script>
 <script>
+
+    var stockList = [];
+
     layui.use(['form'], function () {
         $ = layui.jquery;
-        var form = layui.form ;
+        var form = layui.form;
+
         //监听提交
         form.on('submit(add)', function (data) {
+            var compositions = [] ;
+            for (var i in  stockList){
+                var stock = stockList[i] ;
+                compositions[i] = {
+                    sId : stock.id,
+                    amount:stock.amount,
+                    batch:stock.batch,
+                } ;
+            }
+            data.field.compositions = compositions ;
             $.hoshi()
                 .post("/product/add")
                 .jsonParam(data.field)
                 .onSuccess(function (data, msg) {
                     // showToast(msg);
-                    parent.layui.layer.msg(msg) ;
+                    parent.layui.layer.msg(msg);
                     x_admin_close();
                     $(".layui-laypage-btn", parent.document)[0].click();
                 }).linkStart();
             return false;
         });
-
-
     });
+
+    var options = {
+        elem: "#stockList",
+        data: stockList,
+        cols: [[
+            {field: "name", title: "原料名称"},
+            {field: "specs", title: "原料规格"},
+            {field: "amount", edit: "text", title: "原料数量"},
+            {field: "id", title: "操作", toolbar: "#operateTpl"},
+        ]],
+    };
+
+    layui.use("table", function () {
+        var table = layui.table;
+        table.render(options);
+        table.on("edit(stockList)",function (obj) {
+            var value = obj.value;
+            var field = obj.field;
+            var inputElem = $(this);
+            var tdElem = inputElem.closest('td');
+            var valueOld = inputElem.prev().text();
+            var data = {};
+            var errMsg = ''; // 错误信息
+            if (field === 'amount') {
+                // 评分的条件
+                if (value == 0 || !isNaturalNum(value)) {
+                    errMsg = '请输入正整数';
+                }
+            }
+
+            if (errMsg) {
+                // 如果不满足的时候
+                data[field] = valueOld;
+                inputElem.blur();
+                obj.update(data);
+                tdElem.click();
+                layer.msg(errMsg, {time: 1000, anim: 6, shade: 0.01});
+            }else {
+                data[field] = value ;
+            }
+        })
+    })
+
+    function addStock(stock) {
+        if (stock != null) {
+            var has = false ;
+            for (var i in stockList) {
+                if(stock.id == stockList[i].id){
+                    has = true ;
+                    break ;
+                }
+            }
+            if(!has){
+                stock.amount = 1 ;
+                stockList.push(stock);
+                layui.use("table", function () {
+                    var table = layui.table;
+                    table.reload("stockList", {
+                        data: stockList,
+                    });
+                })
+            }else {
+                showToast("原料已添加") ;
+            }
+        }
+    }
+
+    function delStock(id) {
+        for (var index in stockList) {
+            var stock = stockList[index];
+            if (stock.id == id) {
+                stockList.splice(index, 1);
+                break;
+            }
+        }
+        layui.use("table", function () {
+            var table = layui.table;
+            table.reload("stockList", {
+                data: stockList,
+            });
+        })
+    }
+
 </script>
 
 </body>

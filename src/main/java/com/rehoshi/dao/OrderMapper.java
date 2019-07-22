@@ -40,7 +40,7 @@ public interface OrderMapper {
      * @return
      */
     @Update("UPDATE `order` SET name = #{name}, serial = #{serial}, " +
-            "sId = #{sId}, amount = #{amount}, " +
+            "pId = #{pId}, amount = #{amount}, " +
             "createTime = #{createTime}, status = #{status} WHERE id = #{id}")
     int update(Order order);
 
@@ -51,7 +51,7 @@ public interface OrderMapper {
      * @return
      */
     @Insert("INSERT INTO `order` (id, name, serial, sId, amount, createTime, status) " +
-            "VALUES (#{id}, #{name}, #{serial}, #{sId}, #{amount}, #{createTime}, #{status})")
+            "VALUES (#{id}, #{name}, #{serial}, #{pId}, #{amount}, #{createTime}, #{status})")
     int save(Order order);
 
     /**
