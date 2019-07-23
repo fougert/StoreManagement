@@ -36,6 +36,12 @@ public class ProductController extends BaseController {
         return productService.productInPage(search, pageIndex, pageSize) ;
     }
 
+    @RequestMapping(value = "get/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public RespData<Product> get(@PathVariable String id) {
+        return productService.getById(id);
+    }
+
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public RespData<Boolean> delete(@PathVariable String id) {

@@ -13,6 +13,9 @@ public interface StockMapper {
     @Select("SELECT * FROM stock")
     List<Stock> getAllStock();
 
+    @Select("SELECT * FROM stock WHERE id = #{id}")
+    Stock getById(@Param("id") String id) ;
+
     @Delete("DELETE FROM stock WHERE id = #{id}")
     int delByID(@Param("id") String id);
 

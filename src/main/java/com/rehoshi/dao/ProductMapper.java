@@ -21,6 +21,21 @@ public interface ProductMapper {
     })
     List<Product> getBySearch(ProductPageSearch search);
 
+    @Select("SELECT * from product WHERE id = #{id}")
+    @Results({
+            @Result(column = "id",
+                    property = "compositions",
+                    many = @Many(select = "com.rehoshi.dao.ProductCompositionMapper.getByProductId"))
+    })
+    Product getById(@Param("id") String id) ;
+
+
+    /**
+     * 根据id 获取产品的概括信息 不包含产品成分
+     */
+    @Select("SELECT * from product WHERE id = #{id}")
+    Product getOutlineById(@Param("id") String id) ;
+
     /**
      * 更新产品
      *
@@ -30,6 +45,7 @@ public interface ProductMapper {
     @Update({
             "UPDATE product",
             "SET name = #{name},",
+            "specs = #{specs},",
             "createTime = #{createTime}",
             "WHERE id = #{id}"
     })
@@ -69,10 +85,9 @@ public interface ProductMapper {
     @Insert({
             "INSERT",
             "INTO product (",
-            "id,","name,","createTime",
+            "id,","name,","createTime,","specs",
             ") VALUES (",
-            "#{id},","#{name},","#{createTime})"
+            "#{id},","#{name},","#{createTime},","#{specs})"
     })
-//    @Insert("INSERT INTO product (id, name, createTime) VALUES (#{id}, #{name}, #{createTime})")
     int save(Product product);
 }

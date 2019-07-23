@@ -49,6 +49,15 @@
 
         <div class="layui-form-item">
             <label for="addStock" class="layui-form-label">
+                <span class="x-red">*</span>成品规格
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="specs" name="specs" required="" lay-verify="required|number"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="addStock" class="layui-form-label">
                 <span class="x-red">*</span>成品原料
             </label>
             <div class="layui-input-block">
@@ -63,9 +72,10 @@
             <label class="layui-form-label">
             </label>
             <button class="layui-btn" lay-filter="add" lay-submit="">
-                增加
+                保存
             </button>
         </div>
+        <input type="hidden" name="createTime" id="createTime" />
     </form>
 </div>
 <script type="text/html" id="operateTpl">
@@ -74,6 +84,8 @@
 <script>
 
     var stockList = [];
+    var productId = null;
+    var tableIns = null;
 
     layui.use(['form'], function () {
         $ = layui.jquery;
@@ -81,25 +93,34 @@
 
         //监听提交
         form.on('submit(add)', function (data) {
-            var compositions = [] ;
-            for (var i in  stockList){
-                var stock = stockList[i] ;
+            var compositions = [];
+            for (var i in  stockList) {
+                var stock = stockList[i];
                 compositions[i] = {
-                    sId : stock.id,
-                    amount:stock.amount,
-                    batch:stock.batch,
-                } ;
+                    sId: stock.id,
+                    amount: stock.amount,
+                    batch: stock.batch,
+                };
             }
-            data.field.compositions = compositions ;
-            $.hoshi()
-                .post("/product/add")
-                .jsonParam(data.field)
-                .onSuccess(function (data, msg) {
-                    // showToast(msg);
-                    parent.layui.layer.msg(msg);
-                    x_admin_close();
-                    $(".layui-laypage-btn", parent.document)[0].click();
-                }).linkStart();
+            if (compositions.length > 0) {
+                data.field.compositions = compositions;
+                var hoshi = $.hoshi() ;
+                    if(productId != null){
+                        data.field.id = productId ;
+                        hoshi.put("/product/update") ;
+                    }else {
+                        hoshi.post("/product/add") ;
+                    }
+                    hoshi.jsonParam(data.field)
+                    .onSuccess(function (data, msg) {
+                        // showToast(msg);
+                        parent.layui.layer.msg(msg);
+                        x_admin_close();
+                        reloadTable();
+                    }).linkStart();
+            } else {
+                showError("请选择成品原料");
+            }
             return false;
         });
     });
@@ -113,12 +134,16 @@
             {field: "amount", edit: "text", title: "原料数量"},
             {field: "id", title: "操作", toolbar: "#operateTpl"},
         ]],
+        text: {
+            none: "请添加原料"
+        },
     };
 
     layui.use("table", function () {
         var table = layui.table;
-        table.render(options);
-        table.on("edit(stockList)",function (obj) {
+        tableIns = table.render(options);
+        queryProduct();
+        table.on("edit(stockList)", function (obj) {
             var value = obj.value;
             var field = obj.field;
             var inputElem = $(this);
@@ -140,34 +165,65 @@
                 obj.update(data);
                 tdElem.click();
                 layer.msg(errMsg, {time: 1000, anim: 6, shade: 0.01});
-            }else {
-                data[field] = value ;
+            } else {
+                data[field] = value;
             }
         })
     })
 
+    function queryProduct() {
+        productId = getQueryString("id");
+        if (productId != null) {
+            $.hoshi()
+                .get("/product/get/" + productId)
+                .onSuccess(function (data) {
+                    setProduct(data);
+                }).linkStart();
+        }
+    }
+
+    function setProduct(product) {
+        $("#name").val(product.name);
+        $("#specs").val(product.specs);
+        $("#amount").val(product.amount);
+        $("#createTime").val(product.createTimeStr);
+        stockList = [];
+        for (var i in  product.compositions) {
+            var cop = product.compositions[i];
+            var stock = {
+                id:cop.stock.id ,
+                name:cop.stock.name,
+                specs:cop.stock.specs,
+                amount:cop.amount,
+            };
+            stockList.push(stock);
+        }
+        reloadStockList();
+    }
+
     function addStock(stock) {
         if (stock != null) {
-            var has = false ;
+            var has = false;
             for (var i in stockList) {
-                if(stock.id == stockList[i].id){
-                    has = true ;
-                    break ;
+                if (stock.id == stockList[i].id) {
+                    has = true;
+                    break;
                 }
             }
-            if(!has){
-                stock.amount = 1 ;
+            if (!has) {
+                stock.amount = 1;
                 stockList.push(stock);
-                layui.use("table", function () {
-                    var table = layui.table;
-                    table.reload("stockList", {
-                        data: stockList,
-                    });
-                })
-            }else {
-                showToast("原料已添加") ;
+                reloadStockList();
+            } else {
+                showToast("原料已添加");
             }
         }
+    }
+
+    function reloadStockList() {
+        tableIns.reload({
+            data: stockList,
+        });
     }
 
     function delStock(id) {
@@ -178,12 +234,7 @@
                 break;
             }
         }
-        layui.use("table", function () {
-            var table = layui.table;
-            table.reload("stockList", {
-                data: stockList,
-            });
-        })
+        reloadStockList();
     }
 
 </script>

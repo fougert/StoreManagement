@@ -32,7 +32,7 @@ public class Order extends BaseModel{
     private String pId ;
 
     //成品
-    private Product stock ;
+    private Product product ;
 
     //订单数量
     private Integer amount ;
@@ -95,12 +95,12 @@ public class Order extends BaseModel{
         this.pId = pId;
     }
 
-    public Product getStock() {
-        return stock;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setStock(Product stock) {
-        this.stock = stock;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public String getSerial() {

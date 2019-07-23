@@ -86,6 +86,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public RespData<Order> getById(String id) {
-        return null;
+        RespData<Order> data = new RespData<Order>().setData(null).setMsg("查询订单失败") ;
+        Order byId = orderMapper.getById(id);
+        if(byId != null){
+            data.success().setData(byId).setMsg("查询订单成功") ;
+        }
+        return data;
     }
 }

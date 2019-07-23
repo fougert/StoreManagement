@@ -23,6 +23,9 @@ public interface OrderMapper {
             "AND status = #{status}",
             "</when>",
             "</script>"})
+    @Results({
+            @Result(column = "pId", property = "product", one = @One(select = "com.rehoshi.dao.ProductMapper.getById"))
+    })
     List<Order> getBySearch(OrderPageSearch search);
 
     /**
@@ -50,7 +53,7 @@ public interface OrderMapper {
      * @param order 需要添加的订单信息
      * @return
      */
-    @Insert("INSERT INTO `order` (id, name, serial, sId, amount, createTime, status) " +
+    @Insert("INSERT INTO `order` (id, name, serial, pId, amount, createTime, status) " +
             "VALUES (#{id}, #{name}, #{serial}, #{pId}, #{amount}, #{createTime}, #{status})")
     int save(Order order);
 
@@ -69,4 +72,17 @@ public interface OrderMapper {
             "</foreach>",
             "</script>"})
     int deleteInIds(@Param("ids") List<String> ids);
+
+    /**
+     * 根据ID 查找订单
+     * @param id
+     * @return
+     */
+    @Select("SELECT * FROM `order` WHERE id = #{id}")
+    @Results({
+      @Result(column = "pId", property = "product", one = @One(
+              select = "com.rehoshi.dao.ProductMapper.getOutlineById"
+      ))
+    })
+    Order getById(String id);
 }

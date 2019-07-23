@@ -29,6 +29,8 @@ public class Product extends BaseModel {
     private Date createTime;
     private String createTimeStr;
 
+    private Double specs ;
+
 
     public String getId() {
         return id;
@@ -72,5 +74,13 @@ public class Product extends BaseModel {
 
     public void setCreateTimeStr(String createTimeStr) {
         this.createTimeStr = createTimeStr;
+    }
+
+    public Double getSpecs() {
+        return specs;
+    }
+
+    public void setSpecs(Double specs) {
+        this.specs = specs;
     }
 }

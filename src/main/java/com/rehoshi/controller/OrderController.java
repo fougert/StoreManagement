@@ -49,6 +49,13 @@ public class OrderController extends BaseController {
         return orderService.deleteById(id);
     }
 
+
+    @RequestMapping(value = "get/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public RespData<Order> get(@PathVariable String id) {
+        return orderService.getById(id);
+    }
+
     @RequestMapping(value = "delete/all", method = RequestMethod.DELETE)
     @ResponseBody
     public RespData<Boolean> deleteAll(@RequestBody(required = false) List<String> ids) {
