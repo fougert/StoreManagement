@@ -143,4 +143,19 @@ public class GoodsServiceImpl implements GoodsService {
             return RespData.fail(false).setCode(0).setMsg("删除失败");
         }
     }
+
+    /**
+     * 根据id查询商品
+     * @param id
+     * @return
+     */
+    public RespData<Goods> queryGoodById(String id) {
+
+        Goods goods=goodsMapper.queryGoodSByID(id);
+        if (goods !=null){
+            return RespData.success(goods).setCode(200).setMsg("查询成功");
+        }else{
+            return RespData.fail(goods).setCode(0).setMsg("失败");
+        }
+    }
 }

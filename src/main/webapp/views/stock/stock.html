@@ -83,7 +83,7 @@
     //全局变量  保存父子frame页面的值
     var Gid="";
     var goodsName="";
-    //
+
     var parToChilData;
 
     $(function () {
@@ -156,6 +156,7 @@
             }else if (layEvent === 'stock_edit') { //编辑当前行
                 //将当前行的数据赋给全局变量
                 parToChilData=JSON.stringify(obj.data);
+
                 x_admin_show("编辑库存","stock-edit.html");
               /*  layer.open({
                     type:2,

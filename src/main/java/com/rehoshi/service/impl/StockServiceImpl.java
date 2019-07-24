@@ -142,7 +142,7 @@ public class StockServiceImpl implements StockService {
     public RespData<Boolean> editStock(Stock stock) {
 
         Goods goods = goodsMapper.queryGoodSByID(stock.getgId());
-        //库存名称
+       /* //库存名称
         String stockName;
         if (goods.getType()==0){
             stockName="商品"+goods.getName();
@@ -151,7 +151,7 @@ public class StockServiceImpl implements StockService {
         }else{
             stockName="包材"+goods.getName();
         }
-        stock.setName(stockName);
+        stock.setName(stockName);*/
 
        int result=stockMapper.editStock(stock);
        if (result==1){

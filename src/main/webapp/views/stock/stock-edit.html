@@ -25,9 +25,9 @@
 
     //选择库存名称
     function addStocks() {
-        x_admin_show("选择库存名称", "../goods/chooseGoodsName.html", 900, 600, parent, null, null, function () {
+        x_admin_show("选择库存类型", "../goods/chooseGoodsType.html", 900, 600, parent, null, null, function () {
 
-            document.getElementById("name").value=parent.goodsName;
+            document.getElementById("goodName").value=parent.goodsName;
 
             document.getElementById("gId").value=parent.Gid;
 
@@ -54,10 +54,19 @@
         <div class="layui-form-item">
             <label class="layui-form-label"> <span class="x-red">*</span>库存名称</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input" id="name" name="name" readonly="readonly" value="">
+                <input type="text" class="layui-input" id="name" name="name" required="required" value="" lay-verify="name">
             </div>
-            <a class="layui-btn" onclick="addStocks()" style="margin-left: 15px"><i class="layui-icon"></i>选择库存名称</a>
+            <a class="layui-btn" onclick="addStocks()" style="margin-left: 15px"><i class="layui-icon"></i>选择库存类型</a>
         </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"> <span class="x-red">*</span>库存类型</label>
+            <!--<span id="goodName"></span>-->
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="goodName" readonly="readonly" >
+            </div>
+        </div>
+
         <!-- 隐藏域  随表单一起提交 -->
         <div class="layui-form-item">
             <div class="layui-input-inline">
@@ -178,6 +187,23 @@
         $("#demo1").attr("src",dataField.img);
         $("#name").val(dataField.name);
         $("#gId").val(dataField.gId);
+
+        $.hoshi()
+            .get("/goods/queryGoodById/"+dataField.gId)
+            .onSuccess(function (data) {
+                var name;
+                if (data.type===0){
+                    name="商品"+data.name;
+                } else if (data.type===1){
+                    name="原料"+data.name;
+                } else{
+                    name="包材"+data.name;
+                }
+                $("#goodName").val(name);
+
+            })
+            .linkStart();
+
     })
 
 
@@ -187,10 +213,6 @@
             layer = layui.layer,
             upload = layui.upload,
             form = layui.form;
-
-
-
-
 
       /*  //渲染页面下拉框
         $.hoshi()
@@ -297,9 +319,17 @@
         var int=/^[0-9]*[1-9][0-9]*$/;
         //表单验证
         form.verify({
+            name:function(value,item){
+                if (value === "" || value==null){
+                    return '请输入库存名称';
+                }
+                if (value>10){
+                    return "库存名称长度不能超过10";
+                }
+            },
             gId:function (value,item) {
                 if (value === "" || value==null){
-                    return '请选择库存名称';
+                    return '请选择库存类型';
                 }
             },
             img:function (value,item) {
@@ -348,6 +378,7 @@
             //console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
             //console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
             //console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+            result.field.goodName=null;
 
             var data=JSON.stringify(result.field);
             $.hoshi()

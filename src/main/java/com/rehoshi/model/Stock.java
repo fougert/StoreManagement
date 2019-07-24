@@ -18,6 +18,9 @@ public class Stock extends BaseModel{
     private String img ;
     //货品种类
     private String gId ;
+    //商品
+    private Goods goods ;
+
     //货品规格
     private Double specs;
     //货品数量
@@ -134,5 +137,13 @@ public class Stock extends BaseModel{
 
     public void setCreateTimeStr(String createTimeStr) {
         this.createTimeStr = createTimeStr;
+    }
+
+    public Goods getGoods() {
+        return goods;
+    }
+
+    public void setGoods(Goods goods) {
+        this.goods = goods;
     }
 }

@@ -28,6 +28,19 @@ public class GoodsController {
         return goodsService.getAllGoods();
     }
 
+
+    /**
+     * 根据id查询商品
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/queryGoodById/{id}",method = RequestMethod.GET)
+    public RespData<Goods> queryGoodById(@PathVariable String id){
+        return goodsService.queryGoodById(id);
+    }
+
+
     /**
      * 返回商品分页数据
      * @param page    页号
