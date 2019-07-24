@@ -45,7 +45,7 @@
     </div>
     <xblock>
         <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-        <button class="layui-btn" onclick="x_admin_show('添加库存','stock-add.html')"><i class="layui-icon"></i>添加</button>
+        <button class="layui-btn" onclick="x_admin_show('添加库存','stock-add.html',600,600)"><i class="layui-icon"></i>添加</button>
     </xblock>
     <table class="layui-table" id="stockTable" lay-filter="stockFilter">
 
@@ -157,7 +157,7 @@
                 //将当前行的数据赋给全局变量
                 parToChilData=JSON.stringify(obj.data);
 
-                x_admin_show("编辑库存","stock-edit.html");
+                x_admin_show("编辑库存","stock-edit.html",600,600);
               /*  layer.open({
                     type:2,
                     title:'库存编辑',
