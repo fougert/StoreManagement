@@ -77,19 +77,20 @@ public class GoodsServiceImpl implements GoodsService {
         return null;
     }
 
+
     /**
-     *
-     * @param name 商品名称
-     * @param type 商品种类
+     * 添加商品类型
+     * @param good
      * @return
      */
-    public RespData addGoodsType(String name, Integer type) {
+    public RespData addGoodsType(Goods good) {
 
-        List<Goods> goods=goodsMapper.queryByNameAndType(name,type);
+       List<Goods> goods=goodsMapper.queryByNameAndType(good.getName(),good.getType());
         if(goods.size()==0){
              //生成主键
              String uuid= BaseModel.generateUUID();
-            int result=goodsMapper.addGoodsType(uuid,name,type);
+             good.setId(uuid);
+            int result=goodsMapper.addGoodsType(good);
             if (result==1){
                 return RespData.success(uuid).setCode(200).setMsg("数据库更新成功");
             }else{

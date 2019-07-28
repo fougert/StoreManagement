@@ -7,14 +7,12 @@ import com.rehoshi.model.Stock;
 import com.rehoshi.service.impl.StockServiceImpl;
 import com.rehoshi.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
 
-
-@Controller
+@RestController
 @RequestMapping("/stock")
 public class StockController {
 
@@ -26,7 +24,6 @@ public class StockController {
      * 查询所有库存  返回分页数据
      * @return
      */
-    @ResponseBody
     @RequestMapping(value = "/stockInPage",method= RequestMethod.GET)
     public PageData<Stock> stockInPage(
                         @RequestParam(required = false)String name,
@@ -56,7 +53,6 @@ public class StockController {
      * @param id
      * @return
      */
-    @ResponseBody
     @RequestMapping(value = "/delStock/{id}",method = RequestMethod.DELETE)
     public RespData<Boolean> delStock(@PathVariable String id){
         return stockService.deleteById(id);
@@ -68,7 +64,6 @@ public class StockController {
      * @param stock
      * @return
      */
-    @ResponseBody
     @RequestMapping(value = "/addStock",method = RequestMethod.POST)
     public RespData<Boolean> addStock(@RequestBody Stock stock){
 
@@ -82,7 +77,6 @@ public class StockController {
      * @param stockList
      * @return
      */
-    @ResponseBody
     @RequestMapping(value = "/delBatchStock",method = RequestMethod.DELETE)
     public RespData<Boolean> delBatchStock(@RequestBody List<Stock> stockList){
 
@@ -94,7 +88,6 @@ public class StockController {
      * @param stock
      * @return
      */
-    @ResponseBody
     @RequestMapping(value = "/editStock",method = RequestMethod.PUT)
     public RespData<Boolean> editStock(@RequestBody Stock stock){
         return  stockService.editStock(stock);

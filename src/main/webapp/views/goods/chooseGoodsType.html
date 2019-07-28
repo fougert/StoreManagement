@@ -67,10 +67,27 @@
     <a class="layui-btn-danger layui-btn layui-btn-xs"  lay-event="del"><i class="layui-icon">&#xe640;</i>删除</a>-->
 
 </script>
+<!-- 显示当前图片 -->
+<script type="text/html" id="imgTpl">
+    <a onclick="openImg('{{d.img}}')">点击查看</a>
+</script>
 
 <script>
 
-
+    function openImg(url) {
+        layer.open({
+            type: 2,
+            title: "图片",
+            shadeClose: true,   //点击遮罩关闭 即单击iframe外区域关闭iframe
+            shade: 0.5,
+            area: ['500px', '500px'],
+            scrollbar: false,   //页面滚动条事件
+            content: url, //iframe的url
+            success: function(layero, index) {
+                layer.iframeAuto(index);
+            }
+        });
+    }
 
     $(function () {
         bindInputParam("type") ;
@@ -91,6 +108,8 @@
                 //{field: 'id', title: 'ID', type:'checkbox',  sort: true, fixed: 'left'},
                 {field: 'id', title: '编号'}
                 ,{field: 'name', title: '名称'}
+                ,{field: 'img', title: '图片',templet:'#imgTpl'}
+                ,{field: 'specs', title: '规格'}
                 ,{field:'type',title:'类型'}
                 ,{fixed: 'right',title: '操作',  align:'center', toolbar: '#barDemo'}
             ]]
@@ -115,7 +134,6 @@
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
             var tr = obj.tr; //获得当前行 tr 的DOM对象
 
-
             if(layEvent=='choose'){
                 var GoodName;
                if (data.type==0){
@@ -131,14 +149,8 @@
 
                //关闭当前iframe页
                 x_admin_close();
-
-
             }
-
-
         });
-
-
     });
 
 

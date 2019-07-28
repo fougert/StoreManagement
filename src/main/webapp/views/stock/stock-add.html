@@ -68,7 +68,7 @@
             </div>
             <a class="layui-btn" onclick="addStocks()" style="margin-left: 15px"><i class="layui-icon"></i>选择库存类型</a>
         </div>
-        <!-- 隐藏域  随表单一起提交 -->
+        <!-- 隐藏域 保存商品id 随表单一起提交 -->
         <div class="layui-form-item">
             <div class="layui-input-inline">
                <!-- <a class="layui-btn" onclick="addStocks()" style="margin-left: 30px"><i class="layui-icon"></i>选择库存类型</a>-->
@@ -76,7 +76,7 @@
 
             </div>
         </div>
-        <div class="layui-form-item">
+       <!-- <div class="layui-form-item">
             <label class="layui-form-label"> <span class="x-red">*</span>添加图片</label>
             <div class="layui-input-inline uploadHeadImage">
                 <div class="layui-upload-drag" id="headImg">
@@ -93,21 +93,12 @@
 
         </div>
 
-        <!-- 隐藏域  保存服务器返回的图片url 随请求一起提交上去-->
+        &lt;!&ndash; 隐藏域  保存服务器返回的图片url 随请求一起提交上去&ndash;&gt;
         <div class="layui-form-item">
             <div class="layui-input-inline">
                 <input type="hidden" id="img" name="img" class="layui-input" lay-verify="img">
             </div>
         </div>
-        <!-- <div class="layui-form-item">
-            <label for="username" class="layui-form-label">
-                <span class="x-red">*</span>上传图片
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="username" name="username" required="" lay-verify="required"
-                autocomplete="off" class="layui-input">
-            </div>
-        </div> -->
         <div class="layui-form-item">
             <label for="specs" class="layui-form-label">
                 <span class="x-red">*</span>规格
@@ -116,7 +107,7 @@
                 <input type="text" id="specs" name="specs" required="" lay-verify="specs"
                        autocomplete="off" class="layui-input">
             </div>
-        </div>
+        </div>-->
         <div class="layui-form-item">
             <label for="amount" class="layui-form-label">
                 <span class="x-red">*</span>数量
@@ -140,7 +131,7 @@
                 <span class="x-red">*</span>供应商
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="provider" name="provider" required="" lay-verify="provider"
+                <input type="text" id="provider" name="provider" required="required" lay-verify="provider"
                        autocomplete="off" class="layui-input" placeholder="长度不超过20">
             </div>
         </div>
@@ -172,8 +163,6 @@
         upload = layui.upload,
         form = layui.form;
 
-
-
        /* //渲染页面下拉框
         $.hoshi()
             .get("/goods/allgoods")
@@ -201,7 +190,7 @@
             .linkStart();*/
 
 
-        //拖拽上传
+       /* //拖拽上传
         var uploadInst = upload.render({
             elem: '#headImg'
             , url: '/upload/imgUpload'
@@ -230,13 +219,13 @@
                     //将图片url 保存到form 表单隐藏域中 表单提交的时候一起提交
                     $("#img").val(res.data)
                 }
-             /*   //上传成功
+             /!*   //上传成功
                 //打印后台传回的地址: 把地址放入一个隐藏的input中, 和表单一起提交到后台, 此处略..
                 /!*   console.log(res.data.src);*!/
                 window.parent.uploadHeadImage(res.data.src);
                 //上传成功提示信息
                 var demoText = $('#demoText');
-                demoText.html('<span style="color: #8f8f8f;">上传成功!!!</span>');*/
+                demoText.html('<span style="color: #8f8f8f;">上传成功!!!</span>');*!/
             }
             , error: function () {
                 //演示失败状态，并实现重传
@@ -247,10 +236,11 @@
                 });
             }
         });
-        element.init();
+        element.init();*/
 
         //非负double正则  小数点后2位
-        var reg = /^(([1-9]+)|([0-9]+\.[0-9]{1,2}))$/;
+       /* var reg = /^(([1-9]+)|([0-9]+\.[0-9]{1,2}))$/;*/
+        var reg=/^([1-9][0-9]*)+(.[0-9]{1,2})?$/;
         var int=/^[0-9]*[1-9][0-9]*$/;
         //表单验证
         form.verify({
@@ -268,7 +258,7 @@
                     return '请选择库存类型';
                 }
             },
-            img:function (value,item) {
+           /* img:function (value,item) {
                 if (value==""){
                     return "请上传图片";
                 }
@@ -280,7 +270,7 @@
                 if (value.length>8) {
                     return "规格长度不超过8";
                 }
-            },
+            },*/
             amount:function (value,item) {
                 if (!int.test(value)){
                     return "数量请输入正整数";
@@ -320,29 +310,17 @@
                 .post("/stock/addStock")
                 .jsonParam(data)
                 .onSuccess(function (data,msg,code) {
-                    if (code===200){
-                        layer.msg("入库成功！",{icon:1,time:1000},function () {
-                            //关闭当前frame页
-                            x_admin_close();
-                            //父页当前页刷新
-                            reloadTable();
-                            //$(".layui-laypage-btn",parent.document)[0].click();
-                        })
-                    }else if (code===0){
-                        layer.msg("入库失败！未知错误!",{icon:2,time:1000},function () {
-                            //关闭当前frame页
-                            x_admin_close();
-                        })
-                    }
+                    parent.layui.layer.msg("入库成功！",{icon:1,time:1000});
+                    //关闭当前frame页
+                    x_admin_close();
+                    reloadTable(parent);
                 })
                 .onError(function () {
-                    layer.msg("未知错误！",function () {
-                        x_admin_close();
-                    })
+                   parent.layui.layer("未知错误");
+                   x_admin_close();
                 })
                 .linkStart()
-
-            //return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            //return false; //阻止表单跳转。
         });
 
 

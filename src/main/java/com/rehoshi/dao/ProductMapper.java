@@ -90,4 +90,12 @@ public interface ProductMapper {
             "#{id},","#{name},","#{createTime},","#{specs})"
     })
     int save(Product product);
+
+
+    /**
+     * 查询所有商品
+     * @return
+     */
+    @Select("SELECT * FROM product")
+    List<Product> queryAllProduct();
 }

@@ -75,30 +75,6 @@
             </div>
         </div>
 
-
-       <div class="layui-form-item">
-            <label class="layui-form-label">修改图片</label>
-            <div class="layui-input-inline uploadHeadImage">
-                <div class="layui-upload-drag" id="headImg">
-                    <i class="layui-icon"></i>
-                    <p>点击上传图片，或将图片拖拽到此处</p>
-                </div>
-            </div>
-            <div class="layui-input-inline">
-                <div class="layui-upload-list" >
-                    <img class="layui-upload-img headImage" id="demo1"  style="height: 100px">
-                </div>
-                <p id="demoText"></p>
-            </div>
-        </div>
-
-        <!-- 隐藏域  保存服务器返回的图片url 随请求一起提交上去-->
-        <div class="layui-form-item">
-            <div class="layui-input-inline">
-                <input type="hidden" id="img" name="img" class="layui-input" lay-verify="img">
-            </div>
-        </div>
-
         <!-- 隐藏域  保存当前库存id  随请求一起提交上去-->
         <div class="layui-form-item">
             <div class="layui-input-inline">
@@ -106,24 +82,6 @@
             </div>
         </div>
 
-        <!-- <div class="layui-form-item">
-            <label for="username" class="layui-form-label">
-                <span class="x-red">*</span>上传图片
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="username" name="username" required="" lay-verify="required"
-                autocomplete="off" class="layui-input">
-            </div>
-        </div> -->
-        <div class="layui-form-item">
-            <label for="specs" class="layui-form-label">
-                <span class="x-red">*</span>规格
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="specs" name="specs" required="" lay-verify="specs"
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>
         <div class="layui-form-item">
             <label for="amount" class="layui-form-label">
                 <span class="x-red">*</span>数量
@@ -176,16 +134,12 @@
     $(function () {
         //获取父页面传递过来的值
         var dataField=JSON.parse(parent.parToChilData);
-        //图片url
-        $("#img").val(dataField.img);
-
-        $("#specs").val(dataField.specs);
+        alert(JSON.stringify(dataField));
         $("#amount").val(dataField.amount);
         $("#price").val(dataField.price);
         $("#provider").val(dataField.provider);
         $("#description").val(dataField.description);
         $("#id").val(dataField.id);
-        $("#demo1").attr("src",dataField.img);
         $("#name").val(dataField.name);
         $("#gId").val(dataField.gId);
 
@@ -204,15 +158,12 @@
 
             })
             .linkStart();
-
     })
 
 
-    layui.use(["jquery", "upload", "form", "layer", "element"], function () {
+    layui.use(["jquery", "form", "layer"], function () {
         var $ = layui.$,
-            element = layui.element,
             layer = layui.layer,
-            upload = layui.upload,
             form = layui.form;
 
       /*  //渲染页面下拉框
@@ -264,59 +215,9 @@
             })
             .linkStart();*/
 
-
-
-        //拖拽上传
-        var uploadInst = upload.render({
-            elem: '#headImg'
-            , url: '/upload/imgUpload'
-            , size:5120   //图片最大5M
-            ,accept:'images'  //指定上传的文件类型为图片
-            , before: function (obj) {
-                // //预读本地文件示例，不支持ie8
-                obj.preview(function (index, file, result) {
-
-                    $('#demo1').attr('src', result); //图片链接（base64）
-
-                });
-            }
-            , done: function (res) {
-                //如果上传失败
-                if (res.code == 0) {
-                    layer.msg('上传失败');
-                    //清空隐藏域的值
-                    $("#img").val("");
-                    var demoText = $('#demoText');
-                    demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
-                    demoText.find('.demo-reload').on('click', function () {
-                        uploadInst.upload();
-                    });
-                }else if (res.code==200) {
-                    //将图片url 保存到form 表单隐藏域中 表单提交的时候一起提交
-                    $("#img").val(res.data)
-                }
-                /*   //上传成功
-                   //打印后台传回的地址: 把地址放入一个隐藏的input中, 和表单一起提交到后台, 此处略..
-                   /!*   console.log(res.data.src);*!/
-                   window.parent.uploadHeadImage(res.data.src);
-                   //上传成功提示信息
-                   var demoText = $('#demoText');
-                   demoText.html('<span style="color: #8f8f8f;">上传成功!!!</span>');*/
-            }
-            , error: function () {
-                //演示失败状态，并实现重传
-                var demoText = $('#demoText');
-                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
-                demoText.find('.demo-reload').on('click', function () {
-                    uploadInst.upload();
-                });
-            }
-        });
-        element.init();
-
-
         //非负double正则  小数点后2位
-        var reg = /^(([1-9]+)|([0-9]+\.[0-9]{1,2}))$/;
+       /* var reg = /^(([1-9]+)|([0-9]+\.[0-9]{1,2}))$/;*/
+        var reg=/^([1-9][0-9]*)+(.[0-9]{1,2})?$/;
         var int=/^[0-9]*[1-9][0-9]*$/;
         //表单验证
         form.verify({
@@ -324,26 +225,13 @@
                 if (value === "" || value==null){
                     return '请输入库存名称';
                 }
-                if (value>10){
+                if (value.length>10){
                     return "库存名称长度不能超过10";
                 }
             },
             gId:function (value,item) {
                 if (value === "" || value==null){
                     return '请选择库存类型';
-                }
-            },
-            img:function (value,item) {
-                if (value==""){
-                    return "请上传图片";
-                }
-            },
-            specs:function (value,item) {
-                if (!reg.test(value)){
-                    return "请输入正确的规格！(有效值小数点后2位)";
-                }
-                if (value.length>8) {
-                    return "规格长度不超过8";
                 }
             },
             amount:function (value,item) {
@@ -386,19 +274,11 @@
                 .put("/stock/editStock")
                 .jsonParam(data)
                 .onSuccess(function (data,msg,code) {
-                    if (code===200){
-                        layer.msg("更新成功！",{icon:1,time:1000},function () {
-                            //关闭当前frame页
-                            x_admin_close();
-                            //父页当前页刷新
-                            $(".layui-laypage-btn",parent.document)[0].click();
-                        })
-                    }else if (code===0){
-                        layer.msg("更新失败！未知错误!",{icon:2,time:1000},function () {
-                            //关闭当前frame页
-                            x_admin_close();
-                        })
-                    }
+                    layer.msg("更新成功！",{icon:1});
+                    //关闭当前frame页
+                    x_admin_close();
+                    //父页当前页刷新
+                    reloadTable(parent);
                 })
                 .onError(function () {
                     layer.msg("未知错误！",function () {

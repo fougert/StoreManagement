@@ -15,14 +15,13 @@ public class Stock extends BaseModel{
     //货品名称
     private String name ;
     //货品图片
-    private String img ;
+    //private String img ;
     //货品种类
     private String gId ;
     //商品
     private Goods goods ;
-
     //货品规格
-    private Double specs;
+    //private Double specs;
     //货品数量
     private Integer amount ;
     //货品价格
@@ -55,28 +54,12 @@ public class Stock extends BaseModel{
         this.name = name;
     }
 
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
-
     public String getgId() {
         return gId;
     }
 
     public void setgId(String gId) {
         this.gId = gId;
-    }
-
-    public Double getSpecs() {
-        return specs;
-    }
-
-    public void setSpecs(Double specs) {
-        this.specs = specs;
     }
 
     public Integer getAmount() {

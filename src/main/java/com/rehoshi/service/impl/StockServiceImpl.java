@@ -77,26 +77,13 @@ public class StockServiceImpl implements StockService {
     }
 
     /**
-     *
+     * 添加库存
      * @param stock
      * @return
      */
     public RespData<Boolean> addStock(Stock stock) {
         //库存编号
         stock.setId(BaseModel.generateUUID());
-        //入库名称
-
-       /* //入库类型+商品名称
-        Goods goods = goodsMapper.queryGoodSByID(stock.getgId());
-        String stockName;
-        if (goods.getType()==0){
-            stockName="商品";
-        }else if (goods.getType()==1){
-            stockName="原料";
-        }else{
-            stockName="包材";
-        }
-        stock.setName(stockName+goods.getName());*/
 
         //批次
         String batch=new SimpleDateFormat("yyyyMMddhhmm").format(new Date().getTime());
@@ -140,18 +127,6 @@ public class StockServiceImpl implements StockService {
      * @return
      */
     public RespData<Boolean> editStock(Stock stock) {
-
-        Goods goods = goodsMapper.queryGoodSByID(stock.getgId());
-       /* //库存名称
-        String stockName;
-        if (goods.getType()==0){
-            stockName="商品"+goods.getName();
-        }else if (goods.getType()==1){
-            stockName="原料"+goods.getName();
-        }else{
-            stockName="包材"+goods.getName();
-        }
-        stock.setName(stockName);*/
 
        int result=stockMapper.editStock(stock);
        if (result==1){

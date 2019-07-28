@@ -32,9 +32,6 @@
                 <input type="text" id="name" name="name" required="" lay-verify="name"
                        autocomplete="off" class="layui-input">
             </div>
-            <!-- <div class="layui-form-mid layui-word-aux">
-                <span class="x-red">*</span>
-            </div> -->
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
@@ -49,6 +46,38 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label"> <span class="x-red">*</span>添加图片</label>
+            <div class="layui-input-inline uploadHeadImage">
+                <div class="layui-upload-drag" id="headImg">
+                    <i class="layui-icon"></i>
+                    <p>点击上传图片，或将图片拖拽到此处</p>
+                </div>
+            </div>
+            <div class="layui-input-inline">
+                <div class="layui-upload-list" >
+                    <img class="layui-upload-img headImage" id="demo1"  style="height: 100px">
+                </div>
+                <p id="demoText"></p>
+            </div>
+
+        </div>
+        <!-- 隐藏域  保存服务器返回的图片url 随请求一起提交上去-->
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input type="hidden" id="img" name="img" class="layui-input" lay-verify="img">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label for="specs" class="layui-form-label">
+                <span class="x-red">*</span>规格
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="specs" name="specs" required="" lay-verify="specs"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label  class="layui-form-label">
             </label>
             <button type="button" class="layui-btn" lay-filter="add" lay-submit="" id="btn_add">
@@ -58,11 +87,63 @@
     </form>
 </div>
 <script>
-    layui.use(['form','layer'], function(){
-        $ = layui.jquery;
+    layui.use(["jquery", "upload", "form", "layer", "element"], function(){
+        var $ = layui.jquery;
         var form = layui.form,
-            layer = layui.layer;
+            layer = layui.layer,
+        element = layui.element,
+            upload = layui.upload;
 
+        //拖拽上传
+        var uploadInst = upload.render({
+            elem: '#headImg'
+            , url: '/upload/imgUpload'
+            , size:5120   //图片最大5M
+            ,accept:'images'  //指定上传的文件类型为图片
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    //上传成功  将图片url保存到form表单隐藏域中
+                    $('#demo1').attr('src', result);
+                });
+            }
+            , done: function (res) {
+                //如果上传失败
+                if (res.code == 0) {
+                    layer.msg('上传失败');
+                    //清空隐藏域的值
+                    $("#img").val("");
+                    var demoText = $('#demoText');
+                    demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+                    demoText.find('.demo-reload').on('click', function () {
+                        uploadInst.upload();
+                    });
+                }else if (res.code==200) {
+                    //将图片url 保存到form 表单隐藏域中 表单提交的时候一起提交
+                    $("#img").val(res.data)
+                }
+                /*   //上传成功
+                   //打印后台传回的地址: 把地址放入一个隐藏的input中, 和表单一起提交到后台, 此处略..
+                   /!*   console.log(res.data.src);*!/
+                   window.parent.uploadHeadImage(res.data.src);
+                   //上传成功提示信息
+                   var demoText = $('#demoText');
+                   demoText.html('<span style="color: #8f8f8f;">上传成功!!!</span>');*/
+            }
+            , error: function () {
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+        });
+        element.init();
+
+
+        //非负double小数  小数点后2位
+        var reg=/^([1-9][0-9]*)+(.[0-9]{1,2})?$/;
         //自定义验证规则
         form.verify({
             name: function(value){
@@ -72,7 +153,21 @@
                 if(value.length===0){
                     return '商品名称不能为空'
                 }
-            }
+            },
+            //校验图片是否上传
+            img:function (value,item) {
+                if (value==""){
+                    return "请上传图片";
+                }
+            },
+            specs:function (value,item) {
+                if (!reg.test(value)){
+                    return "请输入正确的规格！(有效值小数点后2位)";
+                }
+                if (value.length>8) {
+                    return "规格长度不超过8";
+                }
+            },
         });
 
         //监听表单提交事件
@@ -81,52 +176,24 @@
 
             var data={
                 name:data.field.name,
-                type:data.field.type
+                type:data.field.type,
+                img:data.field.img,
+                specs:data.field.specs
             }
+
+
             $.hoshi()
                 .post('/goods/goodsTypeAdd')
                 .formParam(data)
                 .onSuccess(function () {
-                    layer.alert("增加成功", {icon: 6},function () {
-                        //关闭当前frame
-                        x_admin_close();
-                        // 可以对父窗口的当前页刷新
-                        //$(".layui-laypage-btn", parent.document)[0].click();
-                        reloadTable();
-
-
-                     /*   parent.layui.use('layer',function () {
-                            parent.layer.msg("上坪")
-                        })*/
-                        //x_admin_father_reload();
-                    });
+                    parent.layui.layer.msg("增加成功", {icon: 6});
+                    x_admin_close();
+                    //重新刷新当前页面
+                    reloadTable(parent);
                 })
                 .linkStart($("#btn_add"));
-          /*  $.ajax({
-                type:'POST',
-                url:'/goods/goodsTypeAdd',
-                data:{
-                    name:data.field.name,
-                    type:data.field.type
-                },
-                success:function(res){
-                    layer.alert("增加成功", {icon: 6},function () {
-                        //关闭当前frame
-                        x_admin_close();
-                        // 可以对父窗口进行刷新
-                        x_admin_father_reload();
-                    });
-                }
-            })*/
 
-            // layer.alert("增加成功", {icon: 6},function () {
-            //     //关闭当前frame
-            //     x_admin_close();
-
-            //     // 可以对父窗口进行刷新
-            //     x_admin_father_reload();
-            // });
-            return false;
+            //return false;
         });
 
 

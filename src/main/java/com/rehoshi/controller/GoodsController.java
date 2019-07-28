@@ -6,12 +6,11 @@ import com.rehoshi.dto.search.GoodPageSearch;
 import com.rehoshi.model.Goods;
 import com.rehoshi.service.impl.GoodsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping(value = "/goods")
 public class GoodsController {
 
@@ -22,7 +21,6 @@ public class GoodsController {
      * 返回所有商品
      * @return
      */
-    @ResponseBody
     @RequestMapping(value ="/allgoods",method = RequestMethod.GET)
     public RespData<List<Goods>> getAllGoods(){
         return goodsService.getAllGoods();
@@ -34,7 +32,6 @@ public class GoodsController {
      * @param id
      * @return
      */
-    @ResponseBody
     @RequestMapping(value = "/queryGoodById/{id}",method = RequestMethod.GET)
     public RespData<Goods> queryGoodById(@PathVariable String id){
         return goodsService.queryGoodById(id);
@@ -47,7 +44,6 @@ public class GoodsController {
      * @param limit  每页显示多少条数
      * @return
      */
-    @ResponseBody
     @RequestMapping(value = "/goodInPage",method = RequestMethod.GET)
     public PageData<Goods> goodInPage(
             @RequestParam(value = "name",required = false)String name
@@ -62,18 +58,26 @@ public class GoodsController {
         return goodsService.goodsInPage(goodPageSearch,page,limit);
     }
 
+
     /**
      * 添加商品
      * @param name
      * @param type
+     * @param img
+     * @param specs
      * @return
      */
-
-    @ResponseBody
     @RequestMapping(value = "/goodsTypeAdd",method = RequestMethod.POST)
-    public RespData addGoosType( @RequestParam("name") String name, @RequestParam("type") Integer type){
-
-        return goodsService.addGoodsType(name,type);
+    public RespData addGoosType(@RequestParam("name")String name
+                                ,@RequestParam("type")Integer type
+                                ,@RequestParam("img") String img
+                                ,@RequestParam("specs")Double specs){
+        Goods goods = new Goods();
+        goods.setName(name);
+        goods.setType(type);
+        goods.setImg(img);
+        goods.setSpecs(specs);
+        return goodsService.addGoodsType(goods);
     }
 
     /**
@@ -81,7 +85,6 @@ public class GoodsController {
      * @param id
      * @return
      */
-    @ResponseBody
     @RequestMapping(value = "/delGoodsType/{id}",method = RequestMethod.DELETE)
     public RespData delGoodsType(@PathVariable String id){
         return goodsService.delGoodsType(id);
@@ -92,7 +95,6 @@ public class GoodsController {
      * @param good
      * @return
      */
-    @ResponseBody
     @RequestMapping(value = "/editGoods",method = RequestMethod.PUT)
     public RespData<Boolean> editGoods(@RequestBody Goods good){
         return goodsService.editGoods(good);
@@ -104,7 +106,6 @@ public class GoodsController {
      * @param goodslist
      * @return
      */
-    @ResponseBody
     @RequestMapping(value = "/delBatchGoodsTypes",method = RequestMethod.DELETE)
     public RespData<Boolean> delBatchGoodsTypes(@RequestBody List<Goods> goodslist){
         return goodsService.delBatchGoodTypes(goodslist);

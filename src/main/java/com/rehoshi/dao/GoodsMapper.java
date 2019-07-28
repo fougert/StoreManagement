@@ -22,8 +22,8 @@ public interface GoodsMapper {
 
 
 
-    @Insert("INSERT INTO goods VALUES (#{uuid},#{name},#{type})")
-    int addGoodsType(@Param("uuid") String uuid, @Param("name") String name, @Param("type") Integer type);
+    @Insert("INSERT INTO goods VALUES (#{id},#{img},#{specs},#{name},#{type})")
+    int addGoodsType(Goods good);
 
 
     @Select("SELECT * FROM goods WHERE name=#{name} AND type=#{type}")
@@ -33,7 +33,7 @@ public interface GoodsMapper {
     int delGoodsType(@Param("id") String id);
 
 
-    @Update("UPDATE goods SET name = #{name},type = #{type} WHERE id = #{id}")
+    @Update("UPDATE goods SET img=#{img}, specs=#{specs}, name = #{name},type = #{type} WHERE id = #{id}")
     int editGoods(Goods good);
 
     /*

@@ -19,7 +19,7 @@ public interface StockMapper {
     @Delete("DELETE FROM stock WHERE id = #{id}")
     int delByID(@Param("id") String id);
 
-    @Insert("INSERT INTO stock VALUES (#{id},#{name},#{img},#{gId},#{specs},#{amount},#{price},#{batch},#{provider},#{description},#{createTime})")
+    @Insert("INSERT INTO stock VALUES (#{id},#{name},#{gId},#{amount},#{price},#{batch},#{provider},#{description},#{createTime})")
     int addStock(Stock stock);
 
 
@@ -48,6 +48,6 @@ public interface StockMapper {
             "</script>"})
     List<Stock> queryStockBySearch(StockPageSearch search);
 
-    @Update("UPDATE stock SET name=#{name},img=#{img},gId=#{gId},specs=#{specs},amount=#{amount},price=#{price},provider=#{provider},description=#{description} WHERE id=#{id}")
+    @Update("UPDATE stock SET name=#{name},gId=#{gId},amount=#{amount},price=#{price},provider=#{provider},description=#{description} WHERE id=#{id}")
     int editStock(Stock stock);
 }

@@ -2,10 +2,7 @@ package com.rehoshi.controller;
 
 import com.rehoshi.dto.RespData;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +14,10 @@ import java.util.UUID;
  * 图片上传处理
  */
 
-@Controller
+@RestController
 @RequestMapping(value = "/upload")
 public class UploadController {
 
-    @ResponseBody
     @RequestMapping(value = "/imgUpload",method = RequestMethod.POST)
     public RespData<String> imageUpload(@RequestParam(value = "file",required = false) MultipartFile file, HttpServletRequest request) {
         //原始图片名称

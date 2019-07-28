@@ -20,6 +20,11 @@ public class Goods extends BaseModel{
     //类型 默认商品类型
     private Integer type ;
 
+    //商品规格
+    private Double specs;
+
+    //img  保存图片相对地址
+    private String img;
 
     public String getId() {
         return id;
@@ -49,4 +54,19 @@ public class Goods extends BaseModel{
         this.type = type;
     }
 
+    public Double getSpecs() {
+        return specs;
+    }
+
+    public void setSpecs(Double specs) {
+        this.specs = specs;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
 }
