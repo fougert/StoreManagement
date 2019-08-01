@@ -310,7 +310,7 @@
                 .onSuccess(function (data,msg,code) {
                     parent.layui.layer.msg("入库成功！",{icon:1,time:1000});
                     //关闭当前frame页
-                    // x_admin_close();
+                     x_admin_close();
                     reloadTable(parent);
                 })
                 .onError(function () {

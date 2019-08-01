@@ -134,7 +134,6 @@
     $(function () {
         //获取父页面传递过来的值
         var dataField=JSON.parse(parent.parToChilData);
-        alert(JSON.stringify(dataField));
         $("#amount").val(dataField.amount);
         $("#price").val(dataField.price);
         $("#provider").val(dataField.provider);
@@ -274,9 +273,9 @@
                 .put("/stock/editStock")
                 .jsonParam(data)
                 .onSuccess(function (data,msg,code) {
-                    layer.msg("更新成功！",{icon:1});
+                    parent.layer.msg("更新成功！",{icon:1});
                     //关闭当前frame页
-                    // x_admin_close();
+                     x_admin_close();
                     //父页当前页刷新
                     reloadTable(parent);
                 })
