@@ -12,12 +12,14 @@ import com.rehoshi.service.ProductService;
 import com.rehoshi.util.CollectionUtil;
 import com.rehoshi.util.DateUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional
 public class ProductServiceImpl implements ProductService {
 
     @Resource

@@ -56,6 +56,11 @@
 <script type="text/html" id="imgTpl">
     <a href="" onclick="x_admin_show('图片显示','{{ d.img }}',600,400,parent)">点击查看</a>
 </script>
+
+<script type="text/html" id="specsTpl">
+    {{d.goods.specs}}
+</script>
+
 <script>
 
     $(function () {
@@ -93,7 +98,7 @@
                {field: 'id', title: '库存编号'}
                 ,{field: 'name', title: '名称'}
                 ,{field: 'img', title: '图片',templet:'#imgTpl'}
-                ,{field: 'specs', title: '规格'}
+                ,{field: 'specs', title: '规格', templet:"#specsTpl"}
                 ,{field: 'amount', title: '数量'}
                 ,{field: 'price', title: '价格'}
                 ,{field: 'batch', title: '批次'}

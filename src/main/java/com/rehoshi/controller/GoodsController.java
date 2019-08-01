@@ -4,7 +4,7 @@ import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
 import com.rehoshi.dto.search.GoodPageSearch;
 import com.rehoshi.model.Goods;
-import com.rehoshi.service.impl.GoodsServiceImpl;
+import com.rehoshi.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public class GoodsController {
 
     @Autowired
-    private GoodsServiceImpl goodsService;
+    private GoodsService goodsService;
 
     /**
      * 返回所有商品

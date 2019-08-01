@@ -47,28 +47,17 @@
         <!--</div>-->
 
         <div class="layui-form-item">
-            <label for="productName" class="layui-form-label">
+            <label class="layui-form-label">
                 <span class="x-red">*</span>成品名称
             </label>
             <div class="layui-input-block">
-                <div class="layui-input-inline">
-                    <input type="hidden" id="productId" name="pId"/>
-                    <input type="text" id="productName" name="product.name" required="" lay-verify="required"
-                           autocomplete="off" class="layui-input" readonly="readonly">
-                </div>
                 <a id="stockName" class="layui-btn layui-btn-sm" onclick="chooseProduct()">选择</a>
+                <table class="layui-table layui-form" id="productList" lay-filter="productList">
+                </table>
             </div>
         </div>
 
-        <div class="layui-form-item">
-            <label for="amount" class="layui-form-label">
-                <span class="x-red">*</span>订单数量
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="amount" name="amount" required="" lay-verify="number"
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>
+
         <div class="layui-form-item">
             <label for="status" class="layui-form-label">
                 <span class="x-red">*</span>订单状态
@@ -90,19 +79,50 @@
         <input type="hidden" name="createTime" id="createTime"/>
     </form>
 </div>
+
+<script type="text/html" id="pNameTpl">
+    {{d.product.name}}
+</script>
+
+<script type="text/html" id="pSpecsTpl">
+    {{ d.product.specs}}
+</script>
+
+<script type="text/html" id="operateTpl">
+    <a class='x-red' href='#' onclick="delChild('{{ d.product.id }}')">删除</a>
+</script>
+
 <script>
 
     var orderId = null;
 
+    var childOrders = [];
+
+    var options = {
+        elem: "#productList",
+        data: childOrders,
+        cols: [[
+            {field: "name", title: "成品名称", templet: "#pNameTpl"},
+            {field: "specs", title: "成品规格", templet: "#pSpecsTpl"},
+            {field: "amount", edit: "text", title: "成品数量"},
+            {field: "id", title: "操作", toolbar: "#operateTpl"},
+        ]],
+        text: {
+            none: "请添加成品"
+        },
+    };
+
+    var tblns = null;
+
     $(function () {
-        queryOrder();
-        initForm() ;
+        initForm();
     });
 
     function initForm() {
-        layui.use(['form'], function () {
+        layui.use(['form', 'table'], function () {
             $ = layui.jquery;
             var form = layui.form;
+            var table = layui.table;
             //监听提交
             form.on('submit(add)', function (data) {
                 var hoshi = $.hoshi();
@@ -112,16 +132,26 @@
                 } else {
                     hoshi.put("/order/update");
                 }
-                data.field.id = orderId;
-                hoshi.formParam(data.field)
+
+                var order =  data.field ;
+                order.id = orderId;
+                order.subOrders = childOrders;
+                order.status = parseInt(order.status);
+                order.createTimeStr = order.createTime ;
+                delete order.createTime ;
+
+                hoshi.jsonParam(data.field)
                     .onSuccess(function (data, msg) {
-                        // showToast(msg);
                         parent.layui.layer.msg(msg);
-                        x_admin_close();
-                        reloadTable();
+                        // x_admin_close();
+                        reloadTable(parent);
                     }).linkStart();
                 return false;
             });
+
+            tblns = table.render(options);
+
+            queryOrder();
         });
     }
 
@@ -143,22 +173,62 @@
         $("#status").val(order.status);
         $("#createTime").val(order.createTimeStr);
         layui.use('form', function () {
-            var form = layui.form ;
-            form.render('select') ;
-        }) ;
-        addProduct(order.product);
+            var form = layui.form;
+            form.render('select');
+        });
+        childOrders = [];
+        for (var i in order.subOrders) {
+            var subOrder = order.subOrders[i];
+            // subOrder.createTime = subOrder.createTimeStr;
+            subOrder.pId = subOrder.product.id;
+            childOrders.push(subOrder);
+        }
+        reloadSubOrderList();
+    }
+
+    function delChild(productId) {
+        for (var index in childOrders) {
+            var order = childOrders[index];
+            if (order.product.id == productId) {
+                childOrders.splice(index, 1);
+                break;
+            }
+        }
+        reloadSubOrderList();
     }
 
 
-    function addProduct(product) {
-        $("#productId").val(product.id);
-        $("#productName").val(product.name);
+    function addChild(child) {
+        var has = false;
+        for (var index in  childOrders) {
+            var order = childOrders[index];
+            if (order.product.id == child.product.id) {
+                has = true;
+                break;
+            }
+        }
+
+        if (!has) {
+            childOrders.push(child);
+            reloadSubOrderList();
+        } else {
+            showToast("成品已添加");
+        }
+    }
+
+    function reloadSubOrderList() {
+        tblns.reload({data: childOrders});
     }
 
     function chooseProduct() {
         x_admin_show('选择成品', '../product/choose.html', 900, 600, parent, null, null, function (data) {
             if (parent.chooseProduct != null) {
-                addProduct(parent.chooseProduct);
+                var childOrder = {
+                    product: parent.chooseProduct,
+                    pId: parent.chooseProduct.id,
+                    amount: 1,
+                };
+                addChild(childOrder);
             }
         });
     }

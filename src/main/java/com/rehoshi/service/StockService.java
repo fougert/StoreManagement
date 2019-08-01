@@ -5,6 +5,8 @@ import com.rehoshi.dto.RespData;
 import com.rehoshi.dto.search.StockPageSearch;
 import com.rehoshi.model.Stock;
 
+import java.util.List;
+
 public interface StockService {
 
     /**
@@ -44,4 +46,10 @@ public interface StockService {
      * @return 成功返回true  失败返回 false
      */
     RespData<Boolean> deleteById(String id) ;
+
+    RespData<Boolean> addStock(Stock stock);
+
+    RespData<Boolean> delBatchStock(List<Stock> stockList);
+
+    RespData<Boolean> editStock(Stock stock);
 }

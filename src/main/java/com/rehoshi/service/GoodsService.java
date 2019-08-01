@@ -70,4 +70,13 @@ public interface GoodsService {
      */
     RespData<Goods> getById(String id);
 
+    RespData<Goods> queryGoodById(String id);
+
+    RespData addGoodsType(Goods goods);
+
+    RespData delGoodsType(String id);
+
+    RespData<Boolean> editGoods(Goods good);
+
+    RespData<Boolean> delBatchGoodTypes(List<Goods> goodslist);
 }

@@ -30,8 +30,12 @@ function getCurRowData(table, tableId, elem) {
     return obj;
 }
 
-function reloadTable() {
-    var btnArray = $(".layui-laypage-btn");
+function reloadTable(searchWin) {
+    var win = searchWin ;
+    if(win == null){
+        win = window ;
+    }
+    var btnArray = $(".layui-laypage-btn",win.document);
     if (btnArray != null && btnArray.length > 0) {
         btnArray[0].click();
     } else {

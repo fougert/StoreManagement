@@ -15,7 +15,7 @@ public class Stock extends BaseModel{
     //货品名称
     private String name ;
     //货品图片
-    //private String img ;
+//    private String img ;
     //货品种类
     private String gId ;
     //商品

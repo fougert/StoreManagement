@@ -31,6 +31,8 @@ public class Product extends BaseModel {
 
     private Double specs ;
 
+    //打包费用
+    private Double packFee;
 
     public String getId() {
         return id;
@@ -82,5 +84,13 @@ public class Product extends BaseModel {
 
     public void setSpecs(Double specs) {
         this.specs = specs;
+    }
+
+    public Double getPackFee() {
+        return packFee;
+    }
+
+    public void setPackFee(Double packFee) {
+        this.packFee = packFee;
     }
 }

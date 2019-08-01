@@ -64,13 +64,14 @@ public class OrderController extends BaseController {
 
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     @ResponseBody
-    public RespData<Boolean> update(Order order) {
+    public RespData<Boolean> update(@RequestBody Order order) {
+        order.setCreateTime(DateUtil.toDateTime(order.getCreateTimeStr()));
         return orderService.update(order);
     }
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
     @ResponseBody
-    public RespData<String> add(Order order) {
+    public RespData<String> add(@RequestBody Order order) {
         return orderService.save(order);
     }
 

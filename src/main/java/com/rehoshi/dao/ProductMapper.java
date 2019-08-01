@@ -46,7 +46,8 @@ public interface ProductMapper {
             "UPDATE product",
             "SET name = #{name},",
             "specs = #{specs},",
-            "createTime = #{createTime}",
+            "createTime = #{createTime},",
+            "packFee = #{packFee}",
             "WHERE id = #{id}"
     })
     int update(Product product);
@@ -85,9 +86,9 @@ public interface ProductMapper {
     @Insert({
             "INSERT",
             "INTO product (",
-            "id,","name,","createTime,","specs",
+            "id,","name,","createTime,","specs,","packFee",
             ") VALUES (",
-            "#{id},","#{name},","#{createTime},","#{specs})"
+            "#{id},","#{name},","#{createTime},","#{specs},","#{packFee})"
     })
     int save(Product product);
 

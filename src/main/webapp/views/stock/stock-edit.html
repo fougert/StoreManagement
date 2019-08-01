@@ -141,10 +141,10 @@
         $("#description").val(dataField.description);
         $("#id").val(dataField.id);
         $("#name").val(dataField.name);
-        $("#gId").val(dataField.gId);
+        $("#gId").val(dataField.goods.id);
 
         $.hoshi()
-            .get("/goods/queryGoodById/"+dataField.gId)
+            .get("/goods/queryGoodById/"+dataField.goods.id)
             .onSuccess(function (data) {
                 var name;
                 if (data.type===0){
@@ -276,7 +276,7 @@
                 .onSuccess(function (data,msg,code) {
                     layer.msg("更新成功！",{icon:1});
                     //关闭当前frame页
-                    x_admin_close();
+                    // x_admin_close();
                     //父页当前页刷新
                     reloadTable(parent);
                 })

@@ -4,7 +4,7 @@ import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
 import com.rehoshi.dto.search.StockPageSearch;
 import com.rehoshi.model.Stock;
-import com.rehoshi.service.impl.StockServiceImpl;
+import com.rehoshi.service.StockService;
 import com.rehoshi.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +17,7 @@ import java.util.List;
 public class StockController {
 
     @Autowired
-    private StockServiceImpl stockService;
-
+    private StockService stockService;
 
     /**
      * 查询所有库存  返回分页数据

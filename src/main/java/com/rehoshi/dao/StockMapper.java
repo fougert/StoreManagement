@@ -46,6 +46,11 @@ public interface StockMapper {
             "WHERE name LIKE #{name}",
             "AND createTime BETWEEN #{startTime} AND #{endTime}",
             "</script>"})
+    @Results(
+            @Result(column = "gId", property = "goods", one = @One(
+                    select = "com.rehoshi.dao.GoodsMapper.queryGoodSByID"
+            ))
+    )
     List<Stock> queryStockBySearch(StockPageSearch search);
 
     @Update("UPDATE stock SET name=#{name},gId=#{gId},amount=#{amount},price=#{price},provider=#{provider},description=#{description} WHERE id=#{id}")

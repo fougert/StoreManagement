@@ -8,10 +8,10 @@ import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
 import com.rehoshi.dto.search.StockPageSearch;
 import com.rehoshi.model.BaseModel;
-import com.rehoshi.model.Goods;
 import com.rehoshi.model.Stock;
 import com.rehoshi.service.StockService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional
 public class StockServiceImpl implements StockService {
 
     @Resource

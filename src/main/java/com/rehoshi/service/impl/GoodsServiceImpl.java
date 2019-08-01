@@ -10,11 +10,13 @@ import com.rehoshi.model.BaseModel;
 import com.rehoshi.model.Goods;
 import com.rehoshi.service.GoodsService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 @Service
+@Transactional
 public class GoodsServiceImpl implements GoodsService {
 
     @Resource

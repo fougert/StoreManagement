@@ -1,6 +1,7 @@
 package com.rehoshi.util;
 
 import com.rehoshi.model.User;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -9,7 +10,7 @@ import javax.servlet.http.HttpSession;
 
 public class ContextUtil {
 
-    public static final String CUR_USER_KEY = "curUser" ;
+    public static final String CUR_USER_KEY = "curUser";
 
     public static User getCurUser() {
         return getCurUser(((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest());
@@ -46,5 +47,12 @@ public class ContextUtil {
                 session.removeAttribute(attrName);
             }
         }
+    }
+
+    /**
+     * 回滚事务
+     */
+    public static void rollbackTransaction() {
+        TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
     }
 }

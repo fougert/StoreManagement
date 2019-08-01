@@ -85,9 +85,7 @@
                 </div>
             </div>
             <div class="layui-input-inline">
-                <div class="layui-upload-list" >
                     <img class="layui-upload-img headImage" id="demo1"  style="height: 100px">
-                </div>
                 <p id="demoText"></p>
             </div>
 
@@ -312,12 +310,12 @@
                 .onSuccess(function (data,msg,code) {
                     parent.layui.layer.msg("入库成功！",{icon:1,time:1000});
                     //关闭当前frame页
-                    x_admin_close();
+                    // x_admin_close();
                     reloadTable(parent);
                 })
                 .onError(function () {
                    parent.layui.layer("未知错误");
-                   x_admin_close();
+                   // x_admin_close();
                 })
                 .linkStart()
             //return false; //阻止表单跳转。

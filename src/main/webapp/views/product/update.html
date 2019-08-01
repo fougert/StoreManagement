@@ -67,6 +67,15 @@
             </div>
         </div>
 
+        <div class="layui-form-item">
+            <label for="packFee" class="layui-form-label">
+                <span class="x-red">*</span>打包费用
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="packFee" name="packFee" required="" lay-verify="required|number"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
 
         <div class="layui-form-item">
             <label class="layui-form-label">
@@ -115,8 +124,8 @@
                     .onSuccess(function (data, msg) {
                         // showToast(msg);
                         parent.layui.layer.msg(msg);
-                        x_admin_close();
-                        reloadTable();
+                        // x_admin_close();
+                        reloadTable(parent);
                     }).linkStart();
             } else {
                 showError("请选择成品原料");
@@ -187,6 +196,7 @@
         $("#specs").val(product.specs);
         $("#amount").val(product.amount);
         $("#createTime").val(product.createTimeStr);
+        $("#packFee").val(product.packFee);
         stockList = [];
         for (var i in  product.compositions) {
             var cop = product.compositions[i];

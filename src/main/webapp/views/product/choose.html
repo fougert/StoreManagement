@@ -62,16 +62,18 @@
 
 <!--产品创建日期模板-->
 <script type="text/html" id="createTimeTpl">
-    <input class="layui-input dateInput" placeholder="创建时间" name="createTime"
+    <input readonly="readonly" class="layui-input dateInput" placeholder="创建时间" name="createTime"
            value="{{d.createTimeStr}}"/>
 </script>
+
+
 
 <script>
 
     $(function () {
-        bindInputParam("startTime") ;
-        bindInputParam("endTime") ;
-        bindInputParam("name") ;
+        bindInputParam("startTime");
+        bindInputParam("endTime");
+        bindInputParam("name");
     });
     layui.use('laydate', function () {
         var laydate = layui.laydate;
@@ -100,22 +102,21 @@
                 {field: 'createTime', width: 200, templet: '#createTimeTpl', title: "创建时间"},
                 {field: 'id', width: 76, toolbar: '#operateTpl', title: "操作"}
             ]],
-            where:getTableWhere(["startTime","endTime","name"]),
+            where: getTableWhere(["startTime", "endTime", "name"]),
             done: function (res, curr, count) {
             }
         });
-        
+
         table.on("tool(productList)", function (obj) {
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 
-            if(layEvent === 'chooseProduct'){  //删除当前选中行
-                parent.chooseProduct = data ;
-                x_admin_close() ;
+            if (layEvent === 'chooseProduct') {  //删除当前选中行
+                parent.chooseProduct = data;
+                x_admin_close();
             }
         })
     })
-
 
 
 </script>

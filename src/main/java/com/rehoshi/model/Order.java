@@ -1,48 +1,57 @@
 package com.rehoshi.model;
 
+import com.rehoshi.util.CollectionUtil;
 import com.rehoshi.util.DateUtil;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 订单
  */
-public class Order extends BaseModel{
+public class Order extends BaseModel {
 
     /**
      * 订单状态
      */
-    public interface Status{
+    public interface Status {
         //待发货
-        int WAIT_SEND = 0 ;
+        int WAIT_SEND = 0;
         //已发货
-        int HAS_SENT = 1 ;
+        int HAS_SENT = 1;
     }
+
     //订单ID
-    private String id ;
+    private String id;
 
     //订单编号
-    private String serial ;
+    private String serial;
 
     //订单名称
-    private String name ;
+    private String name;
 
     //库存商品id
-    private String pId ;
+    private String pId;
 
     //成品
-    private Product product ;
+    private Product product;
 
     //订单数量
-    private Integer amount ;
+    private Integer amount;
 
     //状态
-    private Integer status ;
+    private Integer status;
 
+    private String parentId;
+    //父订单
+    private Order parent;
+    //订单子项目
+    private List<Order> subOrders = new ArrayList<>();
     //创建时间
     @DateTimeFormat(pattern = DateUtil.DATETIME_FORMAT)
-    private Date createTime ;
+    private Date createTime;
     private String createTimeStr;
 
     public String getId() {
@@ -117,5 +126,37 @@ public class Order extends BaseModel{
 
     public void setCreateTimeStr(String createTimeStr) {
         this.createTimeStr = createTimeStr;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    public Order getParent() {
+        return parent;
+    }
+
+    public void setParent(Order parent) {
+        this.parent = parent;
+    }
+
+    public List<Order> getSubOrders() {
+        return subOrders;
+    }
+
+    public void setSubOrders(List<Order> subOrders) {
+        this.subOrders = subOrders;
+    }
+
+    public void newChildren() {
+        CollectionUtil.foreach(getSubOrders(), child -> {
+            child.newId();
+            child.setCreateTime(getCreateTime());
+            child.setParentId(getId());
+        });
     }
 }

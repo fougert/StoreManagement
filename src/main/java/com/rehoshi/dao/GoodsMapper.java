@@ -8,14 +8,11 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 public interface GoodsMapper {
 
-
-
     @Select("SELECT * FROM goods")
     List<Goods> getAllGoods();
 
     @Select("SELECT * FROM goods WHERE id=#{id}")
     Goods queryGoodSByID(String id);
-
 
     @Select("SELECT * FROM goods WHERE name=#{name}")
     List<Goods> queryByName(@Param("name") String name);

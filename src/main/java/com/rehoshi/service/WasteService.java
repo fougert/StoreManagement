@@ -2,7 +2,10 @@ package com.rehoshi.service;
 
 import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
+import com.rehoshi.dto.search.WastePageSearch;
 import com.rehoshi.model.Waste;
+
+import java.util.List;
 
 /**
  * 损耗业务
@@ -44,5 +47,12 @@ public interface WasteService {
      * @param pageSize 每页数据量
      * @return 损耗分页数据
      */
-    RespData<PageData<Waste>> wasteInPage(String search, int pageIndex, int pageSize) ;
+    PageData<Waste> wasteInPage(WastePageSearch search, int pageIndex, int pageSize) ;
+
+    /**
+     * 批量删除id
+     * @param ids
+     * @return
+     */
+    RespData<Boolean> deleteInIds(List<String> ids);
 }
