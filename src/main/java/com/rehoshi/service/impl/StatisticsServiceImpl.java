@@ -1,11 +1,11 @@
 package com.rehoshi.service.impl;
 
-import com.rehoshi.dao.ProductMapper;
+import com.rehoshi.dao.StatisticsMapper;
 import com.rehoshi.dto.RespData;
+import com.rehoshi.dto.echart.ChartData;
 import com.rehoshi.dto.echart.Echart;
-import com.rehoshi.model.Product;
 import com.rehoshi.service.StatisticsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.rehoshi.util.CollectionUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -16,20 +16,23 @@ import java.util.List;
 public class StatisticsServiceImpl implements StatisticsService {
 
     @Resource
-    private ProductMapper productMapper;
+    private StatisticsMapper statisticsMapper;
 
     /**
      * 出库统计
+     *
      * @param startDate
      * @param endDate
      * @return
      */
     @Override
-    public RespData<Echart> outBound(Date startDate, Date endDate) {
-        List<Product> product=productMapper.queryAllProduct();
-
-
-        return null;
+    public RespData<List<ChartData>> outBound(Date startDate, Date endDate) {
+        RespData<List<ChartData>> respData = new RespData<List<ChartData>>().fail().setMsg("查询错误");
+        List<ChartData> outBoundBetween = statisticsMapper.getOutBoundBetween(startDate, endDate);
+        if (!CollectionUtil.isNullOrEmpty(outBoundBetween)) {
+            respData.success().setData(outBoundBetween).setMsg("查询成功");
+        }
+        return respData;
     }
 
     @Override

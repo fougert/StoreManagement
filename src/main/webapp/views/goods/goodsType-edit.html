@@ -96,6 +96,15 @@
         </div>
 
         <div class="layui-form-item">
+            <label for="specsUnit" class="layui-form-label">
+                <span class="x-red">*</span>单位
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="specsUnit" name="specsUnit" required="" lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label  class="layui-form-label">
             </label>
             <button  class="layui-btn" lay-filter="add" lay-submit="" id="btn_edit">
@@ -116,6 +125,7 @@
         $("#name").val(data.name);
         $("#id").val(data.id);
         $("#specs").val(data.specs);
+        $("#specsUnit").val(data.specsUnit);
         //图片url
         $("#demo1").attr("src",data.img);
         $("#img").val(data.img);
@@ -184,8 +194,8 @@
         //自定义验证规则
         form.verify({
             name: function(value){
-                if(value.length >10){
-                    return '商品名称不能大于10个字符';
+                if(value.length >36){
+                    return '商品名称不能大于36个字符';
                 }
                 if(value.length===0){
                     return '商品名称不能为空';
@@ -197,11 +207,11 @@
                 }
             },
             specs:function (value,item) {
-                if (!reg.test(value)){
-                    return "请输入正确的规格！(有效值小数点后2位)";
-                }
-                if (value.length>8) {
-                    return "规格长度不超过8";
+                // if (!reg.test(value)){
+                //     return "请输入正确的规格！(有效值小数点后2位)";
+                // }
+                if (value.length>36) {
+                    return "规格长度不超过36";
                 }
             }
         });
@@ -220,14 +230,14 @@
                 type:data.field.type,
                 id:data.field.id,
                 img:data.field.img,
-                specs:data.field.specs
+                specs:data.field.specs,
+                specsUnit:data.field.specsUnit,
             })
             $.hoshi()
                 .put('/goods/editGoods')
                 .jsonParam(data)
                 .onSuccess(function () {
                     parent.layui.layer.msg("修改成功", {icon: 6,time:1000});
-                     x_admin_close();
                     reloadTable(parent) ;
                 })
                 .linkStart($("#btn_edit"))

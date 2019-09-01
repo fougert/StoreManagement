@@ -26,7 +26,11 @@
 
         function addStocks() {
             x_admin_show("选择库存", "../stock/choose.html", 900, 600, parent, null, null, function () {
-                addStock(parent.chooseStock);
+                if (parent.chooseStock != null) {
+                    parent.chooseStock.specs = parent.chooseStock.goods.specs;
+                    parent.chooseStock.specsUnit = parent.chooseStock.goods.specsUnit;
+                    addStock(parent.chooseStock);
+                }
             });
             return false;
         }
@@ -45,17 +49,9 @@
                 <input type="text" id="name" name="name" required="" lay-verify="required"
                        autocomplete="off" class="layui-input">
             </div>
+            <a class="layui-btn" onclick="addGoods()" style="margin-left: 15px"><i class="layui-icon"></i>选择商品</a>
         </div>
 
-        <div class="layui-form-item">
-            <label for="addStock" class="layui-form-label">
-                <span class="x-red">*</span>成品规格
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="specs" name="specs" required="" lay-verify="required|number"
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>
         <div class="layui-form-item">
             <label for="addStock" class="layui-form-label">
                 <span class="x-red">*</span>成品原料
@@ -78,17 +74,31 @@
         </div>
 
         <div class="layui-form-item">
+            <label for="packFee" class="layui-form-label">
+                <span class="x-red">*</span>成品数量
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="amount" name="amount" required="" lay-verify="required|number"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
             <label class="layui-form-label">
             </label>
             <button class="layui-btn" lay-filter="add" lay-submit="">
                 保存
             </button>
         </div>
-        <input type="hidden" name="createTime" id="createTime" />
+        <input type="hidden" name="createTime" id="createTime"/>
     </form>
 </div>
 <script type="text/html" id="operateTpl">
     <a class='x-red' href='#' onclick="delStock('{{ d.id }}')">删除</a>
+</script>
+
+<script type="text/html" id="specsTpl">
+    {{d.goods.specs + d.goods.specsUnit}}
 </script>
 <script>
 
@@ -109,18 +119,21 @@
                     sId: stock.id,
                     amount: stock.amount,
                     batch: stock.batch,
+                    specs: stock.specs,
+                    specsUnit: stock.specsUnit,
+                    gId:stock.goods.id,
                 };
             }
             if (compositions.length > 0) {
                 data.field.compositions = compositions;
-                var hoshi = $.hoshi() ;
-                    if(productId != null){
-                        data.field.id = productId ;
-                        hoshi.put("/product/update") ;
-                    }else {
-                        hoshi.post("/product/add") ;
-                    }
-                    hoshi.jsonParam(data.field)
+                var hoshi = $.hoshi();
+                if (productId != null) {
+                    data.field.id = productId;
+                    hoshi.put("/product/update");
+                } else {
+                    hoshi.post("/product/add");
+                }
+                hoshi.jsonParam(data.field)
                     .onSuccess(function (data, msg) {
                         // showToast(msg);
                         parent.layui.layer.msg(msg);
@@ -139,7 +152,8 @@
         data: stockList,
         cols: [[
             {field: "name", title: "原料名称"},
-            {field: "specs", title: "原料规格"},
+            {field: "specs", edit: "text", title: "原料规格"},
+            {field: "specsUnit", edit: "text", title: "规格单位"},
             {field: "amount", edit: "text", title: "原料数量"},
             {field: "id", title: "操作", toolbar: "#operateTpl"},
         ]],
@@ -193,18 +207,20 @@
 
     function setProduct(product) {
         $("#name").val(product.name);
-        $("#specs").val(product.specs);
         $("#amount").val(product.amount);
         $("#createTime").val(product.createTimeStr);
         $("#packFee").val(product.packFee);
+        $("#amount").val(product.amount);
         stockList = [];
         for (var i in  product.compositions) {
             var cop = product.compositions[i];
             var stock = {
-                id:cop.stock.id ,
-                name:cop.stock.name,
-                specs:cop.stock.specs,
-                amount:cop.amount,
+                id: cop.stock.id,
+                name: cop.stock.name,
+                specs: cop.specs,
+                specsUnit: cop.specsUnit,
+                amount: cop.amount,
+                goods: cop.stock.goods,
             };
             stockList.push(stock);
         }
@@ -231,6 +247,17 @@
     }
 
     function reloadStockList() {
+        // if ($("#name").val() == "" || stockList.length === 0) {
+        //     var name = "";
+        //     for (var i in stockList) {
+        //         var s = stockList[i];
+        //         //如果是商品
+        //         if (s.goods.type == 0) {
+        //             name += s.goods.name + " ";
+        //         }
+        //     }
+        //     $("#name").val(name);
+        // }
         tableIns.reload({
             data: stockList,
         });
@@ -245,6 +272,14 @@
             }
         }
         reloadStockList();
+    }
+
+    //选择库存名称
+    function addGoods() {
+        x_admin_show("选择商品", "../goods/chooseGoodsType.html", 900, 600, parent, null, null, function () {
+            document.getElementById("name").value=parent.goodsName;
+        });
+        return false;
     }
 
 </script>

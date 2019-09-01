@@ -1,9 +1,11 @@
 package com.rehoshi.service;
 
 import com.rehoshi.dto.RespData;
+import com.rehoshi.dto.echart.ChartData;
 import com.rehoshi.dto.echart.Echart;
 
 import java.util.Date;
+import java.util.List;
 
 public interface StatisticsService {
 
@@ -13,7 +15,7 @@ public interface StatisticsService {
      * @param endDate
      * @return
      */
-    RespData<Echart> outBound(Date startDate,Date endDate);
+    RespData<List<ChartData>> outBound(Date startDate, Date endDate);
 
 
     /**

@@ -58,14 +58,14 @@
             <li>
                 <a href="javascript:;">
                     <i class="iconfont">&#xe6b8;</i>
-                    <cite>用户管理</cite>
+                    <cite>用户</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
                 <ul class="sub-menu">
                     <li date-refresh="1">
                         <a _href="views/user/list.html">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>用户列表</cite>
+                            <cite>用户</cite>
                         </a>
                     </li>
                     <li date-refresh="1">
@@ -80,14 +80,14 @@
             <li>
                 <a href="javascript:;">
                     <i class="iconfont">&#xe723;</i>
-                    <cite>商品管理</cite>
+                    <cite>商品</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
                 <ul class="sub-menu">
                     <li>
                         <a _href="views/goods/good.html">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>商品列表</cite>
+                            <cite>商品</cite>
                         </a>
                     </li>
                 </ul>
@@ -96,7 +96,7 @@
             <li>
                 <a href="javascript:;">
                     <i class="iconfont">&#xe723;</i>
-                    <cite>库存管理</cite>
+                    <cite>库存</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
 
@@ -104,71 +104,77 @@
                     <li>
                         <a _href="views/stock/stock.html">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>库存列表</cite>
+                            <cite>库存</cite>
                         </a>
                     </li>
-                    <li>
-                         <a _href="views/waste/list.html">
-                             <i class="iconfont">&#xe6a7;</i>
-                             <cite>损耗列表</cite>
-                         </a>
-                     </li >
                 </ul>
             </li>
 
             <li>
                 <a href="javascript:;">
                     <i class="iconfont">&#xe723;</i>
-                    <cite>成品管理</cite>
+                    <cite>生产</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
                 <ul class="sub-menu">
                     <li>
                         <a _href="views/product/list.html">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>成品列表</cite>
+                            <cite>生产</cite>
                         </a>
                     </li>
+                    <li>
+                        <a _href="views/waste/list.html">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>损耗</cite>
+                        </a>
+                    </li >
                 </ul>
             </li>
 
             <li>
                 <a href="javascript:;">
                     <i class="iconfont">&#xe723;</i>
-                    <cite>订单管理</cite>
+                    <cite>订单</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
                 <ul class="sub-menu">
                     <li>
-                        <a _href="views/order/list.html">
+                        <a _href="views/order/prepareList.html">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>订单列表</cite>
+                            <cite>待发货</cite>
+                        </a>
+                    </li>
+                    <li>
+                        <a _href="views/order/sendList.html">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>已发货</cite>
                         </a>
                     </li>
                 </ul>
             </li>
 
-            <li>
-                <a href="javascript:;">
-                    <i class="iconfont">&#xe757;</i>
-                    <cite>统计管理</cite>
-                    <i class="iconfont nav_right">&#xe697;</i>
-                </a>
-                <ul class="sub-menu">
-                    <li>
-                        <a _href="views/statistics/outbound.html">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>出库统计</cite>
-                        </a>
-                    </li>
-                    <li>
-                        <a _href="views/statistics/count.html">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>成本统计</cite>
-                        </a>
-                    </li>
-                </ul>
-            </li>
+            <!--<li>-->
+                <!--<a href="javascript:;">-->
+                    <!--<i class="iconfont">&#xe757;</i>-->
+                    <!--<cite>统计管理</cite>-->
+                    <!--<i class="iconfont nav_right">&#xe697;</i>-->
+                <!--</a>-->
+                <!--<ul class="sub-menu">-->
+                    <!--<li>-->
+                        <!--<a _href="views/statistics/outbound.html">-->
+                            <!--<i class="iconfont">&#xe6a7;</i>-->
+                            <!--<cite>出库统计</cite>-->
+                        <!--</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a _href="views/statistics/count.html">-->
+                            <!--<i class="iconfont">&#xe6a7;</i>-->
+                            <!--<cite>成本统计</cite>-->
+                        <!--</a>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</li>-->
 
 
             <!--<li>-->
@@ -194,7 +200,7 @@
                 <!--</a>-->
                 <!--<ul class="sub-menu">-->
                     <!--<li>-->
-                        <!--<a _href="admin-list.html">-->
+                        <!--<a _href="admin-prepareList.html">-->
                             <!--<i class="iconfont">&#xe6a7;</i>-->
                             <!--<cite>管理员列表</cite>-->
                         <!--</a>-->
@@ -344,7 +350,7 @@
 <!-- 中部结束 -->
 <!-- 底部开始 -->
 <div class="footer">
-    <div class="copyright">Copyright ©2017 x-admin v2.3 All Rights Reserved</div>
+    <div class="copyright">2019 - 2020 Yeho Inc. All Rights Reserved</div>
 </div>
 <!-- 底部结束 -->
 </body>

@@ -28,6 +28,7 @@
         x_admin_show("选择库存类型", "../goods/chooseGoodsType.html", 900, 600, parent, null, null, function () {
 
             document.getElementById("goodName").value=parent.goodsName;
+            document.getElementById("name").value=parent.goodsName;
 
             document.getElementById("gId").value=parent.Gid;
 
@@ -52,12 +53,13 @@
         </div>-->
 
         <div class="layui-form-item">
-            <label class="layui-form-label"> <span class="x-red">*</span>库存名称</label>
+            <label class="layui-form-label"> <span class="x-red">*</span>库存批次</label>
+
             <div class="layui-input-inline">
-                <input type="text" class="layui-input" id="name" name="name" required="required" value="" lay-verify="name">
+                <input type="text" class="layui-input" id="batch" name="batch"  value="" required=""  lay-verify="required">
             </div>
-            <!--<a class="layui-btn" onclick="addStocks()" style="margin-left: 15px"><i class="layui-icon"></i>选择库存类型</a>-->
         </div>
+        <input type="hidden" class="layui-input" id="name" name="name"  value="" required=""  lay-verify="name">
 
         <div class="layui-form-item">
             <label class="layui-form-label"> <span class="x-red">*</span>库存类型</label>
@@ -140,21 +142,13 @@
         $("#description").val(dataField.description);
         $("#id").val(dataField.id);
         $("#name").val(dataField.name);
+        $("#batch").val(dataField.batch);
         $("#gId").val(dataField.goods.id);
 
         $.hoshi()
             .get("/goods/queryGoodById/"+dataField.goods.id)
             .onSuccess(function (data) {
-                var name;
-                if (data.type===0){
-                    name="商品"+data.name;
-                } else if (data.type===1){
-                    name="原料"+data.name;
-                } else{
-                    name="包材"+data.name;
-                }
-                $("#goodName").val(name);
-
+                $("#goodName").val(data.name);
             })
             .linkStart();
     })
@@ -275,14 +269,8 @@
                 .onSuccess(function (data,msg,code) {
                     parent.layer.msg("更新成功！",{icon:1});
                     //关闭当前frame页
-                     x_admin_close();
                     //父页当前页刷新
                     reloadTable(parent);
-                })
-                .onError(function () {
-                    layer.msg("未知错误！",function () {
-                        x_admin_close();
-                    })
                 })
                 .linkStart()
 

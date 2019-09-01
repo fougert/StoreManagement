@@ -8,35 +8,41 @@ import java.util.Date;
 /**
  * 货物 主要存原品的数量信息
  */
-public class Stock extends BaseModel{
+public class Stock extends BaseModel {
 
     //货品ID
-    private String id ;
+    private String id;
     //货品名称
-    private String name ;
+    private String name;
     //货品图片
 //    private String img ;
     //货品种类
-    private String gId ;
+    private String gId;
     //商品
-    private Goods goods ;
+    private Goods goods;
     //货品规格
     //private Double specs;
     //货品数量
-    private Integer amount ;
+    private Integer amount;
     //货品价格
-    private Double price ;
+    private Double price;
     //货品批次 使用当前时间字符串 精确到分钟  yyyy-MM-dd HH:mm
-    private String batch ;
+    private String batch;
     //供应商
-    private String provider ;
+    private String provider;
     //描述
-    private String description ;
+    private String description;
     //入库时间
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime ;
+    private Date createTime;
+    //发货量
+    private Double sendAmount;
+    //损耗数量
+    private Double wasteAmount;
+    //生产数量
+    private Double productAmount;
 
-    private String createTimeStr ;
+    private String createTimeStr;
 
     public String getId() {
         return id;
@@ -63,11 +69,12 @@ public class Stock extends BaseModel{
     }
 
     public Integer getAmount() {
-        if(amount == null){
-            amount = 0 ;
+        if (amount == null) {
+            amount = 0;
         }
         return amount;
     }
+
     public void setAmount(Integer amount) {
         this.amount = amount;
     }
@@ -129,4 +136,32 @@ public class Stock extends BaseModel{
     public void setGoods(Goods goods) {
         this.goods = goods;
     }
+
+    public Double getSendAmount() {
+        if (sendAmount == null) {
+            sendAmount = 0d;
+        }
+        return sendAmount;
+    }
+
+    public void setSendAmount(Double sendAmount) {
+        this.sendAmount = sendAmount;
+    }
+
+    public Double getWasteAmount() {
+        return wasteAmount;
+    }
+
+    public void setWasteAmount(Double wasteAmount) {
+        this.wasteAmount = wasteAmount;
+    }
+
+    public Double getProductAmount() {
+        return productAmount;
+    }
+
+    public void setProductAmount(Double productAmount) {
+        this.productAmount = productAmount;
+    }
+
 }

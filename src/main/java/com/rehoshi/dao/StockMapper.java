@@ -13,8 +13,15 @@ public interface StockMapper {
     @Select("SELECT * FROM stock")
     List<Stock> getAllStock();
 
-    @Select("SELECT * FROM stock WHERE id = #{id}")
-    Stock getById(@Param("id") String id) ;
+    @Select("SELECT *," +
+            "(SELECT SUM(weight) FROM waste WHERE sId = s.id) " +
+            "FROM stock s WHERE id = #{id}")
+    @Results({
+            @Result(column = "gId", property = "goods", one = @One(
+                    select = "com.rehoshi.dao.GoodsMapper.queryGoodSByID"
+            ))
+    })
+    Stock getById(@Param("id") String id);
 
     @Delete("DELETE FROM stock WHERE id = #{id}")
     int delByID(@Param("id") String id);
@@ -25,6 +32,7 @@ public interface StockMapper {
 
     /**
      * 批量删除
+     *
      * @param stockList
      * @return
      */
@@ -32,25 +40,25 @@ public interface StockMapper {
             "<script>"
                     + "DELETE FROM stock  WHERE id in "
                     + "<foreach item='item' index='index' collection='stockList' open='(' separator=',' close=')'>"
-                    +       "#{item.id}"
+                    + "#{item.id}"
                     + "</foreach>"
-                    +"</script>"
+                    + "</script>"
     })
-
-
     int delBatchStock(@Param("stockList") List<Stock> stockList);
 
 
     @Select({"<script>",
-            "SELECT * FROM `stock`",
+            "SELECT *, ",
+            "(SELECT SUM(weight) FROM waste WHERE sId = s.id)",
+            " FROM `stock` s",
             "WHERE name LIKE #{name}",
             "AND createTime BETWEEN #{startTime} AND #{endTime}",
             "</script>"})
-    @Results(
+    @Results({
             @Result(column = "gId", property = "goods", one = @One(
                     select = "com.rehoshi.dao.GoodsMapper.queryGoodSByID"
             ))
-    )
+    })
     List<Stock> queryStockBySearch(StockPageSearch search);
 
     @Update("UPDATE stock SET name=#{name},gId=#{gId},amount=#{amount},price=#{price},provider=#{provider},description=#{description} WHERE id=#{id}")

@@ -12,7 +12,6 @@ import java.util.List;
  * 订单
  */
 public class Order extends BaseModel {
-
     /**
      * 订单状态
      */
@@ -47,8 +46,12 @@ public class Order extends BaseModel {
     private String parentId;
     //父订单
     private Order parent;
-    //订单子项目
+    //订单子项目 已发货订单
     private List<Order> subOrders = new ArrayList<>();
+
+    //待发货订单调用库存
+    private List<ProductComposition> items = new ArrayList<>() ;
+
     //创建时间
     @DateTimeFormat(pattern = DateUtil.DATETIME_FORMAT)
     private Date createTime;
@@ -152,11 +155,26 @@ public class Order extends BaseModel {
         this.subOrders = subOrders;
     }
 
+    public List<ProductComposition> getItems() {
+        return items;
+    }
+
+    public void setItems(List<ProductComposition> items) {
+        this.items = items;
+    }
+
     public void newChildren() {
         CollectionUtil.foreach(getSubOrders(), child -> {
             child.newId();
             child.setCreateTime(getCreateTime());
             child.setParentId(getId());
+        });
+    }
+
+    public void newItems() {
+        CollectionUtil.foreach(getItems(), item->{
+            item.newId();
+            item.setoId(getId());
         });
     }
 }

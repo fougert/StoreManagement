@@ -31,6 +31,7 @@
                 <span class="x-red">*</span>订单名称
             </label>
             <div class="layui-input-inline">
+                <input type="hidden" id="parentId" name="parentId"/>
                 <input type="text" id="name" name="name" required="" lay-verify="required"
                        autocomplete="off" class="layui-input">
             </div>
@@ -63,9 +64,8 @@
                 <span class="x-red">*</span>订单状态
             </label>
             <div class="layui-input-inline">
-                <select id="status" name="status" class="valid">
-                    <option value="0">待发货</option>
-                    <option value="1">已发货</option>
+                <select id="status" name="status" class="valid" readonly="readonly" >
+                    <option value="1" selected = "selected">已发货</option>
                 </select>
             </div>
         </div>
@@ -103,7 +103,6 @@
         data: childOrders,
         cols: [[
             {field: "name", title: "成品名称", templet: "#pNameTpl"},
-            {field: "specs", title: "成品规格", templet: "#pSpecsTpl"},
             {field: "amount", edit: "text", title: "成品数量"},
             {field: "id", title: "操作", toolbar: "#operateTpl"},
         ]],
@@ -115,6 +114,10 @@
     var tblns = null;
 
     $(function () {
+
+        bindInputParam("parentId") ;
+        bindInputParam("name") ;
+
         initForm();
     });
 
@@ -172,6 +175,7 @@
         $("#amount").val(order.amount);
         $("#status").val(order.status);
         $("#createTime").val(order.createTimeStr);
+        $("#parentId").val(order.parentId);
         layui.use('form', function () {
             var form = layui.form;
             form.render('select');

@@ -29,10 +29,20 @@ public class Product extends BaseModel {
     private Date createTime;
     private String createTimeStr;
 
-    private Double specs ;
+    private Double specs;
 
     //打包费用
     private Double packFee;
+
+    //成品数量
+    private Integer amount;
+
+    //成品发货数量
+    private Integer sendAmount;
+
+    //成品剩余数量
+    private Integer remainAmount;
+
 
     public String getId() {
         return id;
@@ -92,5 +102,31 @@ public class Product extends BaseModel {
 
     public void setPackFee(Double packFee) {
         this.packFee = packFee;
+    }
+
+    public Integer getAmount() {
+        if (amount == null) {
+            amount = 0;
+        }
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
+    public Integer getRemainAmount() {
+        return getAmount() - getSendAmount();
+    }
+
+    public Integer getSendAmount() {
+        if (sendAmount == null) {
+            sendAmount = 0;
+        }
+        return sendAmount;
+    }
+
+    public void setSendAmount(Integer sendAmount) {
+        this.sendAmount = sendAmount;
     }
 }

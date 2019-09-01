@@ -62,6 +62,13 @@
     <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
     <button class="layui-btn" onclick="x_admin_show('添加库存','stock-add.html',600,600)"><i class="layui-icon"></i>添加</button>
 </script>
+
+<script type="text/html" id="remainAmountTpl">
+    {{(d.amount * d.goods.specsValue - d.productAmount - d.wasteAmount) + d.goods.specsUnit}}
+</script>
+
+
+
 <script>
 
 
@@ -105,9 +112,9 @@
             ,toolbar:"#toolbar"
             ,cols: [[ //表头
                 {field: 'gid', title: '商品id', type:'checkbox', sort: true, fixed: 'left'}
-                ,{field: 'id', title: '库存编号'}
                 ,{field: 'name', title: '名称'}
                 ,{field: 'amount', title: '数量'}
+                ,{field: 'id', title: '剩余', templet:"#remainAmountTpl"}
                 ,{field: 'price', title: '价格'}
                 ,{field: 'batch', title: '批次'}
                 ,{field: 'provider', title: '供应商'}

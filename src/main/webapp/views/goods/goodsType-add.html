@@ -74,7 +74,16 @@
             </label>
             <div class="layui-input-inline">
                 <input type="text" id="specs" name="specs" required="" lay-verify="specs"
-                       autocomplete="off" class="layui-input">
+                       autocomplete="off" class="layui-input" value="1">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="specsUnit" class="layui-form-label">
+                <span class="x-red">*</span>单位
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="specsUnit" name="specsUnit" required="" lay-verify="required"
+                       autocomplete="off" class="layui-input" value="斤">
             </div>
         </div>
         <div class="layui-form-item">
@@ -147,8 +156,8 @@
         //自定义验证规则
         form.verify({
             name: function(value){
-                if(value.length >10){
-                    return '商品名称不能大于10个字符';
+                if(value.length >36){
+                    return '商品名称不能大于36个字符';
                 }
                 if(value.length===0){
                     return '商品名称不能为空'
@@ -161,11 +170,11 @@
                 }
             },
             specs:function (value,item) {
-                if (!reg.test(value)){
-                    return "请输入正确的规格！(有效值小数点后2位)";
-                }
-                if (value.length>8) {
-                    return "规格长度不超过8";
+                // if (!reg.test(value)){
+                //     return "请输入正确的规格！(有效值小数点后2位)";
+                // }
+                if (value.length>36) {
+                    return "规格长度不超过36";
                 }
             },
         });
@@ -178,7 +187,8 @@
                 name:data.field.name,
                 type:data.field.type,
                 img:data.field.img,
-                specs:data.field.specs
+                specs:data.field.specs,
+                specsUnit:data.field.specsUnit,
             }
 
 
@@ -187,7 +197,6 @@
                 .formParam(data)
                 .onSuccess(function () {
                     parent.layui.layer.msg("增加成功", {icon: 6});
-                     x_admin_close();
                     //重新刷新当前页面
                     reloadTable(parent);
                 })

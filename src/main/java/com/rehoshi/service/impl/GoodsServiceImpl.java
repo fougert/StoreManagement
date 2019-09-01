@@ -39,6 +39,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     /**
      * 查询所有商品
+     *
      * @return
      */
     @Override
@@ -58,16 +59,15 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     /**
-     *
-     * @param search 需要查找的关键字
+     * @param search    需要查找的关键字
      * @param pageIndex 页码
-     * @param pageSize 每页数据量
+     * @param pageSize  每页数据量
      * @return
      */
     @Override
-    public PageData<Goods> goodsInPage(GoodPageSearch search, int pageIndex, int pageSize){
+    public PageData<Goods> goodsInPage(GoodPageSearch search, int pageIndex, int pageSize) {
         //查询之前只需传入页码及每页的大小
-        PageHelper.startPage(pageIndex,pageSize);
+        PageHelper.startPage(pageIndex, pageSize);
         //startPage后面紧跟的查询就是分页查询
         List<Goods> goods = goodsMapper.queryGoodsBySearch(search);
         PageInfo<Goods> goodsPageInfo = new PageInfo<>(goods);
@@ -82,82 +82,82 @@ public class GoodsServiceImpl implements GoodsService {
 
     /**
      * 添加商品类型
+     *
      * @param good
      * @return
      */
     public RespData addGoodsType(Goods good) {
-
-       List<Goods> goods=goodsMapper.queryByNameAndType(good.getName(),good.getType());
-        if(goods.size()==0){
-             //生成主键
-             String uuid= BaseModel.generateUUID();
-             good.setId(uuid);
-            int result=goodsMapper.addGoodsType(good);
-            if (result==1){
-                return RespData.success(uuid).setCode(200).setMsg("数据库更新成功");
-            }else{
-                return RespData.fail(false).setCode(0).setMsg("数据库更新异常");
-            }
-        }else{
-            return RespData.fail(false).setCode(0).setMsg("该商品中已存在");
+        //生成主键
+        String uuid = BaseModel.generateUUID();
+        good.setId(uuid);
+        good.judgeSpecsValue();
+        int result = goodsMapper.addGoodsType(good);
+        if (result == 1) {
+            return RespData.success(uuid).setCode(200).setMsg("数据库更新成功");
+        } else {
+            return RespData.fail(false).setCode(0).setMsg("数据库更新异常");
         }
-
     }
 
     /**
      * 删除商品
+     *
      * @param id
      * @return
      */
     public RespData<Boolean> delGoodsType(String id) {
-        int result=goodsMapper.delGoodsType(id);
-        if (result==1){
-           return RespData.success(true).setCode(200).setMsg("删除成功");
-        }else{
-          return RespData.fail(false).setCode(0).setMsg("删除失败");
+        int result = goodsMapper.delGoodsType(id);
+        if (result == 1) {
+            return RespData.success(true).setCode(200).setMsg("删除成功");
+        } else {
+            return RespData.fail(false).setCode(0).setMsg("删除失败");
         }
     }
 
     /**
      * 修改商品
+     *
      * @param good
      * @return
      */
     public RespData<Boolean> editGoods(Goods good) {
-        int result=goodsMapper.editGoods(good);
-        if (result == 0){
+        good.judgeSpecsValue();
+        int result = goodsMapper.editGoods(good);
+        if (result == 0) {
             return RespData.fail(false).setCode(0).setMsg("更新异常");
-        }else{
+        } else {
             return RespData.success(true).setCode(200).setMsg("成功更新");
         }
     }
 
     /**
      * 批量删除商品
+     *
      * @param goodslist
      * @return
      */
     public RespData<Boolean> delBatchGoodTypes(List<Goods> goodslist) {
 
-        int result=goodsMapper.delBatchGoodTypes(goodslist);
-        if(result!=0){
+        int result = goodsMapper.delBatchGoodTypes(goodslist);
+        if (result != 0) {
             return RespData.success(true).setCode(200).setMsg("删除成功");
-        }else{
+        } else {
             return RespData.fail(false).setCode(0).setMsg("删除失败");
         }
     }
 
     /**
      * 根据id查询商品
+     *
      * @param id
      * @return
      */
     public RespData<Goods> queryGoodById(String id) {
 
-        Goods goods=goodsMapper.queryGoodSByID(id);
-        if (goods !=null){
+        Goods goods = goodsMapper.queryGoodSByID(id);
+        if (goods != null) {
             return RespData.success(goods).setCode(200).setMsg("查询成功");
-        }else{
+        } else {
             return RespData.fail(goods).setCode(0).setMsg("失败");
         }
     }

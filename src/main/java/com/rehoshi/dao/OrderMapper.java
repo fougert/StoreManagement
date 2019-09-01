@@ -24,7 +24,7 @@ public interface OrderMapper {
             "</when>",
             "</script>"})
     @Results({
-            @Result(column = "pId", property = "product", one = @One(select = "com.rehoshi.dao.ProductMapper.getById"))
+            @Result(column = "pId", property = "product", one = @One(select = "com.rehoshi.dao.ProductMapper.getById")),
     })
     List<Order> getBySearch(OrderPageSearch search);
 
@@ -56,8 +56,8 @@ public interface OrderMapper {
      * @param order 需要添加的订单信息
      * @return
      */
-    @Insert("INSERT INTO `order` (id, name, serial, pId, amount, createTime, status) " +
-            "VALUES (#{id}, #{name}, #{serial}, #{pId}, #{amount}, #{createTime}, #{status})")
+    @Insert("INSERT INTO `order` (id, name, serial, pId, amount, createTime, status, parentId) " +
+            "VALUES (#{id}, #{name}, #{serial}, #{pId}, #{amount}, #{createTime}, #{status}, #{parentId})")
     int save(Order order);
 
     /**

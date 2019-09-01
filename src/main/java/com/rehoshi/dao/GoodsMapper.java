@@ -6,6 +6,7 @@ import com.rehoshi.model.Goods;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+
 public interface GoodsMapper {
 
     @Select("SELECT * FROM goods")
@@ -18,8 +19,7 @@ public interface GoodsMapper {
     List<Goods> queryByName(@Param("name") String name);
 
 
-
-    @Insert("INSERT INTO goods VALUES (#{id},#{img},#{specs},#{name},#{type})")
+    @Insert("INSERT INTO goods VALUES (#{id},#{img},#{specs},#{name},#{type},#{specsUnit},#{specsValue})")
     int addGoodsType(Goods good);
 
 
@@ -30,19 +30,19 @@ public interface GoodsMapper {
     int delGoodsType(@Param("id") String id);
 
 
-    @Update("UPDATE goods SET img=#{img}, specs=#{specs}, name = #{name},type = #{type} WHERE id = #{id}")
+    @Update("UPDATE goods SET img=#{img}, specs=#{specs}, name = #{name},type = #{type}, specsUnit = #{specsUnit}, specsValue = #{specsValue} WHERE id = #{id}")
     int editGoods(Goods good);
 
     /*
         DELETE FROM goods WHERE id in ('','')
      */
     @Delete({
-    "<script>"
-            + "DELETE FROM goods  WHERE id in "
-            + "<foreach item='item' index='index' collection='goodslist' open='(' separator=',' close=')'>"
-            +       "#{item.id}"
-            + "</foreach>"
-            +"</script>"
+            "<script>"
+                    + "DELETE FROM goods  WHERE id in "
+                    + "<foreach item='item' index='index' collection='goodslist' open='(' separator=',' close=')'>"
+                    + "#{item.id}"
+                    + "</foreach>"
+                    + "</script>"
     })
     int delBatchGoodTypes(@Param("goodslist") List<Goods> goodslist);
 

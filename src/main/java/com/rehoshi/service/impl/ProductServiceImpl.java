@@ -3,6 +3,7 @@ package com.rehoshi.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.rehoshi.dao.ProductCompositionMapper;
 import com.rehoshi.dao.ProductMapper;
+import com.rehoshi.dao.StatisticsMapper;
 import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
 import com.rehoshi.dto.search.ProductPageSearch;
@@ -27,6 +28,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Resource
     private ProductCompositionMapper productCompositionMapper;
+
+    @Resource
+    private StatisticsMapper statisticsMapper ;
 
     @Override
     public RespData<String> packing(Product product) {
@@ -60,6 +64,9 @@ public class ProductServiceImpl implements ProductService {
     public PageData<Product> productInPage(ProductPageSearch search, int pageIndex, int pageSize) {
         PageHelper.startPage(pageIndex, pageSize);
         List<Product> bySearch = productMapper.getBySearch(search);
+        CollectionUtil.foreach(bySearch,data -> {
+            data.setSendAmount(statisticsMapper.getProductSendAmount(data.getId()));
+        });
         return new PageData<>(bySearch);
     }
 
@@ -126,10 +133,12 @@ public class ProductServiceImpl implements ProductService {
         return data;
     }
 
-    public static void newCompositionsId(Product product){
+    public static void newCompositionsId(Product product) {
         CollectionUtil.foreach(product.getCompositions(), data -> {
             data.setpId(product.getId());
             data.newId();
+            data.setpAmount(product.getAmount());
+            data.judgeSpecsValue();
         });
     }
 }

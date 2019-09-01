@@ -24,7 +24,7 @@
     <![endif]-->
 
     <style>
-        .laytable-cell-1-0-6 {
+        .laytable-cell-1-0-3 {
             overflow: visible;
         }
     </style>
@@ -45,107 +45,163 @@
 <div class="x-body">
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so">
-            <input type="text" id="name" name="name" placeholder="请输库存名称" autocomplete="off" class="layui-input">
+            <input class="layui-input" placeholder="开始日" name="startTime" id="startTime">
+            <input class="layui-input" placeholder="截止日" name="endTime" id="endTime">
+            <div class="layui-input-inline">
+                <select name="status" id="status">
+                    <option value="0" selected="selected">待发货</option>
+                </select>
+            </div>
+            <input type="text" id="name" name="name" placeholder="请输入订单名称" autocomplete="off" class="layui-input">
             <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
-    <table class="layui-table layui-form" id="wasteList" lay-filter="wasteList">
+    <table class="layui-table layui-form" id="orderList" lay-filter="orderList">
     </table>
 </div>
 
-<!--损耗列表工具栏-->
+<!--订单列表工具栏-->
 <script type="text/html" id="toolBar">
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="deleteAll">批量删除</button>
-        <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+        <button class="layui-btn layui-btn-sm" lay-event="prepare">添加</button>
     </div>
 </script>
 
-<!--损耗操作按钮-->
+<!--订单操作按钮-->
 <script type="text/html" id="operateTpl">
-    <button class="layui-btn layui-btn-sm" onclick="x_admin_show('编辑损耗','update.html?id={{d.id}}',600,400)"><i class="layui-icon">&#xe642;</i>编辑</button>
-    <button class="layui-btn layui-btn-danger" onclick="deleteWaste('{{d.id}}')"><i class="layui-icon">&#xe640;</i>删除</button>
+    <button class="layui-btn layui-btn-sm" onclick="x_admin_show('编辑订单','prepare.html?id={{d.id}}',650,400)"><i
+            class="layui-icon">&#xe642;</i>编辑
+    </button>
+
+    <button class="layui-btn layui-btn-sm" onclick="x_admin_show('订单发货','send.html?parentId={{d.id}}&name={{d.name}}',650,400)"><i
+            class="layui-icon">&#xe6f6;</i>发货
+    </button>
+
+    <button class="layui-btn layui-btn-danger" onclick="deleteOrder('{{d.id}}')"><i class="layui-icon">&#xe640;</i>删除
+    </button>
+
 </script>
 
-<!--损耗日期创建日期模板-->
+<!--<div class="layui-form">-->
+<!--<div class="layui-inline">-->
+<!--<select name="status" lay-filter="statusSelect" lay-search>-->
+<!--<option value="0" {{ d.status== 0 ?-->
+<!--'selected' : '' }}>待发货</option>-->
+<!--<option value="1" {{ d.status== 1 ?-->
+<!--'selected' : '' }}>已发货</option>-->
+<!--</select>-->
+<!--</div>-->
+<!--</div>-->
+<!--订单状态模板-->
+<script type="text/html" id="statusTpl">
+    {{d.status == 0 ? '待发货' : '已发货' }}
+</script>
+
+<!--订单日期创建日期模板-->
+<!--<input class="layui-input" placeholder="创建时间" name="createTime"-->
+<!--value="" readonly="readonly"/>-->
 <script type="text/html" id="createTimeTpl">
-    <input class="layui-input dateInput" placeholder="创建时间" name="createTime"
-           value="{{d.createTimeStr}}"/>
-</script>
-
-<script type="text/html" id="sNameTpl">
-    {{d.stock.name}}
+    {{d.createTimeStr}}
 </script>
 
 
 <script>
 
     $(function () {
-        bindInputParam("name") ;
+        bindInputParam("startTime");
+        bindInputParam("endTime");
+        bindInputParam("name");
+    });
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#startTime' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#endTime' //指定元素
+        });
     });
     layui.use(['table', 'form'], function () {
         var table = layui.table;
         var form = layui.form;
         table.render({ //其它参数在此省略
-            url: "/waste/list",
-            elem: "#wasteList",
+            url: "/order/list",
+            elem: "#orderList",
             page: true,
             toolbar: "#toolBar",
             cols: [[
                 {type: 'checkbox', title: "ID"},
-                {field: 'stock', title: "库存名称",templet:"#sNameTpl"},
-                {field: 'weight', width: 120, edit: 'text', title: "损耗数量"},
-                {field: 'createTime', templet:"#createTimeTpl", title: "创建时间"},
-                {field: 'id',width: 180, templet: '#operateTpl', title: "操作"}
+                {field: 'name', title: "订单名称"},
+                {field: 'status', width: 120, templet: '#statusTpl', title: "订单状态"},
+                {field: 'createTime', width: 200, templet: '#createTimeTpl', title: "创建时间"},
+                {field: 'id', templet: '#operateTpl', title: "操作"}
             ]],
-            where:getTableWhere(["name"]),
+            where: getTableWhere(["startTime", "endTime", "name", "status"]),
             done: function (res, curr, count) {
                 //表格渲染完成之后 渲染日期输入框
                 renderDateInput();
             }
         });
-        table.on('edit(wasteList)', function (obj) {
+        table.on('edit(orderList)', function (obj) {
             var value = obj.value //得到修改后的值
                 , data = obj.data //得到所在行所有键值
                 , field = obj.field; //得到字段
             data[field] = value;
-            updateWaste(data);
+            updateOrder(data);
         });
 
-        table.on('toolbar(wasteList)', function (obj) {
+        table.on('toolbar(orderList)', function (obj) {
             var checkStatus = table.checkStatus(obj.config.id);
             switch (obj.event) {
                 case 'deleteAll':
                     var data = checkStatus.data;
                     if (data.length <= 0) {
-                        layer.msg("请至少选择一条损耗");
+                        layer.msg("请至少选择一条订单");
                     } else {
                         var ids = [];
                         for (var i = 0; i < data.length; i++) {
                             ids[i] = data[i].id;
                         }
-                        deleteAllWastes(ids);
+                        deleteAllOrders(ids);
                     }
                     break;
-                case 'add':
-                    x_admin_show("损耗添加", 'update.html', 600, 400);
+                case 'send':
+                    x_admin_show("订单添加", 'send.html', 650, 400);
+                    break;
+                case 'prepare':
+                    x_admin_show("订单添加", 'prepare.html', 650, 400);
                     break;
             }
         });
+
+        form.on('select(statusSelect)', function (obj) {
+            var returnObj = getSelectObject(table, "orderList", "status", obj);
+            var order = returnObj.object;
+            var oldVal = returnObj.oldValue;
+            //判断状态是否修改
+            if (order.status != oldVal) {
+                updateOrder(order);
+            }
+        })
     })
 
-    function deleteAllWastes(ids) {
+    function deleteAllOrders(ids) {
         $.hoshi()
-            .delete("/waste/delete/all")
+            .delete("/order/delete/all")
             .jsonParam(ids)
             .onSuccess(function (data, msg) {
-                if(data){
-                    showToast(msg) ;
-                    reloadTable() ;
-                }else {
-                    showError(msg) ;
+                if (data) {
+                    showToast(msg);
+                    reloadTable();
+                } else {
+                    showError(msg);
                 }
-            }).linkStart() ;
+            }).linkStart();
     }
 
     //渲染日期输入
@@ -160,11 +216,11 @@
                     done: function (value) {
                         var input = this.elem[0];
                         //根据单元格元素 获取当前行的 数据缓存
-                        var order = getCurRowData(table, "wasteList", input);
+                        var order = getCurRowData(table, "orderList", input);
                         //值不相等 才更新
                         if (order.createTimeStr !== value) {
                             order.createTimeStr = value;
-                            updateWaste(order);
+                            updateOrder(order);
                         }
                     }
                 });
@@ -173,16 +229,30 @@
     }
 
     /**
-     * 更新损耗
+     * 更新订单
      * @param order 订单信息
      */
-    function updateWaste(waste) {
-        waste.sId = waste.stock.id ;
-        delete waste.stock ;
-        waste.createTime = waste.createTimeStr;
+    function updateOrder(order) {
+        if (order.product != null) {
+            order.pId = order.product.id;
+            delete order.product;
+        }
+
+        if (order.parent != null) {
+            order.parentId = order.parent.id;
+            delete order.parentId;
+        }
+
+        if (order.stock != null) {
+            order.sId = order.stock.id;
+            delete order.sId;
+        }
+
+        order.createTime = order.createTimeStr;
+
         $.hoshi()
-            .put("/waste/update")
-            .formParam(waste)
+            .put("/order/update")
+            .formParam(order)
             .onResponse(function () {
                 reloadTable();
             })
@@ -193,16 +263,15 @@
                     showError(msg);
                 }
             }).linkStart();
-
     }
 
     /**
-     * 删除损耗
-     * @param id 需要删除的损耗id
+     * 删除订单
+     * @param id 需要删除的订单id
      */
-    function deleteWaste(id) {
+    function deleteOrder(id) {
         $.hoshi()
-            .delete("/waste/delete/" + id)
+            .delete("/order/delete/" + id)
             .onSuccess(function (data, msg) {
                 if (data) {
                     showToast(msg);

@@ -25,7 +25,10 @@ public interface ProductMapper {
     @Results({
             @Result(column = "id",
                     property = "compositions",
-                    many = @Many(select = "com.rehoshi.dao.ProductCompositionMapper.getByProductId"))
+                    many = @Many(select = "com.rehoshi.dao.ProductCompositionMapper.getByProductId")),
+            @Result(column = "id",
+                    property = "remainAmount",
+                    many = @Many(select = "com.rehoshi.dao.StatisticsMapper.getProductSendAmount"))
     })
     Product getById(@Param("id") String id) ;
 
@@ -47,7 +50,8 @@ public interface ProductMapper {
             "SET name = #{name},",
             "specs = #{specs},",
             "createTime = #{createTime},",
-            "packFee = #{packFee}",
+            "packFee = #{packFee},",
+            "amount = #{amount}",
             "WHERE id = #{id}"
     })
     int update(Product product);
@@ -86,9 +90,9 @@ public interface ProductMapper {
     @Insert({
             "INSERT",
             "INTO product (",
-            "id,","name,","createTime,","specs,","packFee",
+            "id,","name,","createTime,","specs,","packFee,","amount",
             ") VALUES (",
-            "#{id},","#{name},","#{createTime},","#{specs},","#{packFee})"
+            "#{id},","#{name},","#{createTime},","#{specs},","#{packFee},","#{amount})"
     })
     int save(Product product);
 
