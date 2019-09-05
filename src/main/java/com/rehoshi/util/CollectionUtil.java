@@ -5,6 +5,11 @@ import java.util.Collection;
 import java.util.List;
 
 public class CollectionUtil {
+
+    public interface Foreach<T>{
+        void each(T data, int index);
+    }
+
     public interface Customer<T> {
         void custom(T data);
     }
@@ -21,6 +26,14 @@ public class CollectionUtil {
         if (!isNullOrEmpty(collection)) {
             for (T data : collection) {
                 customer.custom(data);
+            }
+        }
+    }
+    public static <T> void foreach(Collection<T> collection, Foreach<T> foreach) {
+        if (!isNullOrEmpty(collection)) {
+            int index = 0;
+            for (T data : collection) {
+                foreach.each(data, index++);
             }
         }
     }

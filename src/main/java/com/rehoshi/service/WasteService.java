@@ -55,4 +55,7 @@ public interface WasteService {
      * @return
      */
     RespData<Boolean> deleteInIds(List<String> ids);
+
+    RespData<List<Waste>> list(WastePageSearch search);
+
 }

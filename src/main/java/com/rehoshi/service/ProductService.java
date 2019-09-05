@@ -58,4 +58,6 @@ public interface ProductService {
      * @return
      */
     RespData<Boolean> deleteInIds(List<String> ids);
+
+    RespData<List<Product>> list(ProductPageSearch search);
 }

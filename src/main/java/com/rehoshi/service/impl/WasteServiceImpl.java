@@ -79,4 +79,9 @@ public class WasteServiceImpl implements WasteService {
         }
         return data;
     }
+
+    @Override
+    public RespData<List<Waste>> list(WastePageSearch search) {
+        return RespData.success(wasteMapper.getBySearch(search));
+    }
 }

@@ -133,6 +133,18 @@ public class ProductServiceImpl implements ProductService {
         return data;
     }
 
+    @Override
+    public RespData<List<Product>> list(ProductPageSearch search) {
+        List<Product> bySearch = productMapper.getBySearch(search);
+        CollectionUtil.foreach(bySearch, data -> {
+            data.setCompositions(productCompositionMapper.getByProductId(data.getId()));
+        });
+        CollectionUtil.foreach(bySearch,data -> {
+            data.setSendAmount(statisticsMapper.getProductSendAmount(data.getId()));
+        });
+        return RespData.success(bySearch);
+    }
+
     public static void newCompositionsId(Product product) {
         CollectionUtil.foreach(product.getCompositions(), data -> {
             data.setpId(product.getId());

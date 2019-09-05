@@ -142,6 +142,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public RespData<List<Order>> orderList(OrderPageSearch search) {
+        return RespData.success( orderMapper.getBySearch(search));
+    }
+
+    @Override
     public RespData<Order> getById(String id) {
         RespData<Order> data = new RespData<Order>().setData(null).setMsg("查询订单失败");
         Order byId = orderMapper.getById(id);

@@ -358,4 +358,6 @@ $.hoshi = function () {
 }
 
 
-
+function exportExcel(tableName, formId) {
+    location.href = "/excel/export/"+tableName+"?" + $("#" + formId).serialize() ;
+}

@@ -59,7 +59,7 @@ public class StockServiceImpl implements StockService {
         List<Stock> stocks = stockMapper.queryStockBySearch(search);
         //查询已发货的库存量
         CollectionUtil.foreach(stocks, data -> {
-            data.setProductAmount(statisticsMapper.getStockProductAmount(data.getId())); ;
+            data.setProductAmount(statisticsMapper.getStockProductAmount(data.getId()));
             data.setWasteAmount(statisticsMapper.getStockWasteAmount(data.getId()));
         });
         PageInfo<Stock> stockPageInfo = new PageInfo<>(stocks);
@@ -148,5 +148,15 @@ public class StockServiceImpl implements StockService {
         } else {
             return RespData.fail(false).setCode(0).setMsg("更新异常");
         }
+    }
+
+    @Override
+    public RespData<List<Stock>> list(StockPageSearch search) {
+        List<Stock> stocks = stockMapper.queryStockBySearch(search);
+        CollectionUtil.foreach(stocks, data -> {
+            data.setProductAmount(statisticsMapper.getStockProductAmount(data.getId()));
+            data.setWasteAmount(statisticsMapper.getStockWasteAmount(data.getId()));
+        });
+        return RespData.success(stocks);
     }
 }

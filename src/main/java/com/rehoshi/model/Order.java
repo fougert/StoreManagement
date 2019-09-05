@@ -163,6 +163,9 @@ public class Order extends BaseModel {
         this.items = items;
     }
 
+    public String getStatusStr() {
+        return getStatus() == Status.WAIT_SEND ? "待发货" : "已发货";
+    }
     public void newChildren() {
         CollectionUtil.foreach(getSubOrders(), child -> {
             child.newId();

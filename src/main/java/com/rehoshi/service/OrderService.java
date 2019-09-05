@@ -59,6 +59,13 @@ public interface OrderService {
     PageData<Order> orderInPage(OrderPageSearch search, int pageIndex, int pageSize) ;
 
     /**
+     * 订单列表
+     * @param search 查询信息
+     * @return
+     */
+    RespData<List<Order>> orderList(OrderPageSearch search) ;
+
+    /**
      * 根据id 获取订单
      * @param id 订单id
      * @return

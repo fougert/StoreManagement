@@ -149,6 +149,9 @@ public class Stock extends BaseModel {
     }
 
     public Double getWasteAmount() {
+        if(wasteAmount == null){
+            wasteAmount = 0d ;
+        }
         return wasteAmount;
     }
 
@@ -157,6 +160,9 @@ public class Stock extends BaseModel {
     }
 
     public Double getProductAmount() {
+        if(productAmount == null){
+            productAmount = 0d ;
+        }
         return productAmount;
     }
 

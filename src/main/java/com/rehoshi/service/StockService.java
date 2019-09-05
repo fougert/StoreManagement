@@ -52,4 +52,6 @@ public interface StockService {
     RespData<Boolean> delBatchStock(List<Stock> stockList);
 
     RespData<Boolean> editStock(Stock stock);
+
+    RespData<List<Stock>> list(StockPageSearch search);
 }

@@ -44,9 +44,10 @@
 </div>
 <div class="x-body">
     <div class="layui-row">
-        <form class="layui-form layui-col-md12 x-so">
+        <form class="layui-form layui-col-md12 x-so" id="wasteForm">
             <input type="text" id="name" name="name" placeholder="请输库存名称" autocomplete="off" class="layui-input">
             <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+            <a class="layui-btn" onclick="exportExcel('product/waste', 'wasteForm')"><i class="layui-icon">导出</i></a>
         </form>
     </div>
     <table class="layui-table layui-form" id="wasteList" lay-filter="wasteList">

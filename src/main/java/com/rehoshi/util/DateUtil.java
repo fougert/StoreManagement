@@ -88,7 +88,7 @@ public class DateUtil {
 
     public static Date toDate(String pattern, String dateStr) {
         Date date = null;
-        if (dateStr != null) {
+        if (dateStr != null && !dateStr.trim().equals("")) {
             try {
                 dateFormat.applyPattern(pattern);
                 date = dateFormat.parse(dateStr);
