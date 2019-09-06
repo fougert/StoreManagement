@@ -32,6 +32,12 @@ public class UserController extends BaseController{
         return $(login) ;
     }
 
+    @RequestMapping("cur")
+    @ResponseBody
+    public RespData<User> curUser(){
+        return RespData.success(ContextUtil.getCurUser()) ;
+    }
+
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @ResponseBody

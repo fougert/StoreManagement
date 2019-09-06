@@ -155,6 +155,7 @@ public class OrderServiceImpl implements OrderService {
             byId.setItems(productCompositionMapper.getByOrderId(byId.getId()));
             CollectionUtil.foreach(byId.getItems(), item -> {
                 item.setSendAmount(statisticsMapper.getOrderItemSendAmount(item.getId()));
+                item.setSendAmount(Double.valueOf(String.format("%.1f",item.getSendAmount() / item.getSpecsValue())));
             });
             data.success().setData(byId).setMsg("查询订单成功");
         }

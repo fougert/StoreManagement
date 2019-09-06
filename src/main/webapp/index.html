@@ -37,7 +37,7 @@
     </ul>
     <ul class="layui-nav right" lay-filter="">
         <li class="layui-nav-item">
-            <a href="javascript:;">admin</a>
+            <a href="javascript:;" id="curUser" >admin</a>
             <dl class="layui-nav-child"> <!-- 二级菜单 -->
                 <!-- <dd><a onclick="x_admin_show('个人信息','http://www.baidu.com')">个人信息</a></dd> -->
                 <dd><a onclick="x_admin_show('切换帐号','./login.html')">切换帐号</a></dd>
@@ -62,7 +62,7 @@
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
                 <ul class="sub-menu">
-                    <li date-refresh="1">
+                    <li date-refresh="1" id="userListLI" hidden="hidden">
                         <a _href="views/user/list.html">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>用户</cite>
@@ -354,4 +354,13 @@
 </div>
 <!-- 底部结束 -->
 </body>
+<script>
+    $.hoshi().get("/user/cur")
+    .onSuccess(function (data) {
+        if(data.role >= 1){
+            $("#userListLI").removeAttr("hidden") ;
+        }
+        $("#curUser").html(data.name) ;
+    }).linkStart() ;
+</script>
 </html>

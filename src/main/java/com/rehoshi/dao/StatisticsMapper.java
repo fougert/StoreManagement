@@ -88,8 +88,8 @@ public interface StatisticsMapper {
 
 
     @Select({
-            "SELECT SUM(o1.amount * specsValue) ",
-            "FROM ((SELECT oo.*,ox.gId FROM (SELECT pc.*, o.id orderId FROM productcops pc LEFT JOIN `order` o ON pc.oId = o.parentId WHERE pc.id = #{id}) ox LEFT JOIN `order` oo ON ox.orderId = oo.parentId) o1 LEFT JOIN productcops p1 ON",
+            "SELECT SUM(o1.amount * pSpecsValue) ",
+            "FROM ((SELECT oo.*,ox.gId,ox.specsValue pSpecsValue FROM (SELECT pc.*, o.id orderId FROM productcops pc LEFT JOIN `order` o ON pc.oId = o.parentId WHERE pc.id = #{id}) ox LEFT JOIN `order` oo ON ox.orderId = oo.parentId) o1 LEFT JOIN productcops p1 ON",
             " o1.pId = p1.pId AND p1.gId = o1.gId)"
     })
     Double getOrderItemSendAmount(@Param("id") String id);
