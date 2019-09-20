@@ -4,11 +4,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.rehoshi.dao.OrderMapper;
 import com.rehoshi.dao.ProductCompositionMapper;
+import com.rehoshi.dao.ProductMapper;
 import com.rehoshi.dao.StatisticsMapper;
 import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
 import com.rehoshi.dto.search.OrderPageSearch;
 import com.rehoshi.model.Order;
+import com.rehoshi.model.ProductComposition;
 import com.rehoshi.service.OrderService;
 import com.rehoshi.util.CollectionUtil;
 import com.rehoshi.util.DateUtil;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @Transactional
@@ -31,6 +34,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Resource
     private StatisticsMapper statisticsMapper;
+
+    @Resource
+    private ProductMapper productMapper ;
 
     @Override
     public RespData<String> save(Order order) {
@@ -143,7 +149,22 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public RespData<List<Order>> orderList(OrderPageSearch search) {
-        return RespData.success( orderMapper.getBySearch(search));
+        List<Order> bySearch = orderMapper.getBySearch(search);
+        assembleOrderList(bySearch);
+        return RespData.success(bySearch );
+    }
+
+    private void assembleOrderList(List<Order> orderList){
+        CollectionUtil.foreach(orderList, this::assembleOrder);
+    }
+
+    private void assembleOrder(Order order){
+        order.setSubOrders(orderMapper.getByParentId(order.getId()));
+        order.setItems(productCompositionMapper.getByOrderId(order.getId()));
+        CollectionUtil.foreach(order.getItems(), item -> {
+//            item.setSendAmount(statisticsMapper.getOrderItemSendAmount(item.getId()));
+            item.setSendAmount(getOrderItemSendAmount(item));
+        });
     }
 
     @Override
@@ -151,14 +172,35 @@ public class OrderServiceImpl implements OrderService {
         RespData<Order> data = new RespData<Order>().setData(null).setMsg("查询订单失败");
         Order byId = orderMapper.getById(id);
         if (byId != null) {
-            byId.setSubOrders(orderMapper.getByParentId(byId.getId()));
-            byId.setItems(productCompositionMapper.getByOrderId(byId.getId()));
-            CollectionUtil.foreach(byId.getItems(), item -> {
-                item.setSendAmount(statisticsMapper.getOrderItemSendAmount(item.getId()));
-                item.setSendAmount(Double.valueOf(String.format("%.1f",item.getSendAmount() / item.getSpecsValue())));
-            });
+            assembleOrder(byId);
             data.success().setData(byId).setMsg("查询订单成功");
         }
         return data;
+    }
+
+    //获取订单的原料发货量
+    private Double getOrderItemSendAmount(ProductComposition item){
+        item.setgId(item.getGoods().getId());
+        AtomicReference<Double> sendAmount = new AtomicReference<>(0d);
+        //获取该订单下的所有发货订单
+        List<Order> byParentId = orderMapper.getByParentId(item.getoId());
+        CollectionUtil.foreach(byParentId, data -> {
+            //获取发货条目
+            List<Order> sendItems = orderMapper.getByParentId(data.getId());
+            CollectionUtil.foreach(sendItems, sdIt ->{
+                sdIt.setpId(sdIt.getProduct().getId());
+                //获取
+                List<ProductComposition> byProductIdAndGid = productCompositionMapper.getByProductIdAndGid(sdIt.getpId(), item.getgId());
+
+                CollectionUtil.foreach(byProductIdAndGid, cops ->{
+                    Double specsValue = cops.getSpecsValue();
+                    Integer amount = sdIt.getAmount();
+                    sendAmount.updateAndGet(v -> v + amount * specsValue);
+                });
+
+            });
+        });
+        Double aDouble = sendAmount.get();
+        return aDouble;
     }
 }

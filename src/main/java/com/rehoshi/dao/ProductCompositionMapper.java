@@ -16,6 +16,8 @@ public interface ProductCompositionMapper {
     })
     List<ProductComposition> getByProductId(@Param("id") String id);
 
+    @Select("SELECT * FROM productcops WHERE pId = #{id} and gId = #{gid}")
+    List<ProductComposition> getByProductIdAndGid(@Param("id") String id, @Param("gid") String gid);
 
     @Select("SELECT * FROM productcops WHERE oId = #{id}")
     @Results({

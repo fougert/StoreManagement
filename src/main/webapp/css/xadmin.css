@@ -46,7 +46,8 @@ body{
 .login .message {
     margin: 10px 0 0 -58px;
     padding: 18px 10px 18px 60px;
-    background: #189F92;
+    /*background: #9BC800;*/
+    background: #9BC800;
     position: relative;
     color: #fff;
     font-size: 16px;
@@ -93,7 +94,9 @@ body{
     vertical-align: middle;
     cursor: pointer;
     color: #ffffff;
-    background-color: #189F92;
+    /*background-color: #9BC800;*/
+    background-color: #9BC800;
+
     border-radius: 3px;
     border: none;
     -webkit-appearance: none;
@@ -134,7 +137,7 @@ xblock{
     margin-bottom: 10px;
     padding: 5px;
     line-height: 22px;
-    /* border-left: 5px solid #009688; */
+    /* border-left: 5px solid #9BC800; */
     border-radius: 0 2px 2px 0;
     background-color: #f2f2f2;
 }
@@ -159,10 +162,10 @@ xblock{
     color: red;
 }
 .x-a{
-    color: #1AA093;
+    color: #9BC800;
 }
 .x-a:hover{
-    color: #127F74;
+    color: #9BC800;
 }
 .x-sort{
     height: 30px;
@@ -174,7 +177,7 @@ xblock{
     margin-top: 0px;
 }
 .layui-input:focus, .layui-textarea:focus {
-    border-color: #189f92!important;
+    border-color: #9BC800!important;
 }
 
 .page{
@@ -199,11 +202,11 @@ xblock{
 }
 .page span.current{
     display: inline-block;
-    background: #009688 url() 0 0 no-repeat;
+    background: #9BC800 url() 0 0 no-repeat;
     color: #fff;
     padding: 10px;
     min-width: 15px;
-    border: 1px solid #009688;
+    border: 1px solid #9BC800;
 }
 .page .pagination li{
     display: inline-block;
@@ -211,9 +214,9 @@ xblock{
     text-align: center;
 }
 .page .pagination li.active span{
-    background: #009688 url() 0 0 no-repeat;
+    background: #9BC800 url() 0 0 no-repeat;
     color: #fff;
-    border: 1px solid #009688;
+    border: 1px solid #9BC800;
 
 }
 
@@ -462,7 +465,7 @@ xblock{
     font-style:normal;
     font-size:30px;
     font-weight:300;
-    color:#009688
+    color:#9BC800
 }
 .x-admin-backlog-body:hover {
     background-color:#CFCFCF;

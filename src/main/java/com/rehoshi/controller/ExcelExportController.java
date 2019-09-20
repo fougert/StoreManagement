@@ -1,11 +1,8 @@
 package com.rehoshi.controller;
 
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.metadata.Sheet;
-import com.alibaba.excel.support.ExcelTypeEnum;
-import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
 import com.rehoshi.dto.excel.*;
+import com.rehoshi.dto.excel.adapt.ExcelMergeHelper;
 import com.rehoshi.dto.search.OrderPageSearch;
 import com.rehoshi.dto.search.ProductPageSearch;
 import com.rehoshi.dto.search.StockPageSearch;
@@ -17,7 +14,6 @@ import com.rehoshi.service.StockService;
 import com.rehoshi.service.WasteService;
 import com.rehoshi.util.CollectionUtil;
 import com.rehoshi.util.DateUtil;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -121,10 +117,37 @@ public class ExcelExportController extends BaseExcelController {
         String statusStr = "";
         if (status == null || status == Order.Status.WAIT_SEND) {
             statusStr = "待发货";
+            List<PrepareOrderRow> prepareOrderRows = new ArrayList<>();
+            List<ExcelMergeInfo> mergeInfos = ExcelMergeHelper.merge(3, listRespData.data, prepareOrderRows, new ExcelMergeHelper.Adapter<Order, ProductComposition, PrepareOrderRow>() {
+                @Override
+                public List<ProductComposition> adapt(Order model) {
+                    return model.getItems();
+                }
+
+                @Override
+                public PrepareOrderRow createRow(Order model, ProductComposition subModel) {
+                    return new PrepareOrderRow(model, subModel);
+                }
+            });
+            export(PrepareOrderRow.class, prepareOrderRows, "订单-" + statusStr, mergeInfos);
         } else {
             statusStr = "已发货";
-        }
-        export(OrderRow.class, CollectionUtil.map(listRespData.data, OrderRow::new), "订单-" + statusStr);
-    }
+            List<SendOrderRow> sendOrderRows = new ArrayList<>();
+            List<ExcelMergeInfo> mergeInfos = null;
+            mergeInfos = ExcelMergeHelper.merge(3, listRespData.data, sendOrderRows, new ExcelMergeHelper.Adapter<Order, Order, SendOrderRow>() {
+                @Override
+                public List<Order> adapt(Order model) {
+                    return model.getSubOrders();
+                }
 
+                @Override
+                public SendOrderRow createRow(Order model, Order subModel) {
+                    return new SendOrderRow(model, subModel);
+                }
+            }) ;
+            export(SendOrderRow.class, sendOrderRows, "订单-" + statusStr, mergeInfos);
+        }
+
+
+    }
 }

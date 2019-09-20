@@ -52,7 +52,7 @@ public interface StockMapper {
             "(SELECT SUM(weight) FROM waste WHERE sId = s.id)",
             " FROM `stock` s",
             "WHERE name LIKE #{name}",
-            "AND createTime BETWEEN #{startTime} AND #{endTime}",
+            "AND createTime BETWEEN #{startTime} AND #{endTime} ORDER BY createTime DESC",
             "</script>"})
     @Results({
             @Result(column = "gId", property = "goods", one = @One(
@@ -61,6 +61,6 @@ public interface StockMapper {
     })
     List<Stock> queryStockBySearch(StockPageSearch search);
 
-    @Update("UPDATE stock SET name=#{name},gId=#{gId},amount=#{amount},price=#{price},provider=#{provider},description=#{description} WHERE id=#{id}")
+    @Update("UPDATE stock SET name=#{name},gId=#{gId},amount=#{amount},price=#{price},provider=#{provider},description=#{description},batch=#{batch} WHERE id=#{id}")
     int editStock(Stock stock);
 }

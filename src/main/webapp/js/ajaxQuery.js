@@ -93,17 +93,6 @@ function isNum(val) {
     }
 }
 
-// function toJson(obj) {
-//     if(obj == null){
-//         return null ;
-//     }
-//     if(isString(obj)){
-//         return "\"" + obj + "\"" ;
-//     }else if(isNum(obj)){
-//         return obj.toString() ;
-//     }else {
-//     }
-// }
 
 function toJson(obj) {
     if (obj == null) {
