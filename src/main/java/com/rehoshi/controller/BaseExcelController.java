@@ -8,6 +8,7 @@ import com.rehoshi.dto.excel.ExcelMergeInfo;
 import com.rehoshi.dto.excel.ExcelRow;
 import com.rehoshi.util.CollectionUtil;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpServletResponse;
@@ -37,12 +38,11 @@ public class BaseExcelController extends BaseController {
             ExcelWriter writer = new ExcelWriter(null, response.getOutputStream(), ExcelTypeEnum.XLSX, true, new WriteHandler() {
                 @Override
                 public void sheet(int i, org.apache.poi.ss.usermodel.Sheet sheet) {
-
+                    sheet.setAutoFilter(new CellRangeAddress(0, 100, 0, 100)) ;
                 }
 
                 @Override
                 public void row(int i, Row row) {
-
                 }
 
                 @Override
