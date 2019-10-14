@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @Transactional
+@Deprecated
 public class OrderServiceImpl implements OrderService {
 
     @Resource
@@ -188,9 +189,9 @@ public class OrderServiceImpl implements OrderService {
             //获取发货条目
             List<Order> sendItems = orderMapper.getByParentId(data.getId());
             CollectionUtil.foreach(sendItems, sdIt ->{
-                sdIt.setpId(sdIt.getProduct().getId());
+                sdIt.setPId(sdIt.getProduct().getId());
                 //获取
-                List<ProductComposition> byProductIdAndGid = productCompositionMapper.getByProductIdAndGid(sdIt.getpId(), item.getgId());
+                List<ProductComposition> byProductIdAndGid = productCompositionMapper.getByProductIdAndGid(sdIt.getPId(), item.getgId());
 
                 CollectionUtil.foreach(byProductIdAndGid, cops ->{
                     Double specsValue = cops.getSpecsValue();

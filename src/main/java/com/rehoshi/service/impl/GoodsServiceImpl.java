@@ -2,18 +2,22 @@ package com.rehoshi.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.rehoshi.dao.GoodsMapper;
+import com.rehoshi.dao.*;
 import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
 import com.rehoshi.dto.search.GoodPageSearch;
 import com.rehoshi.model.BaseModel;
 import com.rehoshi.model.Goods;
+import com.rehoshi.model.Manifest;
+import com.rehoshi.model.ProductComposition;
 import com.rehoshi.service.GoodsService;
+import com.rehoshi.util.CollectionUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @Transactional
@@ -21,6 +25,12 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Resource
     private GoodsMapper goodsMapper;
+
+    @Resource
+    private ProductCompositionMapper productCompositionMapper ;
+
+    @Resource
+    private ManifestMapper manifestMapper ;
 
     @Override
     public RespData<String> save(Goods goods) {
@@ -70,8 +80,29 @@ public class GoodsServiceImpl implements GoodsService {
         PageHelper.startPage(pageIndex, pageSize);
         //startPage后面紧跟的查询就是分页查询
         List<Goods> goods = goodsMapper.queryGoodsBySearch(search);
+        CollectionUtil.foreach(goods, data -> {
+            data.setSendAmount(getGoodsSendAmount(data));
+        });
         PageInfo<Goods> goodsPageInfo = new PageInfo<>(goods);
         return new PageData<>(goodsPageInfo);
+    }
+
+
+    /**
+     * 获取商品发货量
+     */
+    private Double getGoodsSendAmount(Goods goods){
+        //获取已发货的订单
+        List<Manifest> sendManifestByGid = manifestMapper.getSendManifestByGid(goods.getId());
+        AtomicReference<Double> sendAmount = new AtomicReference<>(0d);
+        CollectionUtil.foreach(sendManifestByGid, data -> {
+            //获取生产原料
+            List<ProductComposition> copsList = productCompositionMapper.getByProductIdAndGid(data.getPid(), data.getGid());
+            CollectionUtil.foreach(copsList, cops -> {
+                sendAmount.updateAndGet(v -> v + cops.getSpecsValue() * cops.getAmount() * data.getAmount());
+            });
+        });
+        return sendAmount.get() ;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.rehoshi.dto.search;
 
-public class WastePageSearch {
+public class WastePageSearch extends PageSearch{
     private String name;
 
     public String getName() {

@@ -1,9 +1,12 @@
 package com.rehoshi.model;
 
+import lombok.Data;
+
 /**
  * 物品类 包含
  * 商品 原料 包材
  */
+@Data
 public class Goods extends BaseModel {
 
     interface Type {
@@ -12,8 +15,6 @@ public class Goods extends BaseModel {
         int PACKAGE_MATERIAL = 2;
     }
 
-    //id
-    private String id;
     //名称
     private String name;
 
@@ -32,21 +33,8 @@ public class Goods extends BaseModel {
     //商品真正的规格
     private Double specsValue ;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    //发货量
+    private Double sendAmount ;
 
 
     public Integer getType() {
@@ -54,43 +42,6 @@ public class Goods extends BaseModel {
             type = Type.GOODS;
         }
         return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
-
-    public String getSpecs() {
-        return specs;
-    }
-
-    public void setSpecs(String specs) {
-        this.specs = specs;
-    }
-
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
-
-    public String getSpecsUnit() {
-        return specsUnit;
-    }
-
-    public void setSpecsUnit(String specsUnit) {
-        this.specsUnit = specsUnit;
-    }
-
-    public Double getSpecsValue() {
-        return specsValue;
-    }
-
-    public void setSpecsValue(Double specsValue) {
-        this.specsValue = specsValue;
     }
 
     public void judgeSpecsValue(){

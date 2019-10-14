@@ -2,6 +2,7 @@ package com.rehoshi.model;
 
 import com.rehoshi.util.CollectionUtil;
 import com.rehoshi.util.DateUtil;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ import java.util.List;
 /**
  * 订单
  */
+@Deprecated
+@Data
 public class Order extends BaseModel {
     /**
      * 订单状态
@@ -21,9 +24,6 @@ public class Order extends BaseModel {
         //已发货
         int HAS_SENT = 1;
     }
-
-    //订单ID
-    private String id;
 
     //订单编号
     private String serial;
@@ -57,107 +57,12 @@ public class Order extends BaseModel {
     private Date createTime;
     private String createTimeStr;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
-    public Integer getAmount() {
-        return amount == null ? 0 : amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
-    }
-
-    public Integer getStatus() {
-        return status == null ? Status.WAIT_SEND : status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
         setCreateTimeStr(DateUtil.formatDateTime(createTime));
     }
 
-    public String getpId() {
-        return pId;
-    }
-
-    public void setpId(String pId) {
-        this.pId = pId;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public String getSerial() {
-        return serial;
-    }
-
-    public void setSerial(String serial) {
-        this.serial = serial;
-    }
-
-    public String getCreateTimeStr() {
-        return createTimeStr;
-    }
-
-    public void setCreateTimeStr(String createTimeStr) {
-        this.createTimeStr = createTimeStr;
-    }
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
-
-    public Order getParent() {
-        return parent;
-    }
-
-    public void setParent(Order parent) {
-        this.parent = parent;
-    }
-
-    public List<Order> getSubOrders() {
-        return subOrders;
-    }
-
-    public void setSubOrders(List<Order> subOrders) {
-        this.subOrders = subOrders;
-    }
-
-    public List<ProductComposition> getItems() {
-        return items;
-    }
 
     public void setItems(List<ProductComposition> items) {
         this.items = items;

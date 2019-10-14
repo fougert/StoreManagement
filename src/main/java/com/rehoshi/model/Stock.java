@@ -1,6 +1,7 @@
 package com.rehoshi.model;
 
 import com.rehoshi.util.DateUtil;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -8,10 +9,8 @@ import java.util.Date;
 /**
  * 货物 主要存原品的数量信息
  */
+@Data
 public class Stock extends BaseModel {
-
-    //货品ID
-    private String id;
     //货品名称
     private String name;
     //货品图片
@@ -24,11 +23,15 @@ public class Stock extends BaseModel {
     //private Double specs;
     //货品数量
     private Integer amount;
+    //误差数量
+    private Double offsetAmount;
     //货品价格
     private Double price;
     //货品批次 使用当前时间字符串 精确到分钟  yyyy-MM-dd HH:mm
     private String batch;
-    //供应商
+    //供应商id
+    private String supplierId ;
+    //供应商 缓存的名称
     private String provider;
     //描述
     private String description;
@@ -43,21 +46,45 @@ public class Stock extends BaseModel {
     private Double productAmount;
 
     private String createTimeStr;
+    //剩余数量
+    private Double remainAmount;
+    //冗余的规格值
+    private Double specsValue;
 
-    public String getId() {
-        return id;
+    public Integer getAmount() {
+        if (amount == null) {
+            amount = 0;
+        }
+        return amount;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+        setCreateTimeStr(DateUtil.formatDate("yyyy-MM-dd HH:mm:ss", createTime));
     }
 
-    public String getName() {
-        return name;
+
+    public Double getSendAmount() {
+        if (sendAmount == null) {
+            sendAmount = 0d;
+        }
+        return sendAmount;
     }
 
-    public void setName(String name) {
-        this.name = name;
+
+    public Double getWasteAmount() {
+        if (wasteAmount == null) {
+            wasteAmount = 0d;
+        }
+        return wasteAmount;
+    }
+
+
+    public Double getProductAmount() {
+        if (productAmount == null) {
+            productAmount = 0d;
+        }
+        return productAmount;
     }
 
     public String getgId() {
@@ -68,106 +95,25 @@ public class Stock extends BaseModel {
         this.gId = gId;
     }
 
-    public Integer getAmount() {
-        if (amount == null) {
-            amount = 0;
+    public Double getOffsetAmount() {
+        if (offsetAmount == null) {
+            offsetAmount = 0d;
         }
-        return amount;
+        return offsetAmount;
     }
 
-    public void setAmount(Integer amount) {
-        this.amount = amount;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public String getBatch() {
-        return batch;
-    }
-
-    public void setBatch(String batch) {
-        this.batch = batch;
-    }
-
-    public String getProvider() {
-        return provider;
-    }
-
-    public void setProvider(String provider) {
-        this.provider = provider;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-        setCreateTimeStr(DateUtil.formatDate("yyyy-MM-dd HH:mm:ss", createTime));
-    }
-
-
-    public String getCreateTimeStr() {
-        return createTimeStr;
-    }
-
-    public void setCreateTimeStr(String createTimeStr) {
-        this.createTimeStr = createTimeStr;
-    }
-
-    public Goods getGoods() {
-        return goods;
-    }
-
-    public void setGoods(Goods goods) {
-        this.goods = goods;
-    }
-
-    public Double getSendAmount() {
-        if (sendAmount == null) {
-            sendAmount = 0d;
+    //    d.amount * d.goods.specsValue - d.productAmount - d.wasteAmount + d.offsetAmount
+    public Double getRemainAmount() {
+        if (this.remainAmount == null) {
+            this.remainAmount = getAmount() * getSpecsValue() - getProductAmount() - getWasteAmount() + getOffsetAmount();
         }
-        return sendAmount;
+        return this.remainAmount;
     }
 
-    public void setSendAmount(Double sendAmount) {
-        this.sendAmount = sendAmount;
-    }
-
-    public Double getWasteAmount() {
-        if(wasteAmount == null){
-            wasteAmount = 0d ;
+    public Double getSpecsValue() {
+        if (specsValue == null) {
+            specsValue = 1d;
         }
-        return wasteAmount;
+        return specsValue;
     }
-
-    public void setWasteAmount(Double wasteAmount) {
-        this.wasteAmount = wasteAmount;
-    }
-
-    public Double getProductAmount() {
-        if(productAmount == null){
-            productAmount = 0d ;
-        }
-        return productAmount;
-    }
-
-    public void setProductAmount(Double productAmount) {
-        this.productAmount = productAmount;
-    }
-
 }

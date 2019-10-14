@@ -37,6 +37,17 @@
             return false;
         }
 
+        function chooseSupplier() {
+            x_admin_show("选择供应商", "../supplier/choose.html", 900, 600, parent, null, null, function () {
+
+                var supplier = parent.chooseSupplier ;
+                $("#supplierId").val(supplier.id) ;
+                $("#provider").val(supplier.name) ;
+
+            });
+            return false;
+        }
+
 
 
 </script>
@@ -53,14 +64,14 @@
                 </select>
             </div>
         </div>-->
-        <div class="layui-form-item">
-            <label class="layui-form-label"> <span class="x-red">*</span>库存批次</label>
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label"> <span class="x-red">*</span>库存批次</label>-->
 
-            <div class="layui-input-inline">
-                <input type="text" class="layui-input" id="batch" name="batch"  value="" required=""  lay-verify="required">
-            </div>
-          <!--<a class="layui-btn" onclick="addStocks()" style="margin-left: 15px"><i class="layui-icon"></i>选择库存类型</a>-->
-        </div>
+<!--            <div class="layui-input-inline">-->
+<!--                <input type="text" class="layui-input" id="batch" name="batch"  value="" required=""  lay-verify="required">-->
+<!--            </div>-->
+<!--          &lt;!&ndash;<a class="layui-btn" onclick="addStocks()" style="margin-left: 15px"><i class="layui-icon"></i>选择库存类型</a>&ndash;&gt;-->
+<!--        </div>-->
         <input type="hidden" class="layui-input" id="name" name="name"  value="" required=""  lay-verify="name">
 
         <div class="layui-form-item">
@@ -110,11 +121,20 @@
         </div>-->
         <div class="layui-form-item">
             <label for="amount" class="layui-form-label">
-                <span class="x-red">*</span>数量
+                <span class="x-red">*</span>入库数量
             </label>
             <div class="layui-input-inline">
                 <input type="text" id="amount" name="amount" required="" lay-verify="amount"
                        autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="amount" class="layui-form-label">
+                <span class="x-red">*</span>入库误差
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id=" offsetAmount" name="offsetAmount" required="" lay-verify="amount"
+                       autocomplete="off" class="layui-input" value="0">
             </div>
         </div>
         <div class="layui-form-item">
@@ -131,9 +151,11 @@
                 <span class="x-red">*</span>供应商
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="provider" name="provider" required="required" lay-verify="provider"
-                       autocomplete="off" class="layui-input" placeholder="长度不超过20">
+                <input type="text" id="provider" name="provider" required="required" lay-verify="required"
+                       autocomplete="off" class="layui-input"  readonly="readonly">
+                <input type="hidden" name="supplierId" id="supplierId"/>
             </div>
+            <a class="layui-btn" onclick="chooseSupplier()" style="margin-left: 15px"><i class="layui-icon"></i>选择供应商</a>
         </div>
         <div class="layui-form-item layui-form-text">
             <label for="description" class="layui-form-label">
@@ -241,7 +263,7 @@
         //非负double正则  小数点后2位
        var reg = /^(([1-9]+)|([0-9]+\.[0-9]{1,2}))$/;
         // var reg=/^([1-9][0-9]*)+(.[0-9]{1,2})?$/;
-        var int=/^[0-9]*[1-9][0-9]*$/;
+        var int = /^0|[0-9]*[1-9][0-9]*$/;
         //表单验证
         form.verify({
             name:function(value,item){
@@ -280,7 +302,7 @@
                 }
             },
             price:function (value,item) {
-                if(!reg.test(value)){
+                if(!(int.test(value) || reg.test(value))){
                     return "请输入正确的价格！(正数有效值小数点后2位)";
                 }
                 if (value.length>8) {

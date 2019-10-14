@@ -33,10 +33,12 @@
 <body>
 <div class="x-nav">
       <span class="layui-breadcrumb">
-        <a href="">首页</a>
-        <a href="">演示</a>
         <a>
-          <cite>导航元素</cite></a>
+            <cite>生产</cite>
+        </a>
+        <a>
+          <cite>生产列表</cite>
+        </a>
       </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
        href="javascript:location.replace(location.href);" title="刷新">
@@ -111,7 +113,7 @@
                 {field: 'name', title: "成品名称"},
                 {field: 'amount', title: "成品数量"},
                 {field: 'remainAmount', title: "成品剩余"},
-                {field: 'createTime', width: 200, templet: '#createTimeTpl', title: "创建时间"},
+                {field: 'createTimeStr', width: 200, title: "创建时间"},
                 {field: 'id', width: 170, templet: '#operateTpl', title: "操作"}
             ]],
             where:getTableWhere(["startTime","endTime","name"]),
@@ -152,17 +154,19 @@
     })
 
     function deleteAllProducts(ids) {
-        $.hoshi()
-            .delete("/product/delete/all")
-            .jsonParam(ids)
-            .onSuccess(function (data, msg) {
-                if(data){
-                    showToast(msg) ;
-                    reloadTable() ;
-                }else {
-                    showError(msg) ;
-                }
-            }).linkStart() ;
+        confirmBatchOperation(function () {
+            $.hoshi()
+                .delete("/product/delete/all")
+                .jsonParam(ids)
+                .onSuccess(function (data, msg) {
+                    if(data){
+                        showToast(msg) ;
+                        reloadTable() ;
+                    }else {
+                        showError(msg) ;
+                    }
+                }).linkStart() ;
+        })
     }
 
     //渲染日期输入
@@ -215,16 +219,18 @@
      * @param id 需要删除的订单id
      */
     function deleteProduct(id) {
-        $.hoshi()
-            .delete("/product/delete/" + id)
-            .onSuccess(function (data, msg) {
-                if (data) {
-                    showToast(msg);
-                    reloadTable();
-                } else {
-                    showError(msg);
-                }
-            }).linkStart();
+        confirmOperation(function () {
+            $.hoshi()
+                .delete("/product/delete/" + id)
+                .onSuccess(function (data, msg) {
+                    if (data) {
+                        showToast(msg);
+                        reloadTable();
+                    } else {
+                        showError(msg);
+                    }
+                }).linkStart();
+        })
     }
 
 </script>

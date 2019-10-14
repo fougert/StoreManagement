@@ -63,8 +63,11 @@
     {{d.goods.specs + d.goods.specsUnit}}
 </script>
 
+<!--<script type="text/html" id="remainAmountTpl">-->
+<!--    {{d.amount - d.productAmount - d.wasteAmount}}-->
+<!--</script>-->
 <script type="text/html" id="remainAmountTpl">
-    {{d.amount - d.productAmount - d.wasteAmount}}
+    {{(d.remainAmount) + d.goods.specsUnit}}
 </script>
 
 <script>
@@ -90,6 +93,12 @@
         });
     });
 
+    function getChooseWhere() {
+        var param = getTableWhere(["startTime", "endTime", "name"]);
+        param["minRemain"] = getQueryString("minRemain");
+        return param;
+    }
+
 
     layui.use('table', function () {
 
@@ -102,10 +111,11 @@
             , url: '/stock/stockInPage' //数据接口
             , page: true //开启分页
             , cols: [[ //表头
-                 {field: 'name', title: '名称'}
+                {field: 'name', title: '名称'}
                 , {field: 'img', title: '图片', templet: '#imgTpl'}
                 , {field: 'specs', title: '规格', templet: "#specsTpl"}
-                , {field: 'amount', title: '数量'}
+                , {field: 'amount', title: '入库数量'}
+                , {field: 'offsetAmount', title: '入库误差'}
                 , {field: 'id', title: '剩余', templet: "#remainAmountTpl"}
                 , {field: 'price', title: '价格'}
                 , {field: 'batch', title: '批次'}
@@ -114,7 +124,7 @@
                 , {field: 'createTimeStr', title: '入库时间'}
                 , {fixed: 'right', title: '操作', width: 80, align: 'center', toolbar: "#operateTpl"}
             ]],
-            where: getTableWhere(["startTime", "endTime", "name"])
+            where: getChooseWhere()//生产选择库存不选择库存为0的
         });
 
 //监听行工具事件

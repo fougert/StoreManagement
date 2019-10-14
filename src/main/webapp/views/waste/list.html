@@ -33,10 +33,12 @@
 <body>
 <div class="x-nav">
       <span class="layui-breadcrumb">
-        <a href="">首页</a>
-        <a href="">演示</a>
         <a>
-          <cite>导航元素</cite></a>
+            <cite>生产</cite>
+        </a>
+        <a>
+          <cite>损耗列表</cite>
+        </a>
       </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
        href="javascript:location.replace(location.href);" title="刷新">
@@ -45,6 +47,8 @@
 <div class="x-body">
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so" id="wasteForm">
+            <input class="layui-input" placeholder="开始日" name="startTime" id="startTime">
+            <input class="layui-input" placeholder="截止日" name="endTime" id="endTime">
             <input type="text" id="name" name="name" placeholder="请输库存名称" autocomplete="off" class="layui-input">
             <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
             <a class="layui-btn" onclick="exportExcel('product/waste', 'wasteForm')"><i class="layui-icon">导出</i></a>
@@ -64,8 +68,11 @@
 
 <!--损耗操作按钮-->
 <script type="text/html" id="operateTpl">
-    <button class="layui-btn layui-btn-sm" onclick="x_admin_show('编辑损耗','update.html?id={{d.id}}',600,400)"><i class="layui-icon">&#xe642;</i>编辑</button>
-    <button class="layui-btn layui-btn-danger" onclick="deleteWaste('{{d.id}}')"><i class="layui-icon">&#xe640;</i>删除</button>
+    <button class="layui-btn layui-btn-sm" onclick="x_admin_show('编辑损耗','update.html?id={{d.id}}',600,400)"><i
+            class="layui-icon">&#xe642;</i>编辑
+    </button>
+    <button class="layui-btn layui-btn-danger" onclick="deleteWaste('{{d.id}}')"><i class="layui-icon">&#xe640;</i>删除
+    </button>
 </script>
 
 <!--损耗日期创建日期模板-->
@@ -78,11 +85,30 @@
     {{d.stock.name}}
 </script>
 
+<script type="text/html" id="creatorTpl">
+    {{d.creator == null ? "" : d.creator.name}}
+</script>
+
 
 <script>
 
     $(function () {
-        bindInputParam("name") ;
+        bindInputParam("name");
+        bindInputParam("startTime");
+        bindInputParam("endTime");
+    });
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#startTime' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#endTime' //指定元素
+        });
     });
     layui.use(['table', 'form'], function () {
         var table = layui.table;
@@ -94,24 +120,21 @@
             toolbar: "#toolBar",
             cols: [[
                 {type: 'checkbox', title: "ID"},
-                {field: 'stock', title: "库存名称",templet:"#sNameTpl"},
-                {field: 'weight', width: 120, edit: 'text', title: "损耗数量"},
-                {field: 'createTime', templet:"#createTimeTpl", title: "创建时间"},
-                {field: 'id',width: 180, templet: '#operateTpl', title: "操作"}
+                {field: 'stock', title: "库存名称", templet: "#sNameTpl"},
+                {field: 'weight', width: 120,  title: "损耗数量"},
+                {field: 'creatorId', width: 120, title: "审核人员", templet: "#creatorTpl"},
+                {field: 'createTimeStr', title: "创建时间"},
+                {field: 'id', width: 180, templet: '#operateTpl', title: "操作"}
             ]],
-            where:getTableWhere(["name"]),
-            done: function (res, curr, count) {
-                //表格渲染完成之后 渲染日期输入框
-                renderDateInput();
-            }
+            where: getTableWhere(["name", "startTime", "endTime"]),
         });
-        table.on('edit(wasteList)', function (obj) {
-            var value = obj.value //得到修改后的值
-                , data = obj.data //得到所在行所有键值
-                , field = obj.field; //得到字段
-            data[field] = value;
-            updateWaste(data);
-        });
+        // table.on('edit(wasteList)', function (obj) {
+        //     var value = obj.value //得到修改后的值
+        //         , data = obj.data //得到所在行所有键值
+        //         , field = obj.field; //得到字段
+        //     data[field] = value;
+        //     updateWaste(data);
+        // });
 
         table.on('toolbar(wasteList)', function (obj) {
             var checkStatus = table.checkStatus(obj.config.id);
@@ -136,17 +159,19 @@
     })
 
     function deleteAllWastes(ids) {
-        $.hoshi()
-            .delete("/waste/delete/all")
-            .jsonParam(ids)
-            .onSuccess(function (data, msg) {
-                if(data){
-                    showToast(msg) ;
-                    reloadTable() ;
-                }else {
-                    showError(msg) ;
-                }
-            }).linkStart() ;
+        confirmBatchOperation(function () {
+            $.hoshi()
+                .delete("/waste/delete/all")
+                .jsonParam(ids)
+                .onSuccess(function (data, msg) {
+                    if (data) {
+                        showToast(msg);
+                        reloadTable();
+                    } else {
+                        showError(msg);
+                    }
+                }).linkStart();
+        })
     }
 
     //渲染日期输入
@@ -178,8 +203,8 @@
      * @param order 订单信息
      */
     function updateWaste(waste) {
-        waste.sId = waste.stock.id ;
-        delete waste.stock ;
+        waste.sId = waste.stock.id;
+        delete waste.stock;
         waste.createTime = waste.createTimeStr;
         $.hoshi()
             .put("/waste/update")
@@ -202,16 +227,18 @@
      * @param id 需要删除的损耗id
      */
     function deleteWaste(id) {
-        $.hoshi()
-            .delete("/waste/delete/" + id)
-            .onSuccess(function (data, msg) {
-                if (data) {
-                    showToast(msg);
-                    reloadTable();
-                } else {
-                    showError(msg);
-                }
-            }).linkStart();
+        confirmOperation(function () {
+            $.hoshi()
+                .delete("/waste/delete/" + id)
+                .onSuccess(function (data, msg) {
+                    if (data) {
+                        showToast(msg);
+                        reloadTable();
+                    } else {
+                        showError(msg);
+                    }
+                }).linkStart();
+        })
     }
 
 </script>

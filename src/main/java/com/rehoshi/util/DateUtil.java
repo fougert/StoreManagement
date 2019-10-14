@@ -107,8 +107,16 @@ public class DateUtil {
         return toDate(formatDate(new Date()));
     }
 
+    public static Date todayEnd() {
+        return endOfDay(today());
+    }
+
     public static Date tomorrow() {
         return addTime(today(), 1, Unit.DAY);
+    }
+
+    public static Date endOfDay(Date date){
+        return toDate("yyyy-MM-dd HH:mm:ss:SSS",formatDate("yyyy-MM-dd 23:59:59:999", date)) ;
     }
 }
 

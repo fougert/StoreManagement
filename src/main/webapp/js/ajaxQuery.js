@@ -13,8 +13,20 @@ function showSuccess(msg) {
     layer.alert(msg, {icon: 6});
 }
 
-function showToast(msg) {
-    layer.msg(msg);
+function showToast(msg, layui) {
+    if(layui != null){
+        layui.layer.msg(msg, {time: 1000,  shade: 0.01});
+    }else {
+        layer.msg(msg, {time: 1000, shade: 0.01});
+    }
+}
+
+function showShake(msg, layui) {
+    if(layui != null){
+        layui.layer.msg(msg, {time: 1000, anim: 6, shade: 0.01});
+    }else {
+        layer.msg(msg, {time: 1000, anim: 6, shade: 0.01});
+    }
 }
 
 
@@ -23,6 +35,22 @@ function getQueryString(name) {
     var r = window.location.search.substr(1).match(reg);
     if (r != null) return decodeURIComponent(r[2]);
     return null;
+}
+
+function confirmBatchOperation(callback, msg) {
+    if (msg == null) {
+        msg = "确认删除勾选数据吗？";
+    }
+    confirmOperation(callback, msg);
+}
+
+function confirmOperation(callback, msg) {
+    if (msg == null) {
+        msg = "确认删除当前数据吗？";
+    }
+    layer.confirm(msg, function () {
+        callback() ;
+    });
 }
 
 /**
@@ -79,7 +107,7 @@ var queryManager = {
 };
 
 function isString(obj) {
-    return 'string' === typeof(obj);
+    return 'string' === typeof (obj);
 }
 
 function isNum(val) {
@@ -112,7 +140,7 @@ function toJson(obj) {
             close = "]";
         }
         var json = open;
-        for (var i in  obj) {
+        for (var i in obj) {
             var o = obj[i];
             if (o != null) {
                 var j = toJson(o);
@@ -348,5 +376,5 @@ $.hoshi = function () {
 
 
 function exportExcel(tableName, formId) {
-    location.href = "/excel/export/"+tableName+"?" + $("#" + formId).serialize() ;
+    location.href = "/excel/export/" + tableName + "?" + $("#" + formId).serialize();
 }

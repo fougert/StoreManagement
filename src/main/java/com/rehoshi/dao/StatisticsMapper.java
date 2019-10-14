@@ -74,8 +74,8 @@ public interface StatisticsMapper {
      */
     @Select({
             "SELECT SUM(amount) ",
-            "FROM `order` ",
-            "WHERE pId = #{id}"
+            "FROM `manifest` ",
+            "WHERE pId = #{id} AND visible = 1"
     })
     Integer getProductSendAmount(@Param("id") String id);
 
@@ -93,5 +93,4 @@ public interface StatisticsMapper {
             " o1.pId = p1.pId AND p1.gId = o1.gId)"
     })
     Double getOrderItemSendAmount(@Param("id") String id);
-
 }

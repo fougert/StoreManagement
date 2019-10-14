@@ -33,10 +33,12 @@
 <body class="">
 <div class="x-nav">
       <span class="layui-breadcrumb">
-        <a href="">首页</a>
-        <a href="">演示</a>
         <a>
-          <cite>导航元素</cite></a>
+            <cite>用户</cite>
+        </a>
+        <a>
+          <cite>用户列表</cite>
+        </a>
       </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
        href="javascript:location.replace(location.href);" title="刷新">
@@ -196,8 +198,7 @@
     }
 
     function deleteUser(id) {
-        layer.confirm('确认要删除该用户吗？',function(index){
-
+        confirmOperation(function(index){
             //请求服务器删除用户
             $.hoshi()
                 .delete("/user/delete/" + id)
@@ -213,7 +214,7 @@
     }
 
     function deleteAllUser(ids) {
-        layer.confirm('确认要删除勾选用户吗？',function(index){
+        confirmBatchOperation(function(index){
             //请求服务器删除用户
             $.hoshi()
                 .delete("/user/deleteAll/" + ids)

@@ -27,10 +27,12 @@
 <body>
 <div class="x-nav">
       <span class="layui-breadcrumb">
-        <a href="">首页</a>
-          <!-- <a href="">演示</a> -->
         <a>
-          <cite>商品列表</cite></a>
+            <cite>商品</cite>
+        </a>
+        <a>
+          <cite>商品列表</cite>
+        </a>
       </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
        href="javascript:location.replace(location.href);" title="刷新">
@@ -62,11 +64,11 @@
 </div>
 
 <script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn layui-btn-xs" lay-event="deliver"><i class="layui-icon">&#xe642;</i>打单</a>
     <a class="layui-btn layui-btn layui-btn-xs" lay-event="edit"><i class="layui-icon">&#xe642;</i>编辑</a>
-    <!-- onclick="x_admin_show('编辑','admin-edit.html')"
-    onclick="member_del(this,'要删除的id')" href="javascript:;"  -->
     <a class="layui-btn-danger layui-btn layui-btn-xs" lay-event="del"><i class="layui-icon">&#xe640;</i>删除</a>
-       </script>
+</script>
+
 <!--工具行按钮-->
 <script type="text/html" id="toolBar">
     <div class="layui-btn-container">
@@ -80,11 +82,15 @@
 </script>
 <!-- 显示当前图片 -->
 <script type="text/html" id="imgTpl">
-    <img onclick="openImg('{{d.img}}')" src="{{d.img}}" style="width: 28px;height: 28px;" />
+    <img onclick="openImg('{{d.img}}')" src="{{d.img}}" style="width: 28px;height: 28px;"/>
 </script>
 
 <script type="text/html" id="specsTpl">
     {{d.specs + d.specsUnit}}
+</script>
+
+<script type="text/html" id="sendAmountTpl">
+    {{d.sendAmount + d.specsUnit}}
 </script>
 
 <script>
@@ -125,8 +131,9 @@
                 {field: 'id', title: 'ID', type: 'checkbox', sort: true, fixed: 'left'}
                 , {field: 'name', title: '名称'}
                 , {field: 'img', title: '图片', templet: '#imgTpl'}
-                , {field: 'specs', title: '规格', templet:'#specsTpl'}
+                , {field: 'specs', title: '规格', templet: '#specsTpl'}
                 , {field: 'type', title: '类型'}
+                , {field: 'sendAmount', title: '发货量', templet: '#sendAmountTpl'}
                 , {fixed: 'right', title: '操作', width: 250, align: 'center', toolbar: '#barDemo'}
             ]]
             , done: function (res, curr, count) {
@@ -151,7 +158,7 @@
             var tr = obj.tr; //获得当前行 tr 的DOM对象
             //删除事件
             if (layEvent === 'del') {
-                layer.confirm('真的删除当前行吗', function (index) {
+                confirmOperation(function (index) {
                     var id = data.id;
                     $.hoshi()
                         .delete('/goods/delGoodsType/' + id)
@@ -174,8 +181,11 @@
                     area: ['600px', '400px'],
                     content: 'goodsType-edit.html',
                 });
-            }
+            } else if (layEvent === 'deliver') {
 
+                x_admin_show("订单添加", '../manifest/prepare.html?gId=' + data.id, 650, 450);
+
+            }
         });
     });
 
@@ -193,20 +203,22 @@
             layer.msg("请选中要删除的商品！", {icon: 7, time: 1500})
         } else {
             //ajax请求
-            $.hoshi()
-                .delete('/goods/delBatchGoodsTypes')
-                .jsonParam(data)
-                .onSuccess(function (result) {
-                    parent.layui.layer.msg("删除成功！");
-                    //父页 当前页刷新
-                    reloadTable();
+            confirmBatchOperation(function () {
+                $.hoshi()
+                    .delete('/goods/delBatchGoodsTypes')
+                    .jsonParam(data)
+                    .onSuccess(function (result) {
+                        parent.layui.layer.msg("删除成功！");
+                        //父页 当前页刷新
+                        reloadTable();
 
 
-                })
-                .onError(function () {
-                    layui.layer.msg("网络异常！请联系管理员", {icon: 2, time: 2000})
-                })
-                .linkStart($("#batchDel"));
+                    })
+                    .onError(function () {
+                        layui.layer.msg("网络异常！请联系管理员", {icon: 2, time: 2000})
+                    })
+                    .linkStart($("#batchDel"));
+            })
 
         }
     }

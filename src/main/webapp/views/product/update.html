@@ -25,7 +25,7 @@
     <script>
 
         function addStocks() {
-            x_admin_show("选择库存", "../stock/choose.html", 900, 600, parent, null, null, function () {
+            x_admin_show("选择库存", "../stock/choose.html?minRemain=0", 900, 600, parent, null, null, function () {
                 if (parent.chooseStock != null) {
                     parent.chooseStock.specs = parent.chooseStock.goods.specs;
                     parent.chooseStock.specsUnit = parent.chooseStock.goods.specsUnit;
@@ -106,47 +106,6 @@
     var productId = null;
     var tableIns = null;
 
-    layui.use(['form'], function () {
-        $ = layui.jquery;
-        var form = layui.form;
-
-        //监听提交
-        form.on('submit(add)', function (data) {
-            var compositions = [];
-            for (var i in  stockList) {
-                var stock = stockList[i];
-                compositions[i] = {
-                    sId: stock.id,
-                    amount: stock.amount,
-                    batch: stock.batch,
-                    specs: stock.specs,
-                    specsUnit: stock.specsUnit,
-                    gId:stock.goods.id,
-                };
-            }
-            if (compositions.length > 0) {
-                data.field.compositions = compositions;
-                var hoshi = $.hoshi();
-                if (productId != null) {
-                    data.field.id = productId;
-                    hoshi.put("/product/update");
-                } else {
-                    hoshi.post("/product/add");
-                }
-                hoshi.jsonParam(data.field)
-                    .onSuccess(function (data, msg) {
-                        // showToast(msg);
-                        parent.layui.layer.msg(msg);
-                        // x_admin_close();
-                        reloadTable(parent);
-                    }).linkStart();
-            } else {
-                showError("请选择成品原料");
-            }
-            return false;
-        });
-    });
-
     var options = {
         elem: "#stockList",
         data: stockList,
@@ -193,6 +152,47 @@
             }
         })
     })
+
+    layui.use(['form'], function () {
+        $ = layui.jquery;
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(add)', function (data) {
+            var compositions = [];
+            for (var i in  stockList) {
+                var stock = stockList[i];
+                compositions[i] = {
+                    sId: stock.id,
+                    amount: stock.amount,
+                    batch: stock.batch,
+                    specs: stock.specs,
+                    specsUnit: stock.specsUnit,
+                    gId:stock.goods == null ? null : stock.goods.id,
+                };
+            }
+            if (compositions.length > 0) {
+                data.field.compositions = compositions;
+                var hoshi = $.hoshi();
+                if (productId != null) {
+                    data.field.id = productId;
+                    hoshi.put("/product/update");
+                } else {
+                    hoshi.post("/product/add");
+                }
+                hoshi.jsonParam(data.field)
+                    .onSuccess(function (data, msg) {
+                        // showToast(msg);
+                        parent.layui.layer.msg(msg);
+                        // x_admin_close();
+                        reloadTable(parent);
+                    }).linkStart();
+            } else {
+                showError("请选择成品原料");
+            }
+            return false;
+        });
+    });
 
     function queryProduct() {
         productId = getQueryString("id");

@@ -26,10 +26,12 @@
 <body>
 <div class="x-nav">
       <span class="layui-breadcrumb">
-        <a href="">首页</a>
-          <!-- <a href="">演示</a>
-          <a>
-            <cite>导航元素</cite></a> -->
+        <a>
+            <cite>库存</cite>
+        </a>
+        <a>
+          <cite>库存列表</cite>
+        </a>
       </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
         <i class="layui-icon" style="line-height:30px">ဂ</i></a>
@@ -61,11 +63,16 @@
 <!-- 图片 -->
 <script type="text/html" id="toolbar">
     <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-    <button class="layui-btn" onclick="x_admin_show('添加库存','stock-add.html',600,600)"><i class="layui-icon"></i>添加</button>
+    <button class="layui-btn" onclick="x_admin_show('添加库存','stock-batch-add.html',800,400)"><i class="layui-icon"></i>添加</button>
 </script>
 
+<!--    {{(d.amount * d.goods.specsValue - d.productAmount - d.wasteAmount + d.offsetAmount) + d.goods.specsUnit}}-->
 <script type="text/html" id="remainAmountTpl">
-    {{(d.amount * d.goods.specsValue - d.productAmount - d.wasteAmount) + d.goods.specsUnit}}
+    {{(d.remainAmount) + d.goods.specsUnit}}
+</script>
+
+<script type="text/html" id="creatorTpl">
+    {{d.creator == null ? "" : d.creator.name}}
 </script>
 
 
@@ -113,15 +120,17 @@
             ,toolbar:"#toolbar"
             ,cols: [[ //表头
                 {field: 'gid', title: '商品id', type:'checkbox', sort: true, fixed: 'left'}
-                ,{field: 'name', title: '名称'}
-                ,{field: 'amount', title: '数量'}
-                ,{field: 'id', title: '剩余', templet:"#remainAmountTpl"}
-                ,{field: 'price', title: '价格'}
-                ,{field: 'batch', title: '批次'}
-                ,{field: 'provider', title: '供应商'}
-                ,{field:'description',title:'描述'}
-                ,{field:'createTimeStr',title:'入库时间'}
-                ,{fixed: 'right',title:'操作', width:150, align:'center', toolbar: '#barDemo'}
+                ,{field: 'batch', title: '批次',width:180}
+                ,{field: 'name', title: '名称',width:150}
+                ,{field: 'amount', title: '入库数量',width:80}
+                ,{field: 'offsetAmount', title: '入库误差',width:80}
+                ,{field: 'id', title: '剩余', templet:"#remainAmountTpl",width:80}
+                ,{field: 'price', title: '价格',width:80}
+                ,{field: 'creatorId', title: '登记人员', templet:"#creatorTpl",width:80}
+                ,{field: 'provider', title: '供应商',width:150}
+                ,{field:'createTimeStr',title:'入库时间',width:180}
+                ,{field:'description',title:'描述',width:200}
+                ,{fixed: 'right',title:'操作', width:180, align:'center', toolbar: '#barDemo'}
             ]],
             where:getTableWhere(["startTime","endTime","name"])
         });
@@ -131,9 +140,8 @@
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
             var tr = obj.tr; //获得当前行 tr 的DOM对象
-
             if(layEvent === 'stock_del'){  //删除当前选中行
-                layer.confirm("确定删除当前库存吗？",function (index) {
+                confirmOperation(function (index) {
                     //当前库存编号
                     var id=data.id;
                     $.hoshi()
@@ -156,6 +164,11 @@
 
     });
 
+
+    function editStock() {
+
+    }
+
     //批量删除库存
     function delAll () {
 
@@ -164,16 +177,17 @@
         if (data.length===0){
             layer.msg("请选中要删除的商品！",{icon:7,time:2000});
         }else{
-
-           $.hoshi()
-               .delete("/stock/delBatchStock")
-               .jsonParam(JSON.stringify(data))
-               .onSuccess(function (data,msg,code) {
-                   parent.layui.layer.msg("删除成功！",{icon:1,time:1000});
-                   //刷新父页 当前页内容
-                   reloadTable(parent);
-               })
-               .linkStart();
+            confirmBatchOperation(function () {
+                $.hoshi()
+                    .delete("/stock/delBatchStock")
+                    .jsonParam(JSON.stringify(data))
+                    .onSuccess(function (data,msg,code) {
+                        parent.layui.layer.msg("删除成功！",{icon:1,time:1000});
+                        //刷新父页 当前页内容
+                        reloadTable(parent);
+                    })
+                    .linkStart();
+            })
         }
     }
 </script>

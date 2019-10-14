@@ -29,7 +29,9 @@ public class StockController {
                         @RequestParam(value = "startTime",required = false)String startTimeStr,
                         @RequestParam(value = "endTime",required = false)String endTimeStr,
                         @RequestParam("page")Integer page,
-                        @RequestParam("limit")Integer limit){
+                        @RequestParam("limit")Integer limit,
+                        @RequestParam(value = "minRemain",required = false)Double minRemain
+    ){
 
         Date startTime = DateUtil.toDate(startTimeStr);
         Date endTime = DateUtil.toDate(endTimeStr);
@@ -43,6 +45,7 @@ public class StockController {
         search.setName(name);
         search.setStartTime(startTime);
         search.setEndTime(endTime);
+        search.setMinRemain(minRemain);
         return stockService.stockInPage(search,page,limit);
 
     }
@@ -67,7 +70,6 @@ public class StockController {
     public RespData<Boolean> addStock(@RequestBody Stock stock){
 
        return stockService.addStock(stock);
-
     }
 
 
@@ -90,6 +92,11 @@ public class StockController {
     @RequestMapping(value = "/editStock",method = RequestMethod.PUT)
     public RespData<Boolean> editStock(@RequestBody Stock stock){
         return  stockService.editStock(stock);
+    }
+
+    @PostMapping(value = "/add/all")
+    public RespData<Boolean> batchAdd(@RequestBody List<Stock> stockList){
+        return stockService.batchSave(stockList) ;
     }
 
 }

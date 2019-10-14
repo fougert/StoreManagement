@@ -14,6 +14,9 @@ public class StockPageSearch {
     //入库结束时间
     private Date endTime;
 
+    //最低
+    private Double minRemain ;
+
     public String getName() {
         if (name==null){
             name="";
@@ -45,5 +48,13 @@ public class StockPageSearch {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public Double getMinRemain() {
+        return minRemain;
+    }
+
+    public void setMinRemain(Double minRemain) {
+        this.minRemain = minRemain;
     }
 }

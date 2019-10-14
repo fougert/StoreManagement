@@ -1,8 +1,11 @@
 package com.rehoshi.model;
 
+import lombok.Data;
+
 /**
  * 产品组成原料
  */
+@Data
 public class ProductComposition extends BaseModel {
     //成分id
     private String id;
@@ -40,125 +43,6 @@ public class ProductComposition extends BaseModel {
     //订单发货量
     private Double sendAmount ;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Stock getStock() {
-        return stock;
-    }
-
-    public void setStock(Stock stock) {
-        this.stock = stock;
-    }
-
-    public String getBatch() {
-        return batch;
-    }
-
-    public void setBatch(String batch) {
-        this.batch = batch;
-    }
-
-    public String getpId() {
-        return pId;
-    }
-
-    public void setpId(String pId) {
-        this.pId = pId;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public String getsId() {
-        return sId;
-    }
-
-    public void setsId(String sId) {
-        this.sId = sId;
-    }
-
-    public Integer getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
-    }
-
-    public Integer getpAmount() {
-        return pAmount;
-    }
-
-    public void setpAmount(Integer pAmount) {
-        this.pAmount = pAmount;
-    }
-
-    public String getSpecs() {
-        return specs;
-    }
-
-    public void setSpecs(String specs) {
-        this.specs = specs;
-    }
-
-    public String getSpecsUnit() {
-        return specsUnit;
-    }
-
-    public void setSpecsUnit(String specsUnit) {
-        this.specsUnit = specsUnit;
-    }
-
-    public Double getSpecsValue() {
-        return specsValue;
-    }
-
-    public void setSpecsValue(Double specsValue) {
-        this.specsValue = specsValue;
-    }
-
-    public String getgId() {
-        return gId;
-    }
-
-    public void setgId(String gId) {
-        this.gId = gId;
-    }
-
-    public Goods getGoods() {
-        return goods;
-    }
-
-    public void setGoods(Goods goods) {
-        this.goods = goods;
-    }
-
-    public String getoId() {
-        return oId;
-    }
-
-    public void setoId(String oId) {
-        this.oId = oId;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
 
     public void judgeSpecsValue() {
         Double val;
@@ -177,7 +61,61 @@ public class ProductComposition extends BaseModel {
         return sendAmount;
     }
 
+    public Integer getAmount() {
+        if(amount == null){
+            amount = 0 ;
+        }
+        return amount;
+    }
+
+    public Double getSpecsValue() {
+        if(specsValue == null){
+            specsValue = 1d ;
+        }
+        return specsValue;
+    }
+
     public void setSendAmount(Double sendAmount) {
         this.sendAmount = sendAmount;
+    }
+
+    public String getsId() {
+        return sId;
+    }
+
+    public void setsId(String sId) {
+        this.sId = sId;
+    }
+
+    public String getpId() {
+        return pId;
+    }
+
+    public void setpId(String pId) {
+        this.pId = pId;
+    }
+
+    public Integer getpAmount() {
+        return pAmount;
+    }
+
+    public void setpAmount(Integer pAmount) {
+        this.pAmount = pAmount;
+    }
+
+    public String getgId() {
+        return gId;
+    }
+
+    public void setgId(String gId) {
+        this.gId = gId;
+    }
+
+    public String getoId() {
+        return oId;
+    }
+
+    public void setoId(String oId) {
+        this.oId = oId;
     }
 }

@@ -7,6 +7,7 @@ import com.rehoshi.dto.RespData;
 import com.rehoshi.dto.search.WastePageSearch;
 import com.rehoshi.model.Waste;
 import com.rehoshi.service.WasteService;
+import com.rehoshi.util.ContextUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ public class WasteServiceImpl implements WasteService {
     public RespData<String> save(Waste waste) {
         RespData<String> data = new RespData<String>().fail().setMsg("损耗添加失败") ;
         waste.newId();
+        waste.setCreatorId(ContextUtil.getCurUser().getId());
         waste.setCreateTime(new Date());
         int save = wasteMapper.save(waste);
         if(save > 0){

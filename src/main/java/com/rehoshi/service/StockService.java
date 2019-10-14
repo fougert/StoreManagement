@@ -54,4 +54,11 @@ public interface StockService {
     RespData<Boolean> editStock(Stock stock);
 
     RespData<List<Stock>> list(StockPageSearch search);
+
+    /**
+     * 批量插入库存
+     * @param stockList
+     * @return
+     */
+    RespData<Boolean> batchSave(List<Stock> stockList);
 }

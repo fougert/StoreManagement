@@ -1,6 +1,7 @@
 package com.rehoshi.model;
 
 import com.rehoshi.util.DateUtil;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -8,6 +9,7 @@ import java.util.Date;
 /**
  * 用户
  */
+@Data
 public class User extends BaseModel {
 
     //角色
@@ -16,8 +18,6 @@ public class User extends BaseModel {
         int ADMIN = 1;//管理员
         int SUPER_ADMIN = 2;//超级管理员
     }
-    //UUID
-    private String id;
     //账号 账号是惟一的
     private String account;
     //密码 数据库保存的密码都是md5加密过得
@@ -43,41 +43,6 @@ public class User extends BaseModel {
     @DateTimeFormat(pattern = DateUtil.DATETIME_FORMAT)
     private Date lastLoginTime ;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getRole() {
-        return role;
-    }
 
     public void setRole(Integer role) {
         this.role = role;
@@ -91,61 +56,10 @@ public class User extends BaseModel {
         }
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
-
-    public String getRePassword() {
-        return rePassword;
-    }
-
-    public void setRePassword(String rePassword) {
-        this.rePassword = rePassword;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
         setCreateTimeStr(DateUtil.formatDate("yyyy-MM-dd HH:mm:ss", createTime));
-    }
-
-    public String getCreateTimeStr() {
-        return createTimeStr;
-    }
-
-    public Date getLastLoginTime() {
-        return lastLoginTime;
-    }
-
-    public void setLastLoginTime(Date lastLoginTime) {
-        this.lastLoginTime = lastLoginTime;
-    }
-
-    public void setCreateTimeStr(String createTimeStr) {
-        this.createTimeStr = createTimeStr;
-    }
-
-    public String getOldPassword() {
-        return oldPassword;
-    }
-
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
     }
 
     /**

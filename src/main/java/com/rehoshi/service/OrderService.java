@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * 订单业务
  */
+@Deprecated
 public interface OrderService {
 
     /**

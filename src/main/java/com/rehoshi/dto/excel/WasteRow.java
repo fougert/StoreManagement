@@ -12,7 +12,9 @@ public class WasteRow extends ExcelRow<Waste> {
     private String batch ;
     @ExcelProperty(value = {"损耗数量"},index = 3)
     private Double amount ;
-    @ExcelProperty(value = {"时间"},index = 3)
+    @ExcelProperty(value = {"审核人员"},index = 4)
+    private String creatorName  ;
+    @ExcelProperty(value = {"时间"},index = 5)
     private String date ;
 
     public WasteRow(Waste model) {
@@ -20,6 +22,7 @@ public class WasteRow extends ExcelRow<Waste> {
         this.stockName = model.getStock().getName() ;
         this.batch = model.getStock().getBatch() ;
         this.amount = model.getWeight() ;
+        this.creatorName = model.getCreator().getName() ;
         this.date = DateUtil.formatDateTime(model.getCreateTime()) ;
     }
 
@@ -53,5 +56,13 @@ public class WasteRow extends ExcelRow<Waste> {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
     }
 }
