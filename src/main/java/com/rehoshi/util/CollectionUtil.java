@@ -1,8 +1,6 @@
 package com.rehoshi.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class CollectionUtil {
 
@@ -47,5 +45,16 @@ public class CollectionUtil {
             }
         }
         return list;
+    }
+    public static <K, R> Map<K, List<R>> group(Collection<R> collection, Mapper<R, K> groupBy) {
+        Map<K, List<R>> group  = new HashMap<>() ;
+
+        foreach(collection, data -> {
+            K key = groupBy.map(data);
+            List<R> list = group.computeIfAbsent(key, k -> new ArrayList<>());
+            list.add(data) ;
+        });
+
+        return group ;
     }
 }

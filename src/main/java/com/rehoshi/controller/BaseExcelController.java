@@ -71,6 +71,7 @@ public class BaseExcelController extends BaseController {
                     return cellStyle;
                 }
             });
+
             Sheet sheet = new Sheet(1, 1);
             sheet.setSheetName(sheetName);
             sheet.setClazz(cls);

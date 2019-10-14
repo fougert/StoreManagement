@@ -118,4 +118,20 @@ public class ProductComposition extends BaseModel {
     public void setoId(String oId) {
         this.oId = oId;
     }
+
+    /**
+     * 是否是主材料
+     * @return
+     */
+    public Boolean isMain(){
+        boolean isMain = false ;
+        Stock stock = getStock();
+        if(stock != null){
+            Goods goods = stock.getGoods();
+            if(goods != null){
+                isMain = goods.getType() == Goods.Type.GOODS ;
+            }
+        }
+        return isMain ;
+    }
 }
