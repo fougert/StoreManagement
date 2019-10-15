@@ -4,6 +4,7 @@ import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
 import com.rehoshi.dto.excel.*;
 import com.rehoshi.dto.excel.adapt.ExcelMergeHelper;
+import com.rehoshi.dto.excel.adapt.TableInfo;
 import com.rehoshi.dto.search.*;
 import com.rehoshi.model.*;
 import com.rehoshi.service.*;
@@ -82,27 +83,10 @@ public class ExcelExportController extends BaseExcelController {
         search.setStartTime(DateUtil.toDate(startTimeStr));
         search.setEndTime(DateUtil.addTime(DateUtil.toDate(endTimeStr), 1, DateUtil.Unit.DAY));
         RespData<List<Product>> listRespData = productService.list(search);
-        List<ProductCopsRow> copsRowList = new ArrayList<>();
-        List<ExcelMergeInfo> mergeInfos = new ArrayList<>();
-        CollectionUtil.foreach(listRespData.data, (data, index) -> {
-            int startRow = 1 + copsRowList.size();
-            CollectionUtil.foreach(data.getCompositions(), cops -> {
-                copsRowList.add(new ProductCopsRow(data, cops));
-            });
-            int endRow = 1 + copsRowList.size();
-            if (endRow - startRow > 1) {
-                for (int i = 0; i < 5; i++) {
-                    ExcelMergeInfo mergeInfo = new ExcelMergeInfo();
-                    mergeInfo.setStartRow(startRow);
-                    mergeInfo.setEndRow(endRow - 1);
-                    mergeInfo.setStartCol(i);
-                    mergeInfo.setEndCol(i);
-                    mergeInfos.add(mergeInfo);
-                }
-            }
-        });
-        export(ProductCopsRow.class, copsRowList, "生产-生产", mergeInfos);
+        TableInfo table = ProductTable.createTable(listRespData.data);
+        export(table, "生产-生产");
     }
+
 
     @GetMapping("order")
     public void orderList(@RequestParam(value = "startTime", required = false) String startTime,
