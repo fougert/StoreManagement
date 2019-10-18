@@ -5,6 +5,7 @@ import com.rehoshi.dto.RespData;
 import com.rehoshi.dto.search.ManifestPageSearch;
 import com.rehoshi.model.Manifest;
 import com.rehoshi.service.ManifestService;
+import com.rehoshi.util.CollectionUtil;
 import com.rehoshi.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("manifest")
 public class ManifestController extends BaseController {
 
@@ -21,7 +22,6 @@ public class ManifestController extends BaseController {
     private ManifestService manifestService;
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
-    @ResponseBody
     public PageData<Manifest> listInPage(@RequestParam(required = false) String name,
                                          @RequestParam(value = "startTime", required = false) String startTimeStr,
                                          @RequestParam(value = "endTime", required = false) String endTimeStr,
@@ -46,26 +46,22 @@ public class ManifestController extends BaseController {
     }
 
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
-    @ResponseBody
     public RespData<Boolean> delete(@PathVariable String id) {
         return manifestService.deleteById(id);
     }
 
 
     @RequestMapping(value = "get/{id}", method = RequestMethod.GET)
-    @ResponseBody
     public RespData<Manifest> get(@PathVariable String id) {
         return manifestService.getById(id);
     }
 
     @RequestMapping(value = "delete/all", method = RequestMethod.DELETE)
-    @ResponseBody
     public RespData<Boolean> deleteAll(@RequestBody(required = false) List<String> ids) {
         return manifestService.deleteInIds(ids);
     }
 
     @RequestMapping(value = "update", method = RequestMethod.PUT)
-    @ResponseBody
     public RespData<Boolean> update(@RequestBody Manifest manifest) {
         manifest.setCreateTime(DateUtil.toDateTime(manifest.getCreateTimeStr()));
         return manifestService.update(manifest);
@@ -76,6 +72,20 @@ public class ManifestController extends BaseController {
     public RespData<String> add(@RequestBody Manifest manifest) {
         manifest.setCreateTime(DateUtil.toDateTime(manifest.getCreateTimeStr()));
         return manifestService.save(manifest);
+    }
+
+    @PostMapping("add/all")
+    public RespData<Boolean> addAll(@RequestBody List<Manifest> manifests){
+        CollectionUtil.foreach(manifests, data -> {
+            data.setCreateTime(DateUtil.toDateTime(data.getCreateTimeStr()));
+        });
+        return manifestService.save(manifests) ;
+    }
+
+
+    @GetMapping(value = "batch/prepare/list/{gId}")
+    public RespData<List<Manifest>> batchPrepareList(@PathVariable String gId){
+      return   manifestService.batchPrepareListByGid(gId) ;
     }
 
 }

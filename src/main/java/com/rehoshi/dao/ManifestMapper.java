@@ -74,6 +74,7 @@ public interface ManifestMapper {
             "<when test = 'status != null'>",
             "AND status = #{status} AND visible = 1",
             "</when>",
+            "ORDER BY createTime DESC",
             "</script>"})
     @Results({
             @Result(column = "pid", property = "product", one = @One(
@@ -126,7 +127,7 @@ public interface ManifestMapper {
             "(#{item.id}, #{item.name}, #{item.pid},#{item.gid}, #{item.amount}, #{item.createTime}, #{item.status}, #{item.parentId}, #{item.visible})",
             "</foreach>",
             "</script>"})
-    int saveAll(@Param("manifestList") List<Manifest> subManifests);
+    int saveAll(@Param("manifestList") List<Manifest> manifestList);
 
     @Select({
             "SELECT SUM( amount )",
@@ -141,4 +142,11 @@ public interface ManifestMapper {
             "AND parentId IS NOT NULL"
     })
     List<Manifest> getSendManifestByGid(String gid);
+
+    @Select({
+            "SELECT * FROM `manifest`",
+            "WHERE gid = #{gid}",
+            "AND status = #{status}"
+    })
+    List<Manifest> getByStatusAndGid(@Param("status") int status, @Param("gid") String gid);
 }

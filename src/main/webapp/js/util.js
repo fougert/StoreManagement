@@ -1,4 +1,10 @@
 
+function isMoney(val) {
+    val = val.toString()
+    let reg = /^(([1-9]+)|([0-9]+\.[0-9]{1,2}))$/;
+    return isNaturalNum(val) || reg.test(val) ;
+}
+
 function isNaturalNum(val) {
     val = val.toString() ;
     var regPos = /^\d+$/; // 非负整数

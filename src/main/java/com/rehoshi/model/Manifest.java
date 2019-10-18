@@ -69,7 +69,7 @@ public class Manifest extends BaseModel {
     }
 
     public String getStatusStr() {
-        return getStatus() == Order.Status.WAIT_SEND ? "待发货" : "已发货";
+        return getStatus() == Manifest.Status.WAIT_SEND ? "待发货" : "已发货";
     }
 
     public void newChildren() {

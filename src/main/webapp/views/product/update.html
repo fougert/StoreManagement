@@ -111,8 +111,8 @@
         data: stockList,
         cols: [[
             {field: "name", title: "原料名称"},
-            {field: "specs", edit: "text", title: "原料规格"},
-            {field: "specsUnit", edit: "text", title: "规格单位"},
+            // {field: "specs", edit: "text", title: "原料规格"},
+            // {field: "specsUnit", edit: "text", title: "规格单位"},
             {field: "amount", edit: "text", title: "原料数量"},
             {field: "id", title: "操作", toolbar: "#operateTpl"},
         ]],
@@ -136,7 +136,7 @@
             if (field === 'amount') {
                 // 评分的条件
                 if (value == 0 || !isNaturalNum(value)) {
-                    errMsg = '请输入正整数';
+                    errMsg = '请输入小数点后两位';
                 }
             }
 

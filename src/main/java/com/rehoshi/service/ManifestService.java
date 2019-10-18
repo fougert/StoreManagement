@@ -52,4 +52,13 @@ public interface ManifestService {
      * @return
      */
     RespData<Manifest> getById(String id) ;
+
+    RespData<List<Manifest>> batchPrepareListByGid(String gId);
+
+    /**
+     * 批量插入
+     * @param manifestList
+     * @return
+     */
+    RespData<Boolean> save(List<Manifest> manifestList);
 }

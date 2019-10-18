@@ -103,4 +103,18 @@ public interface ProductMapper {
      */
     @Select("SELECT * FROM product")
     List<Product> queryAllProduct();
+
+
+    /**
+     * 获取根据商品id 获取最新生产的成品
+     * 原料包含对应商品
+     * 剩余数量大于0
+     * @param gId
+     * @return
+     */
+    @Select({"SELECT * FROM `product` p",
+            "WHERE p.id IN ( SELECT pId FROM `productcops` WHERE gId = #{gId} ) AND amount - IFNULL((SELECT SUM(amount)FROM `manifest`WHERE pId = p.id AND visible = 1),0) > 0 ",
+            "ORDER BY createTime DESC LIMIT 0, 1"
+    })
+    Product getRecommendByGid(@Param("gId") String gId);
 }

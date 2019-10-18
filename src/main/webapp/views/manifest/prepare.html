@@ -26,16 +26,6 @@
 <body>
 <div class="x-body">
     <form class="layui-form">
-
-        <div class="layui-form-item">
-            <label class="layui-form-label">
-                <span class="x-red">*</span>日期
-            </label>
-            <div class="layui-input-inline">
-                <input class="layui-input" placeholder="订单创建日期" name="createTime" id="createTime" lay-verify="required"/>
-            </div>
-        </div>
-
         <div class="layui-form-item">
             <label for="name" class="layui-form-label">
                 <span class="x-red">*</span>订单名称
@@ -63,6 +53,15 @@
             <div class="layui-input-inline">
                 <input type="text" id="amount" name="amount" required="" lay-verify="amount|required"
                        autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>日期
+            </label>
+            <div class="layui-input-inline">
+                <input class="layui-input" placeholder="订单创建日期" name="createTime" id="createTime" lay-verify="required"/>
             </div>
         </div>
 
@@ -127,6 +126,7 @@
             layDate.render({
                 elem:"#createTime",
                 type:"datetime",
+                trigger:"click",
             });
             //监听提交
             form.on('submit(add)', function (data) {

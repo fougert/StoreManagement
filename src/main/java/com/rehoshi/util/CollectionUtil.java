@@ -1,9 +1,9 @@
 package com.rehoshi.util;
 
 import java.util.*;
+import java.util.function.Function;
 
 public class CollectionUtil {
-
     public interface Foreach<T>{
         void each(T data, int index);
     }
@@ -56,5 +56,14 @@ public class CollectionUtil {
         });
 
         return group ;
+    }
+    public static <T> List<T> find(Collection<T> collection, Function<T, Boolean> filter) {
+        List<T> list = new ArrayList<>() ;
+        CollectionUtil.foreach(collection, data -> {
+            if(filter.apply(data)){
+                list.add(data) ;
+            }
+        });
+        return list;
     }
 }
