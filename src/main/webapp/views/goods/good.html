@@ -47,7 +47,7 @@
             <div class="layui-input-inline">
                 <select name="type" id="type">
                     <option value=""></option>
-                    <option value="0">原料</option>
+                    <option value="0">商品</option>
                     <option value="1">包材</option>
                     <!--<option value="2">包材</option>-->
                 </select>
@@ -140,7 +140,7 @@
             , done: function (res, curr, count) {
                 $("[data-field='type']").children().each(function () {
                     if ($(this).text() == '0') {
-                        $(this).text("原料")
+                        $(this).text("商品")
                     } else if ($(this).text() == '1') {
                         $(this).text("包材")
                     }

@@ -69,7 +69,7 @@
 
 <!--产品操作按钮-->
 <script type="text/html" id="operateTpl">
-    <button class="layui-btn layui-btn-sm" onclick="x_admin_show('编辑成品', 'update.html?id={{d.id}}',600,400)"><i class="layui-icon">&#xe642;</i>编辑</button>
+    <button class="layui-btn layui-btn-sm" onclick="x_admin_show('编辑成品', 'update.html?id={{d.id}}',600,500)"><i class="layui-icon">&#xe642;</i>编辑</button>
     <button class="layui-btn layui-btn-danger" onclick="deleteProduct('{{d.id}}')"><i class="layui-icon">&#xe640;</i>删除</button>
 </script>
 
@@ -146,7 +146,7 @@
                     }
                     break;
                 case 'add':
-                    x_admin_show("成品添加", 'update.html', 600, 400);
+                    x_admin_show("成品添加", 'update.html', 600, 500);
                     break;
             }
         });

@@ -40,9 +40,9 @@
     function chooseSupplier() {
         x_admin_show("选择供应商", "../supplier/choose.html", 900, 600, parent, null, null, function () {
 
-            var supplier = parent.chooseSupplier ;
-            $("#supplierId").val(supplier.id) ;
-            $("#provider").val(supplier.name) ;
+            var supplier = parent.chooseSupplier;
+            $("#supplierId").val(supplier.id);
+            $("#provider").val(supplier.name);
 
         });
         return false;
@@ -125,7 +125,8 @@
                        autocomplete="off" class="layui-input" readonly="readonly">
                 <input type="hidden" name="supplierId" id="supplierId"/>
             </div>
-            <a class="layui-btn" onclick="chooseSupplier()" style="margin-left: 15px"><i class="layui-icon"></i>选择供应商</a>
+            <a class="layui-btn" onclick="chooseSupplier()" style="margin-left: 15px"><i
+                    class="layui-icon"></i>选择供应商</a>
         </div>
         <div class="layui-form-item layui-form-text">
             <label for="description" class="layui-form-label">
@@ -162,7 +163,7 @@
         $("#batch").val(dataField.batch);
         $("#gId").val(dataField.goods.id);
         $("#offsetAmount").val(dataField.offsetAmount);
-        $("#supplierId").val(dataField.supplierId) ;
+        $("#supplierId").val(dataField.supplierId);
 
         $.hoshi()
             .get("/goods/queryGoodById/" + dataField.goods.id)
