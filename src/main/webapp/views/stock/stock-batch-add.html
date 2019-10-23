@@ -244,18 +244,24 @@
         //表单提交事件
         form.on('submit(add)', function (result) {
             if (stockList.length <= 0) {
-                showToast("至少添加一条入库记录") ;
+                showToast("至少添加一条入库记录");
             } else {
-                let data = JSON.stringify(stockList);
-                $.hoshi()
-                    .post("/stock/add/all")
-                    .jsonParam(data)
-                    .onSuccess(function (data, msg, code) {
-                        showToast(msg, parent.layui) ;
-                        //关闭当前frame页
-                        reloadTable(parent);
-                    })
-                    .linkStart()
+                let last = stockList[stockList.length - 1];
+                let err = judgeStock(last);
+                if (err != null) {//提交时判断输入的正确性
+                    showShake(err) ;
+                } else {
+                    let data = JSON.stringify(stockList);
+                    $.hoshi()
+                        .post("/stock/add/all")
+                        .jsonParam(data)
+                        .onSuccess(function (data, msg, code) {
+                            showToast(msg, parent.layui);
+                            //关闭当前frame页
+                            reloadTable(parent);
+                        })
+                        .linkStart()
+                }
             }
             //return false; //阻止表单跳转。
         });

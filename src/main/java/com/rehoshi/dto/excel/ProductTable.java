@@ -9,6 +9,7 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Data
@@ -25,12 +26,15 @@ public class ProductTable {
         tableInfo.getColumns().add("原料名称");
         tableInfo.getColumns().add("原料批次");
         tableInfo.getColumns().add("批次价格");
+        tableInfo.getColumns().add("入库数量");
         tableInfo.getColumns().add("原料数量");
 
 
         AtomicReference<Integer> mainCount = new AtomicReference<>(1);
 
         AtomicReference<Integer> supCount = new AtomicReference<>(0);
+
+        AtomicInteger maxSize = new AtomicInteger();
 
         CollectionUtil.foreach(productList, (data, index) -> {
             List<Object> values = new ArrayList<>();
@@ -49,38 +53,60 @@ public class ProductTable {
                     tableInfo.getColumns().add("原料" + i + "名称");
                     tableInfo.getColumns().add("原料" + i + "批次");
                     tableInfo.getColumns().add("批次价格");
+                    tableInfo.getColumns().add("入库数量");
                     tableInfo.getColumns().add("原料" + i + "数量");
                 }
 
-                assembleCops(values, mainList);
+                assembleCops(values, mainList, supCount.get());
 
-                mainCount.set(mainList.size());
+                int size = mainList.size();
+                if(size > mainCount.get()){
+                    mainCount.set(size);
+                }
             }
             if(!CollectionUtil.isNullOrEmpty(supList)){
                 for (int i = supCount.get(); i < supList.size(); i++) {
                     tableInfo.getColumns().add("辅助材料" + (i + 1) + "名称");
                     tableInfo.getColumns().add("辅助材料" + (i + 1) + "批次");
                     tableInfo.getColumns().add("批次价格");
+                    tableInfo.getColumns().add("入库数量");
                     tableInfo.getColumns().add("辅助材料" + (i + 1) + "数量");
                 }
 
-                assembleCops(values, supList);
+                assembleCops(values, supList, supCount.get());
 
-                supCount.set(supList.size());
+                int size = supList.size();
+                if(size > supCount.get()){
+                    supCount.set(size);
+                }
+            }
+
+            int size = values.size();
+            if(maxSize.get() < size){
+                maxSize.set(size);
             }
 
             tableInfo.getValues().add(values);
         });
+
+        //填充空格
+        CollectionUtil.foreach(tableInfo.getValues(), data -> {
+            for (int i = data.size(); i < maxSize.get(); i++){
+                data.add("") ;
+            }
+        });
+
         return tableInfo;
     }
 
-    private static void assembleCops(List<Object> values, List<ProductComposition> copsList) {
+    private static void assembleCops(List<Object> values, List<ProductComposition> copsList, int maxCount) {
         CollectionUtil.foreach(copsList, cops -> {
             values.add(cops.getStock().getGoods().getName());
             values.add(cops.getStock().getBatch());
+            values.add(cops.getStock().getAmount());
             values.add(cops.getStock().getPrice());
             values.add(cops.getAmount());
-        });
+        } );
     }
 
 }

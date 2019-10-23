@@ -46,10 +46,7 @@
             <!--//<label class="layui-form-label">搜索类型</label>-->
             <div class="layui-input-inline">
                 <select name="type" id="type">
-                    <option value=""></option>
-                    <option value="0">商品</option>
-                    <option value="1">原料</option>
-                    <option value="2">包材</option>
+                    <option value="0" selected="selected">商品</option>
                 </select>
             </div>
 
@@ -100,7 +97,7 @@
     }
     
     $(function () {
-        bindInputParam("type");
+        // bindInputParam("type");
         bindInputParam("name");
     });
 
@@ -126,11 +123,9 @@
             ]]
             , done: function (res, curr, count) {
                 $("[data-field='type']").children().each(function () {
-                    if ($(this).text() == '0') {
+                     if ($(this).text() == '0') {
                         $(this).text("商品")
                     } else if ($(this).text() == '1') {
-                        $(this).text("原料")
-                    } else if ($(this).text() == '2') {
                         $(this).text("包材")
                     }
                 });

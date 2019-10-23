@@ -41,6 +41,7 @@
         <form class="layui-form layui-col-md12 x-so">
             <input class="layui-input" placeholder="开始日" name="startTime" id="startTime">
             <input class="layui-input" placeholder="截止日" name="endTime" id="endTime">
+            <input type="hidden" class="layui-input" name="minRemain" id="minRemain">
             <input type="text" name="name" id="name" placeholder="请输入库存名称" autocomplete="off" class="layui-input">
             <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
@@ -77,6 +78,7 @@
         bindInputParam("startTime");
         bindInputParam("endTime");
         bindInputParam("name");
+        bindInputParam("minRemain");
     });
 
     layui.use('laydate', function () {
@@ -94,8 +96,8 @@
     });
 
     function getChooseWhere() {
-        var param = getTableWhere(["startTime", "endTime", "name"]);
-        param["minRemain"] = getQueryString("minRemain");
+        var param = getTableWhere(["startTime", "endTime", "name", "minRemain"]);
+        // param["minRemain"] = getQueryString("minRemain");
         return param;
     }
 

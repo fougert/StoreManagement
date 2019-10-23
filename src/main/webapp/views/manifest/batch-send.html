@@ -177,12 +177,6 @@
 
         gId = getQueryString("gId");
         initLayUI();
-        $.hoshi()
-            .get("/manifest/batch/prepare/list/" + gId)
-            .onSuccess(function (data) {
-                manifestList = data;
-                reloadManifestTable();
-            }).linkStart();
     });
 
     function initLayUI() {
@@ -207,6 +201,12 @@
                     tdElem.click();
                 }
             })
+            $.hoshi()
+                .get("/manifest/batch/prepare/list/" + gId)
+                .onSuccess(function (data) {
+                    manifestList = data;
+                    reloadManifestTable();
+                }).linkStart();
         })
 
         layui.use(["jquery", "upload", "form", "layer", "element"], function () {
