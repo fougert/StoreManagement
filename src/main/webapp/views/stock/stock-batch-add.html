@@ -62,6 +62,41 @@
 <div class="x-body">
     <form class="layui-form" lay-filter="stock-form">
 
+        <div class="layui-form-item">
+            <label class="layui-form-label"> <span class="x-red">*</span>库存类型</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="goodName"  readonly="readonly" >
+            </div>
+            <a class="layui-btn" onclick="addStocks()" style="margin-left: 15px"><i class="layui-icon"></i>选择库存类型</a>
+        </div>
+        <div class="layui-form-item">
+            <label for="amount" class="layui-form-label">
+                <span class="x-red">*</span>入库数量
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="amount" name="amount" required="" lay-verify="amount"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="amount" class="layui-form-label">
+                <span class="x-red">*</span>入库误差
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id=" offsetAmount" name="offsetAmount" required="" lay-verify="amount"
+                       autocomplete="off" class="layui-input" value="0">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="price" class="layui-form-label">
+                <span class="x-red">*</span>价格
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="price" name="price" required="" lay-verify="price"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
         <div class="layui-form-item" id="tableContainer">
             <table class="layui-table layui-form" id="stockList" lay-filter="stockList">
             </table>
@@ -106,7 +141,7 @@
     let options = {
         elem: "#stockList",
         data: stockList,
-        height: "full-120",
+        height: "180",
         limit: Number.MAX_VALUE,
         cols: [[ //表头
             , {field: 'LAY_TABLE_INDEX', title: '序号', width: 60, templet: '#indexTpl'}
