@@ -2,6 +2,7 @@ package com.rehoshi.dto.search;
 
 import com.rehoshi.util.DateUtil;
 import lombok.Data;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
 

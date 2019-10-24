@@ -43,6 +43,13 @@
             <input class="layui-input" placeholder="截止日" name="endTime" id="endTime">
             <input type="hidden" class="layui-input" name="minRemain" id="minRemain">
             <input type="text" name="name" id="name" placeholder="请输入库存名称" autocomplete="off" class="layui-input">
+            <div class="layui-input-inline">
+                <select name="goodsType" id="goodsType">
+                    <option value="">请选择商品类型</option>
+                    <option value="0">商品</option>
+                    <option value="1">包材</option>
+                </select>
+            </div>
             <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
@@ -79,6 +86,7 @@
         bindInputParam("endTime");
         bindInputParam("name");
         bindInputParam("minRemain");
+        bindInputParam("goodsType") ;
     });
 
     layui.use('laydate', function () {
@@ -96,8 +104,7 @@
     });
 
     function getChooseWhere() {
-        var param = getTableWhere(["startTime", "endTime", "name", "minRemain"]);
-        // param["minRemain"] = getQueryString("minRemain");
+        let param = getTableWhere(["startTime", "endTime", "name", "minRemain", "goodsType"]);
         return param;
     }
 

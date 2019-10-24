@@ -1,23 +1,21 @@
 package com.rehoshi.dto.search;
 
+import lombok.Data;
+
 /**
  * 封装商品查询参数
  */
-public class GoodPageSearch {
+
+@Data
+public class GoodPageSearch extends PageSearch{
 
     private Integer type;
 
     private String name;
 
+    private Integer minSpecs;
 
-    public Integer getType() {
-        return type;
-    }
 
-    public void setType(Integer type) {
-        this.type = type;
-    }
-    
     public String getName() {
         if (name==null){
             return "%%";
@@ -25,7 +23,10 @@ public class GoodPageSearch {
       return "%"+name+"%";
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Integer getMinSpecs() {
+        if(minSpecs == null){
+            minSpecs = Integer.MIN_VALUE ;
+        }
+        return minSpecs;
     }
 }

@@ -48,7 +48,7 @@
                     <option value="1">包材</option>
                 </select>
             </div>
-
+            <input type="hidden" name="minSpecs" id="minSpecs"/>
             <input type="text" name="name" id="name" placeholder="名称" autocomplete="off" class="layui-input">
             <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
@@ -96,6 +96,7 @@
         parent.goods = null;
         bindInputParam("type");
         bindInputParam("name");
+        bindInputParam("minSpecs");
     });
 
     layui.use('table', function () {
@@ -125,7 +126,7 @@
                     }
                 });
             },
-            where: getTableWhere(["type", "name"])
+            where: getTableWhere(["type", "name", "minSpecs"])
         });
 
 

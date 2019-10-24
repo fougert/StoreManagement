@@ -1,10 +1,13 @@
 package com.rehoshi.dto.search;
 
+import lombok.Data;
+
 import java.util.Date;
 
 /**
  * 数据库查询参数
  */
+@Data
 public class StockPageSearch {
 
     //库存名称
@@ -16,6 +19,8 @@ public class StockPageSearch {
 
     //最低
     private Double minRemain ;
+
+    private Integer goodsType ;
 
     public String getName() {
         if (name==null){

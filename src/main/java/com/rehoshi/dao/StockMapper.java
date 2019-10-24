@@ -69,6 +69,9 @@ public interface StockMapper {
             "<if test=\"minRemain != null\">",
             "AND ss.remainAmount > #{minRemain}",
             "</if>",
+            "<if test=\"goodsType != null\">",
+            "AND (SELECT type FROM goods g WHERE g.id = oriStock.gId) = #{goodsType}",
+            "</if>",
             "AND oriStock.createTime BETWEEN #{startTime} AND #{endTime} ORDER BY oriStock.createTime DESC",
             "</script>"
     })

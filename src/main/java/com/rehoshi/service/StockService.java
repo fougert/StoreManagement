@@ -1,5 +1,6 @@
 package com.rehoshi.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.rehoshi.dto.PageData;
 import com.rehoshi.dto.RespData;
 import com.rehoshi.dto.search.StockPageSearch;
@@ -7,7 +8,7 @@ import com.rehoshi.model.Stock;
 
 import java.util.List;
 
-public interface StockService {
+public interface StockService  {
 
     /**
      * 货物入库

@@ -50,6 +50,7 @@ public interface GoodsMapper {
     @Select({"<script>",
             "SELECT * FROM `goods`",
             "WHERE name LIKE #{name}",
+            "AND specsValue > #{minSpecs}",
             "<when test = 'type != null'>",
             "AND type = #{type}",
             "</when>",

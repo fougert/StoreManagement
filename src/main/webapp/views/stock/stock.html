@@ -42,6 +42,13 @@
             <input class="layui-input" placeholder="开始日" name="startTime" id="startTime">
             <input class="layui-input" placeholder="截止日" name="endTime" id="endTime">
             <input type="text" name="name" id="name" placeholder="请输入库存名称" autocomplete="off" class="layui-input">
+            <div class="layui-input-inline">
+                <select name="goodsType" id="goodsType">
+                    <option value="">请选择商品类型</option>
+                    <option value="0">商品</option>
+                    <option value="1">包材</option>
+                </select>
+            </div>
             <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
             <a class="layui-btn" onclick="exportExcel('stock', 'stockForm')"><i class="layui-icon">导出</i></a>
         </form>
@@ -90,6 +97,7 @@
         bindInputParam("startTime") ;
         bindInputParam("endTime") ;
         bindInputParam("name") ;
+        bindInputParam("goodsType") ;
     });
 
   layui.use('laydate', function(){
@@ -132,7 +140,7 @@
                 ,{field:'description',title:'描述',width:200}
                 ,{fixed: 'right',title:'操作', width:180, align:'center', toolbar: '#barDemo'}
             ]],
-            where:getTableWhere(["startTime","endTime","name"])
+            where:getTableWhere(["startTime","endTime","name", "goodsType"])
         });
 
         //监听行工具事件

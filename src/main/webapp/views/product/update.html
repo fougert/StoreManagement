@@ -276,7 +276,7 @@
 
     //选择库存名称
     function addGoods() {
-        x_admin_show("选择商品", "../goods/chooseGoodsType.html?type=0", 900, 600, parent, null, null, function () {
+        x_admin_show("选择商品", "../goods/chooseGoodsType.html?type=0&minSpecs=1", 900, 600, parent, null, null, function () {
             document.getElementById("name").value=parent.goodsName;
         });
         return false;

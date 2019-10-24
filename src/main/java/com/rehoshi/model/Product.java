@@ -2,6 +2,7 @@ package com.rehoshi.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rehoshi.util.DateUtil;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
  * 产品 将原品打包之后的
  * 使用原料包材 将原品打包好
  */
+@Data
 public class Product extends BaseModel {
 
     //产品id
@@ -28,6 +30,7 @@ public class Product extends BaseModel {
     @JsonFormat(pattern = DateUtil.DATETIME_FORMAT, timezone = "GMT+8")
     private Date createTime;
     private String createTimeStr;
+    private String createTimeLabel ;
 
     private Double specs;
 
@@ -78,6 +81,7 @@ public class Product extends BaseModel {
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
         setCreateTimeStr(DateUtil.formatDateTime(createTime));
+        setCreateTimeLabel(DateUtil.formatDate("yyyy-MM-dd HH:mm", createTime));
     }
 
     public String getCreateTimeStr() {
